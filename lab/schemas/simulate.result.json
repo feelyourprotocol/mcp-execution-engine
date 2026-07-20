@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://feelyourprotocol.org/schemas/mcp-engine/simulate.result.json",
+  "title": "SimulateBytecodeResult",
+  "type": "object",
+  "required": ["success", "gasUsed", "returnValue", "finalStack", "error", "provenance"],
+  "properties": {
+    "success": { "type": "boolean" },
+    "gasUsed": { "type": "string" },
+    "returnValue": { "type": "string" },
+    "finalStack": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "error": { "type": ["string", "null"] },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pc": { "type": "integer" },
+          "op": { "type": "string" },
+          "gasCost": { "type": "string" },
+          "gasLeft": { "type": "string" },
+          "stack": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["engineVersion", "forkConfig"],
+      "properties": {
+        "engineVersion": { "type": "string" },
+        "forkConfig": {
+          "type": "object",
+          "properties": {
+            "baseHardfork": { "type": "string" },
+            "eips": { "type": "array", "items": { "type": "integer" } }
+          }
+        },
+        "stabilityRollup": { "type": "string" },
+        "caveat": { "type": "string" },
+        "asOf": { "type": "string" }
+      }
+    }
+  }
+}

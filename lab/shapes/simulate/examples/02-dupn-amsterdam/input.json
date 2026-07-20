@@ -1,0 +1,5 @@
+{
+  "bytecode": "0x600160026003600460056006600760086009600a600b600c600d600e600f60106011e68000",
+  "fork": { "baseHardfork": "amsterdam", "eips": [] },
+  "trace": true
+}
