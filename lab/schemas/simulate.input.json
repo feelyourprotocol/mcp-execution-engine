@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://feelyourprotocol.org/schemas/mcp-engine/simulate.input.json",
+  "title": "SimulateBytecodeInput",
+  "type": "object",
+  "required": ["bytecode"],
+  "properties": {
+    "bytecode": {
+      "type": "string",
+      "description": "Hex-encoded EVM bytecode (0x prefix optional)"
+    },
+    "fork": {
+      "type": "object",
+      "properties": {
+        "baseHardfork": { "type": "string" },
+        "eips": {
+          "type": "array",
+          "items": { "type": "integer" }
+        }
+      },
+      "required": ["baseHardfork"]
+    },
+    "gasLimit": {
+      "type": "string",
+      "description": "Execution gas limit as decimal string"
+    },
+    "trace": {
+      "type": "boolean",
+      "description": "Include stack-only opcode trace when true"
+    }
+  },
+  "additionalProperties": false
+}

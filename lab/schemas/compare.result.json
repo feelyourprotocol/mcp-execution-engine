@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://feelyourprotocol.org/schemas/mcp-engine/compare.result.json",
+  "title": "CompareVariantsResult",
+  "type": "object",
+  "required": ["variants", "diffs", "provenance"],
+  "properties": {
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "result": { "$ref": "simulate.result.json" }
+        }
+      }
+    },
+    "diffs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dimension": { "type": "string" },
+          "byLabel": { "type": "object" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "provenance": { "type": "object" }
+  }
+}

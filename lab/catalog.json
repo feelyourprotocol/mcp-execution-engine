@@ -1,0 +1,68 @@
+{
+  "engineVersion": "0.1.0",
+  "mcpDocs": "https://mcp-docs.feelyourprotocol.org",
+  "shapes": [
+    {
+      "id": "simulate",
+      "status": "shipped",
+      "engineFn": "simulateBytecode",
+      "mcpTool": "simulate_evm_bytecode",
+      "transport": { "stdio": "planned-step-3", "http": "planned-step-5" },
+      "summary": "Run raw bytecode under a fork / EIP configuration; optional execution trace."
+    },
+    {
+      "id": "compare",
+      "status": "shipped",
+      "engineFn": "compareVariants",
+      "mcpTool": null,
+      "transport": { "stdio": "planned-step-3", "http": "planned-step-5" },
+      "summary": "Run multiple labelled variants (each with own fork + bytecode) and diff results."
+    },
+    {
+      "id": "probe",
+      "status": "shipped",
+      "engineFn": "describeCapabilities",
+      "mcpTool": "describe_capabilities",
+      "transport": { "stdio": "planned-step-3", "http": "planned-step-5" },
+      "summary": "Describe supported forks, EIPs, ceilings, and presets."
+    },
+    {
+      "id": "generate",
+      "status": "planned",
+      "engineFn": "generateBal",
+      "mcpTool": "generate_eip7928_bal",
+      "transport": { "stdio": "planned-step-6", "http": "planned-step-6" },
+      "summary": "Produce structured outputs such as block-level access lists (EIP-7928)."
+    }
+  ],
+  "examples": [
+    {
+      "id": "simulate/01-push1-stop",
+      "shape": "simulate",
+      "title": "PUSH1 STOP on Amsterdam",
+      "input": "shapes/simulate/examples/01-push1-stop/input.json",
+      "notes": "shapes/simulate/examples/01-push1-stop/notes.md"
+    },
+    {
+      "id": "simulate/02-dupn-amsterdam",
+      "shape": "simulate",
+      "title": "EIP-8024 DUPN stack demo on Amsterdam",
+      "input": "shapes/simulate/examples/02-dupn-amsterdam/input.json",
+      "notes": "shapes/simulate/examples/02-dupn-amsterdam/notes.md"
+    },
+    {
+      "id": "compare/01-two-bytecodes",
+      "shape": "compare",
+      "title": "Compare PUSH1 STOP vs DUPN demo",
+      "input": "shapes/compare/examples/01-two-bytecodes/input.json",
+      "notes": "shapes/compare/examples/01-two-bytecodes/notes.md"
+    },
+    {
+      "id": "probe/01-capabilities",
+      "shape": "probe",
+      "title": "Full capability registry snapshot",
+      "input": null,
+      "notes": "shapes/probe/examples/01-capabilities/notes.md"
+    }
+  ]
+}
