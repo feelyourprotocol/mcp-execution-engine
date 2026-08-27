@@ -29,8 +29,7 @@ Agent → mcp-gateway (tools) → mcp-execution-engine (this repo) → EthereumJ
 | Shape | Export | MCP tool (gateway) |
 | --- | --- | --- |
 | probe | `describeCapabilities()` | `describe_capabilities` |
-| simulate | `simulateBytecode()` | `simulate_evm_bytecode` |
-| compare | `compareVariants()` | `compare_evm_variants` |
+| simulate | `simulateBytecode()` | `run_evm_bytecode` |
 | generate | (planned) | (planned) |
 
 Do **not** add per-EIP engine exports that mirror MCP tools. EIP work belongs in `src/modules/`.

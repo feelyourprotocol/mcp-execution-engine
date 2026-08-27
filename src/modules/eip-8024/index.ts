@@ -24,7 +24,7 @@ export const EIP_8024_MODULE: EipCapability = {
     'Amsterdam EVM executes DUPN, SWAPN, and EXCHANGE. Supply any bytecode; this server does not ship demo programs.',
   changeNature: 'new-capability',
   runnable: true,
-  shapes: ['simulate', 'compare'],
+  shapes: ['simulate'],
   keywords: ['DUPN', 'SWAPN', 'EXCHANGE', 'stack opcodes', 'stack too deep', 'eip-8024'],
   relatedForks: ['amsterdam', 'glamsterdam'],
   opcodes: [
@@ -71,5 +71,5 @@ export const EIP_8024_MODULE: EipCapability = {
   testMaturity: 'Opcode execution tests',
   specAnchor: 'EIP-8024',
   notes:
-    'Amsterdam already bundles EIP-8024 in EthereumJS v10. Passing eips:[8024] is accepted but does not disable the opcodes. There is no pre-8024 base hardfork on this server yet, so compare is same-fork or future-fork diffs, not a before/after 8024 toggle.',
+    'Amsterdam already bundles EIP-8024 in EthereumJS v10. Passing eips:[8024] is accepted but does not disable the opcodes. There is no pre-8024 base hardfork on this server yet.',
 }

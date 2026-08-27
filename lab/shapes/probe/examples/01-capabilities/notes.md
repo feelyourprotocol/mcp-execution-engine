@@ -6,6 +6,6 @@ After running `npm run lab -- run probe/01-capabilities`:
 - **`ceilings`** — hard limits (max gas, bytecode size, trace steps).
 - **`namedForks`** — curated shortcuts (e.g. `amsterdam`).
 - **`eips`** — runnable EIP modules only (`runnable: true`), with `summary`, `opcodes` (encoding rules), and `keywords`.
-- **No demo programs** — callers supply bytecode to simulate/compare. Lab examples below are test fixtures, not the catalog.
+- **No demo programs** — callers supply bytecode to simulate. Lab examples below are test fixtures, not the catalog.
 
-This is what the gateway's `describe_capabilities` MCP tool exposes to agents. Provenance fields on simulate/compare results should stay consistent with this registry.
+This is what the gateway's `describe_capabilities` MCP tool exposes to agents. Provenance fields on simulate results should stay consistent with this registry.

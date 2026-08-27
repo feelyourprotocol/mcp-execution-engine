@@ -20,8 +20,7 @@ The MCP surface is organized as **intent-driven shapes**, not raw library export
 
 | Shape | Engine (v0.1) | Future MCP tool | Status |
 | --- | --- | --- | --- |
-| **simulate** | `simulateBytecode()` | `simulate_evm_bytecode` | Shipped |
-| **compare** | `compareVariants()` | `compare_evm_variants` | Shipped |
+| **simulate** | `simulateBytecode()` | `run_evm_bytecode` | Shipped |
 | **probe** | `describeCapabilities()` | `describe_capabilities` | Shipped |
 | **generate** | `generateBal()` | `generate_eip7928_bal` | Planned (Step 6) |
 
@@ -35,7 +34,7 @@ An **endpoint** is **not** a function in this repo. It is the **agent-facing MCP
 | --- | --- | --- |
 | Query shape | simulate | Concept |
 | Engine function | `simulateBytecode()` | This repo |
-| MCP tool | `simulate_evm_bytecode` | `mcp-gateway` (Step 3+) |
+| MCP tool | `run_evm_bytecode` | `mcp-gateway` (Step 3+) |
 | Transport endpoint | stdio / `https://mcp.feelyourprotocol.org/mcp` | Gateway host |
 
 Running examples here executes the **engine layer** with the same JSON payloads the gateway will eventually accept.

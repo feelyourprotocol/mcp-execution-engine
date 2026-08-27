@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-import { compareVariants } from '../diff/diffResults.js'
 import { EIP_8024_MODULE } from '../modules/eip-8024/index.js'
 import {
   DUPN,
@@ -14,7 +13,6 @@ import {
   dupnDemoHex,
   exchangeDemoHex,
   invalidDupnDemoHex,
-  PUSH1_STOP_HEX,
   swapnDemoHex,
 } from './fixtures/eip8024.js'
 
@@ -22,7 +20,7 @@ describe('EIP-8024 module', () => {
   it('describes Amsterdam opcode support without demo programs', () => {
     expect(EIP_8024_MODULE.eip).toBe(8024)
     expect(EIP_8024_MODULE.runnable).toBe(true)
-    expect(EIP_8024_MODULE.shapes).toEqual(['simulate', 'compare'])
+    expect(EIP_8024_MODULE.shapes).toEqual(['simulate'])
     expect(EIP_8024_MODULE.summary).toMatch(/Amsterdam/)
     expect(EIP_8024_MODULE.opcodes?.map((entry) => entry.name)).toEqual([
       'DUPN',
@@ -69,27 +67,5 @@ describe('EIP-8024 module', () => {
     })
     expect(invalid.success).toBe(false)
     expect(invalid.error).toMatch(/stack/i)
-  })
-
-  it('compares caller-supplied variants', async () => {
-    const result = await compareVariants({
-      variants: [
-        {
-          label: 'push1-stop',
-          bytecode: PUSH1_STOP_HEX,
-          fork: { baseHardfork: 'amsterdam', eips: [] },
-        },
-        {
-          label: 'dupn',
-          bytecode: dupnDemoHex(),
-          fork: { baseHardfork: 'amsterdam', eips: [] },
-        },
-      ],
-    })
-    expect(result.variants).toHaveLength(2)
-    const gas = result.diffs.find((entry) => entry.dimension === 'gasUsed')
-    expect(BigInt(String(gas?.byLabel['dupn']))).toBeGreaterThan(
-      BigInt(String(gas?.byLabel['push1-stop'])),
-    )
   })
 })

@@ -73,30 +73,3 @@ export function buildProvenance(engineVersion: string, forkConfig: ForkConfig): 
     asOf: PROVENANCE_AS_OF,
   }
 }
-
-export function mergeProvenanceForCompare(
-  engineVersion: string,
-  forkConfigs: ForkConfig[],
-): Provenance {
-  const mergedEips = [...new Set(forkConfigs.flatMap((config) => config.eips ?? []))].sort(
-    (a, b) => a - b,
-  )
-
-  const composite: ForkConfig = {
-    baseHardfork: forkConfigs[0]?.baseHardfork ?? 'amsterdam',
-    eips: mergedEips,
-  }
-
-  const stabilityRollup = rollupFromForkConfig(composite)
-
-  return {
-    engineVersion,
-    forkConfig: composite,
-    perEip: buildPerEipProvenance(composite),
-    stabilityRollup,
-    caveat:
-      `Comparison across ${forkConfigs.length} variant(s). ` +
-      buildCaveat(engineVersion, composite, stabilityRollup),
-    asOf: PROVENANCE_AS_OF,
-  }
-}

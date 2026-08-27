@@ -4,7 +4,7 @@
 
 ## When to use
 
-- Discover **what the engine supports** before calling simulate/compare.
+- Discover **what the engine supports** before calling simulate.
 - Inspect registered **runnable** EIP modules, query shapes, opcodes, encoding, ceilings, and named forks.
 - Agents use this to decide whether a fork/EIP is available and what limits apply.
 

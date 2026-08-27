@@ -1,5 +1,5 @@
 /** Query shapes the MCP surface exposes (generic verbs). */
-export type QueryShape = 'simulate' | 'compare' | 'generate' | 'probe'
+export type QueryShape = 'simulate' | 'generate' | 'probe'
 
 /** Nature of a protocol change — drives which query shapes apply. */
 export type ChangeNature =
@@ -74,35 +74,6 @@ export interface SimulateBytecodeResult {
   finalStack: string[]
   error: string | null
   steps?: StepTrace[]
-  provenance: Provenance
-}
-
-export interface CompareVariantInput {
-  label: string
-  fork: ForkConfig
-  bytecode: string
-  gasLimit?: string
-  trace?: boolean
-}
-
-export interface CompareVariantsInput {
-  variants: CompareVariantInput[]
-}
-
-export interface CompareVariantResult {
-  label: string
-  result: SimulateBytecodeResult
-}
-
-export interface CompareDiffEntry {
-  dimension: string
-  byLabel: Record<string, string | boolean | null>
-  note?: string
-}
-
-export interface CompareVariantsResult {
-  variants: CompareVariantResult[]
-  diffs: CompareDiffEntry[]
   provenance: Provenance
 }
 

@@ -1,6 +1,6 @@
 # Simulate
 
-> **Status:** Shipped (engine v0.1). MCP tool `simulate_evm_bytecode` — gateway Step 3.
+> **Status:** Shipped (engine v0.1). MCP tool `run_evm_bytecode` — gateway Step 3.
 
 ## When to use
 

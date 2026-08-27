@@ -1,4 +1,3 @@
-export { compareVariants } from './diff/diffResults.js'
 export {
   ALLOWED_BASE_HARDFORKS,
   buildCommon,
@@ -25,17 +24,12 @@ export {
   SWAPN,
 } from './modules/eip-8024/opcodes.js'
 export { EIP_MODULES, getEipModule, listEipModules } from './modules/index.js'
-export { buildProvenance, mergeProvenanceForCompare, PROVENANCE_AS_OF } from './provenance/build.js'
+export { buildProvenance, PROVENANCE_AS_OF } from './provenance/build.js'
 export { simulateBytecode } from './simulate/simulateBytecode.js'
 export { stepToTrace } from './simulate/trace.js'
 export type {
   CapabilityDescription,
   ChangeNature,
-  CompareDiffEntry,
-  CompareVariantInput,
-  CompareVariantResult,
-  CompareVariantsInput,
-  CompareVariantsResult,
   EipCapability,
   EipOpcode,
   EipOpcodeImmediate,
