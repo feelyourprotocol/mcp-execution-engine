@@ -1,7 +1,7 @@
 import { Common, Hardfork, Mainnet } from '@ethereumjs/common'
 
-import { listPresets } from '../presets/index.js'
-import type { EipCapability, EngineCeilings, ForkConfig, NamedFork } from '../types.js'
+import { EIP_MODULES, getEipModule } from '../modules/index.js'
+import type { EngineCeilings, ForkConfig, NamedFork } from '../types.js'
 import { EngineError } from '../types.js'
 
 export const ENGINE_VERSION = '0.1.0'
@@ -23,75 +23,30 @@ export const NAMED_FORKS: NamedFork[] = [
     label: 'Amsterdam (scheduled EL fork)',
     config: { baseHardfork: 'amsterdam', eips: [] },
     stabilityRollup: 'stabilizing',
+    aliases: ['glamsterdam'],
   },
 ]
 
-/** Curated EIP capabilities — basic provenance, optional fields, tighten over time. */
-export const EIP_CAPABILITIES: EipCapability[] = [
-  {
-    eip: 8024,
-    name: 'Backward compatible SWAPN, DUPN, EXCHANGE',
-    changeNature: 'new-capability',
-    shapes: ['simulate', 'compare'],
-    status: 'Review',
-    forkInclusion: 'Scheduled',
-    implMaturity: 'Implemented in EthereumJS (website + engine)',
-    testMaturity: 'Exploration parity tests',
-    specAnchor: 'EIP-8024',
-  },
-  {
-    eip: 7883,
-    name: 'ModExp gas cost increase',
-    changeNature: 'repricing',
-    shapes: ['simulate', 'compare'],
-    status: 'Review',
-    forkInclusion: 'Scheduled',
-    implMaturity: 'Implemented in website exploration',
-    testMaturity: 'Exploration parity tests',
-    specAnchor: 'EIP-7883',
-  },
-  {
-    eip: 7928,
-    name: 'Block-level access lists',
-    changeNature: 'new-structure',
-    shapes: ['generate', 'simulate'],
-    status: 'Review',
-    forkInclusion: 'Scheduled',
-    implMaturity: 'Implemented in website exploration',
-    testMaturity: 'Exploration parity tests',
-    specAnchor: 'EIP-7928',
-  },
-  {
-    eip: 7951,
-    name: 'secp256r1 precompile',
-    changeNature: 'new-capability',
-    shapes: ['simulate', 'compare'],
-    status: 'Review',
-    forkInclusion: 'Scheduled',
-    implMaturity: 'Implemented in website exploration',
-    testMaturity: 'Exploration parity tests',
-    specAnchor: 'EIP-7951',
-  },
-  {
-    eip: 8141,
-    name: 'Frame transactions',
-    changeNature: 'new-exec-model',
-    shapes: ['simulate'],
-    status: 'Draft',
-    forkInclusion: 'Proposed',
-    implMaturity: 'Not yet in engine',
-    notes: 'Far-future research EIP — speculative activation only when implemented.',
-  },
-]
+/** Live catalog — derived from EIP modules. Unimplemented EIPs are not listed. */
+export const EIP_CAPABILITIES = EIP_MODULES
 
-const eipByNumber = new Map(EIP_CAPABILITIES.map((entry) => [entry.eip, entry]))
-
-export function getEipCapability(eip: number): EipCapability | undefined {
-  return eipByNumber.get(eip)
+export function getEipCapability(eip: number) {
+  return getEipModule(eip)
 }
 
-export function listKnownEips(): EipCapability[] {
+export function listKnownEips() {
   return [...EIP_CAPABILITIES]
+}
+
+function resolveBaseHardfork(id: string): string {
+  if (ALLOWED_BASE_HARDFORKS.includes(id as AllowedBaseHardfork)) {
+    return id
+  }
+  const named = NAMED_FORKS.find((entry) => entry.aliases?.includes(id))
+  if (named) {
+    return named.config.baseHardfork
+  }
+  return id
 }
 
 export function normalizeForkConfig(input?: ForkConfig): ForkConfig {
@@ -100,13 +55,15 @@ export function normalizeForkConfig(input?: ForkConfig): ForkConfig {
   }
 
   return {
-    baseHardfork: input.baseHardfork,
+    baseHardfork: resolveBaseHardfork(input.baseHardfork),
     eips: [...(input.eips ?? [])].sort((a, b) => a - b),
   }
 }
 
 export function resolveNamedFork(id: string): ForkConfig {
-  const named = NAMED_FORKS.find((entry) => entry.id === id)
+  const named = NAMED_FORKS.find(
+    (entry) => entry.id === id || (entry.aliases?.includes(id) ?? false),
+  )
   if (!named) {
     throw new EngineError(`Unknown named fork: ${id}`, 'unknown_named_fork')
   }
@@ -145,7 +102,7 @@ export function assertForkAllowed(config: ForkConfig): void {
   }
 
   for (const eip of fork.eips ?? []) {
-    if (!eipByNumber.has(eip)) {
+    if (getEipModule(eip) === undefined) {
       throw new EngineError(
         `EIP ${eip} is not registered in the capability registry`,
         'unknown_eip',
@@ -166,6 +123,5 @@ export function describeCapabilities() {
     namedForks: NAMED_FORKS,
     eips: EIP_CAPABILITIES,
     allowedBaseHardforks: [...ALLOWED_BASE_HARDFORKS],
-    presets: listPresets(),
   }
 }

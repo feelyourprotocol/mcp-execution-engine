@@ -7,15 +7,15 @@
       "status": "shipped",
       "engineFn": "simulateBytecode",
       "mcpTool": "simulate_evm_bytecode",
-      "transport": { "stdio": "planned-step-3", "http": "planned-step-5" },
+      "transport": { "stdio": "live", "http": "planned-step-5" },
       "summary": "Run raw bytecode under a fork / EIP configuration; optional execution trace."
     },
     {
       "id": "compare",
       "status": "shipped",
       "engineFn": "compareVariants",
-      "mcpTool": null,
-      "transport": { "stdio": "planned-step-3", "http": "planned-step-5" },
+      "mcpTool": "compare_evm_variants",
+      "transport": { "stdio": "live", "http": "planned-step-5" },
       "summary": "Run multiple labelled variants (each with own fork + bytecode) and diff results."
     },
     {
@@ -23,8 +23,8 @@
       "status": "shipped",
       "engineFn": "describeCapabilities",
       "mcpTool": "describe_capabilities",
-      "transport": { "stdio": "planned-step-3", "http": "planned-step-5" },
-      "summary": "Describe supported forks, EIPs, ceilings, and presets."
+      "transport": { "stdio": "live", "http": "planned-step-5" },
+      "summary": "Describe supported forks, runnable EIP modules, opcodes, and encoding."
     },
     {
       "id": "generate",

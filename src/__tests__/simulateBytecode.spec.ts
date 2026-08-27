@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { ENGINE_CEILINGS } from '../forks/registry.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
 import { EngineError } from '../types.js'
-import { dupnDemoBytecodeHex, PUSH1_STOP_HEX } from './fixtures/eip8024.js'
+import { dupnDemoHex, PUSH1_STOP_HEX } from './fixtures/eip8024.js'
 
 describe('simulateBytecode', () => {
   it('is deterministic for identical input', async () => {
@@ -39,7 +39,7 @@ describe('simulateBytecode', () => {
 
   it('runs DUPN on amsterdam (EIP-8024 bundled in fork)', async () => {
     const result = await simulateBytecode({
-      bytecode: dupnDemoBytecodeHex(),
+      bytecode: dupnDemoHex(),
       fork: { baseHardfork: 'amsterdam', eips: [] },
     })
 
@@ -49,7 +49,7 @@ describe('simulateBytecode', () => {
 
   it('accepts explicit eips:[8024] on amsterdam', async () => {
     const result = await simulateBytecode({
-      bytecode: dupnDemoBytecodeHex(),
+      bytecode: dupnDemoHex(),
       fork: { baseHardfork: 'amsterdam', eips: [8024] },
     })
 

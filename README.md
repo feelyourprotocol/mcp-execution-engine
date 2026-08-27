@@ -23,7 +23,7 @@ Website explorations are the **browser twin**; this engine is the **headless lab
 | Shape | Engine | Future MCP tool | Status |
 | --- | --- | --- | --- |
 | **simulate** | `simulateBytecode()` | `simulate_evm_bytecode` | Shipped |
-| **compare** | `compareVariants()` | TBD | Shipped |
+| **compare** | `compareVariants()` | `compare_evm_variants` | Shipped |
 | **probe** | `describeCapabilities()` | `describe_capabilities` | Shipped |
 | **generate** | `generateBal()` | `generate_eip7928_bal` | Planned (Step 6) |
 

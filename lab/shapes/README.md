@@ -6,7 +6,7 @@ Intent-driven verbs that frame how agents and integrators think about protocol w
 | --- | --- | --- | --- |
 | [simulate](./simulate/about.md) | "What happens if I run this bytecode under fork X?" | `simulateBytecode()` | Optional opcode trace |
 | [compare](./compare/about.md) | "How do these variants differ?" | `compareVariants()` | Each variant has own fork + bytecode |
-| [probe](./probe/about.md) | "What can this server do?" | `describeCapabilities()` | Registry, ceilings, presets |
+| [probe](./probe/about.md) | "What can this server do?" | `describeCapabilities()` | Registry, ceilings, EIP modules |
 | [generate](./generate/README.md) | "Produce structured protocol output (e.g. BAL)" | `generateBal()` — **planned** | Step 6 |
 
 ## Fork model (all shapes)

@@ -11,9 +11,9 @@ describe('provenance', () => {
     expect(provenance.caveat).toMatch(/mcp-execution-engine/)
   })
 
-  it('marks draft eips as experimental rollup', () => {
-    const provenance = buildProvenance('0.1.0', { baseHardfork: 'amsterdam', eips: [8141] })
-    expect(provenance.stabilityRollup).toBe('experimental')
-    expect(provenance.perEip?.[0]?.eip).toBe(8141)
+  it('marks review eips as emerging rollup', () => {
+    const provenance = buildProvenance('0.1.0', { baseHardfork: 'amsterdam', eips: [8024] })
+    expect(provenance.stabilityRollup).toBe('emerging')
+    expect(provenance.perEip?.[0]?.eip).toBe(8024)
   })
 })

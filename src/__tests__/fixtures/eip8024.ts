@@ -1,12 +1,14 @@
-/** Minimal EIP-8024 DUPN demo bytecode (stack 1..17, DUPN depth 17). */
-const DUPN = 0xe6
+import {
+  DUPN,
+  encodeDupnSwapnImmediate,
+  encodeExchangeImmediate,
+  EXCHANGE,
+  SWAPN,
+} from '../../modules/eip-8024/opcodes.js'
+
 const STOP = 0x00
 const PUSH1 = 0x60
 const DUPN_MIN_DEPTH = 17
-
-function encodeDupnSwapnImmediate(operandN: number): number {
-  return (operandN + 111) & 0xff
-}
 
 function buildPushSequence(count: number): Uint8Array {
   const bytes = new Uint8Array(count * 2)
@@ -28,19 +30,46 @@ function concatBytes(...parts: Uint8Array[]): Uint8Array {
   return out
 }
 
-export function dupnDemoBytecodeHex(): string {
-  const code = concatBytes(
-    buildPushSequence(DUPN_MIN_DEPTH),
-    Uint8Array.from([DUPN, encodeDupnSwapnImmediate(DUPN_MIN_DEPTH), STOP]),
-  )
+function toHex(code: Uint8Array): string {
   return `0x${Buffer.from(code).toString('hex')}`
 }
 
-/** Legacy-style deep stack manipulation without EIP-8024 opcodes (PUSH-heavy idiom). */
-export function legacyStackIdiomBytecodeHex(): string {
-  return '0x' + '60'.repeat(34) + '00'
-}
-
+/** Test-only programs — not part of the MCP catalog. */
 export const PUSH1_STOP_HEX = '0x600100'
 
-export const PUSH_ADD_HEX = '0x6001600201600055'
+export function dupnDemoHex(): string {
+  return toHex(
+    concatBytes(
+      buildPushSequence(DUPN_MIN_DEPTH),
+      Uint8Array.from([DUPN, encodeDupnSwapnImmediate(DUPN_MIN_DEPTH), STOP]),
+    ),
+  )
+}
+
+export function swapnDemoHex(): string {
+  return toHex(
+    concatBytes(
+      buildPushSequence(DUPN_MIN_DEPTH + 1),
+      Uint8Array.from([SWAPN, encodeDupnSwapnImmediate(DUPN_MIN_DEPTH), STOP]),
+    ),
+  )
+}
+
+export function exchangeDemoHex(): string {
+  // Stack depths 2 and 3 below the top → n=1, m=2
+  return toHex(
+    concatBytes(
+      buildPushSequence(4),
+      Uint8Array.from([EXCHANGE, encodeExchangeImmediate(1, 2), STOP]),
+    ),
+  )
+}
+
+export function invalidDupnDemoHex(): string {
+  return toHex(
+    concatBytes(
+      buildPushSequence(3),
+      Uint8Array.from([DUPN, encodeDupnSwapnImmediate(DUPN_MIN_DEPTH), STOP]),
+    ),
+  )
+}

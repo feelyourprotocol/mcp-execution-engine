@@ -1,6 +1,6 @@
 # Compare
 
-> **Status:** Shipped (engine v0.1). Dedicated MCP tool — TBD with gateway.
+> **Status:** Shipped (engine v0.1). MCP tool `compare_evm_variants` — live on stdio gateway.
 
 ## When to use
 

@@ -9,4 +9,4 @@ After running `npm run lab -- run compare/01-two-bytecodes`:
 
 This example is about the **diff machinery**, not claiming the two bytecodes are semantically equivalent. For repricing compares, use the same bytecode with different fork configs.
 
-Seed presets in the engine (`eip7883-modexp-repricing`, `eip8024-opcode-equivalence`) describe future curated compare scenarios.
+This example is a lab fixture for the compare engine (two caller-supplied programs on Amsterdam). The EIP-8024 **module** does not ship demo programs — Amsterdam already bundles the opcodes.

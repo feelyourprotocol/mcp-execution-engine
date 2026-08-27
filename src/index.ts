@@ -13,7 +13,18 @@ export {
   resolveNamedFork,
 } from './forks/registry.js'
 export { parseBytecodeHex, parseGasLimit, resolveFork } from './forks/resolve.js'
-export { getPreset, listPresets, PRESETS } from './presets/index.js'
+export { EIP_8024_MODULE } from './modules/eip-8024/index.js'
+export {
+  DUPN,
+  DUPN_SWAPN_MAX_DEPTH,
+  DUPN_SWAPN_MIN_DEPTH,
+  encodeDupnSwapnImmediate,
+  encodeExchangeImmediate,
+  EXCHANGE,
+  EXCHANGE_XOR_MASK,
+  SWAPN,
+} from './modules/eip-8024/opcodes.js'
+export { EIP_MODULES, getEipModule, listEipModules } from './modules/index.js'
 export { buildProvenance, mergeProvenanceForCompare, PROVENANCE_AS_OF } from './provenance/build.js'
 export { simulateBytecode } from './simulate/simulateBytecode.js'
 export { stepToTrace } from './simulate/trace.js'
@@ -26,11 +37,12 @@ export type {
   CompareVariantsInput,
   CompareVariantsResult,
   EipCapability,
+  EipOpcode,
+  EipOpcodeImmediate,
   EipProvenance,
   EngineCeilings,
   ForkConfig,
   NamedFork,
-  PresetDefinition,
   Provenance,
   QueryShape,
   SimulateBytecodeInput,

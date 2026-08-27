@@ -5,7 +5,7 @@
 ## When to use
 
 - Discover **what the engine supports** before calling simulate/compare.
-- Inspect registered EIPs, query shapes per EIP, ceilings, named forks, and seed presets.
+- Inspect registered **runnable** EIP modules, query shapes, opcodes, encoding, ceilings, and named forks.
 - Agents use this to decide whether a fork/EIP is available and what limits apply.
 
 ## What you send
@@ -14,7 +14,7 @@ Nothing — `describeCapabilities()` takes no input.
 
 ## What you get back
 
-A registry snapshot: engine version, ceilings, named forks, EIP capabilities, allowed base hardforks, presets.
+A registry snapshot: engine version, ceilings, named forks, runnable EIP modules (opcodes + encoding), allowed base hardforks.
 
 ## Examples
 

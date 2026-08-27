@@ -1,0 +1,30 @@
+---
+description: How MCP engine modules relate to website explorations — twin not clone
+alwaysApply: true
+---
+
+# Website relation (explorations vs MCP)
+
+## One capability, three presentations
+
+| Layer | Role |
+| --- | --- |
+| Website exploration | Human textbook — pedagogy, widgets, curated examples |
+| MCP docs `use/eips/eip-NNNN` | Human inspiration — what to ask an agent, Connect |
+| Engine module + generic tools | Runtime — execute **caller-supplied** bytecode |
+
+## Twin, not clone
+
+- Same **core question** (e.g. “can Amsterdam run DUPN?”) — different **artifact**
+- Website owns **interactive examples**; MCP owns **general execution**
+- Do **not** replay exploration widget bytecode in the engine catalog
+- Do **not** import from `website/src/explorations/` into this repo
+
+## Cross-links (human docs only)
+
+- Exploration → MCP docs: `/use/eips/eip-NNNN` (future website icon)
+- MCP docs → exploration: feelyourprotocol.org route + EIP spec
+
+## Adding exploration does not add MCP
+
+The website `add-exploration` skill is out of scope for engine/gateway work unless explicitly requested. A new exploration without a runnable module does not appear in `describeCapabilities()`.

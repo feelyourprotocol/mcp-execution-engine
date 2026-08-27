@@ -43,24 +43,13 @@ export interface EngineCeilings {
   maxTraceSteps: number
 }
 
-export interface EipCapability {
-  eip: number
-  name?: string
-  changeNature?: ChangeNature
-  shapes?: QueryShape[]
-  status?: string
-  forkInclusion?: string
-  implMaturity?: string
-  testMaturity?: string
-  specAnchor?: string
-  notes?: string
-}
-
 export interface NamedFork {
   id: string
   label: string
   config: ForkConfig
   stabilityRollup?: StabilityRollup
+  /** Alternate names agents may use (e.g. glamsterdam → amsterdam). */
+  aliases?: string[]
 }
 
 export interface StepTrace {
@@ -117,6 +106,46 @@ export interface CompareVariantsResult {
   provenance: Provenance
 }
 
+export interface EipOpcodeImmediate {
+  /** Spec formula so agents can construct bytecode (not a demo program). */
+  encoding: string
+  minDepth?: number
+  maxDepth?: number
+  notes?: string
+}
+
+/** Opcode this EIP adds or changes — facts for constructing requests. */
+export interface EipOpcode {
+  name: string
+  opcode: number
+  opcodeHex: string
+  effect: string
+  immediate?: EipOpcodeImmediate
+}
+
+/**
+ * Catalog entry for one EIP module. Only `runnable: true` entries belong in
+ * `describeCapabilities()`. Describes what became possible, not demo programs.
+ */
+export interface EipCapability {
+  eip: number
+  name: string
+  /** One-line capability: what callers can do. */
+  summary: string
+  changeNature: ChangeNature
+  runnable: boolean
+  shapes: QueryShape[]
+  keywords: string[]
+  relatedForks: string[]
+  opcodes?: EipOpcode[]
+  status?: string
+  forkInclusion?: string
+  implMaturity?: string
+  testMaturity?: string
+  specAnchor?: string
+  notes?: string
+}
+
 export interface CapabilityDescription {
   engineVersion: string
   ceilings: {
@@ -128,17 +157,6 @@ export interface CapabilityDescription {
   namedForks: NamedFork[]
   eips: EipCapability[]
   allowedBaseHardforks: string[]
-  presets: PresetDefinition[]
-}
-
-export interface PresetDefinition {
-  id: string
-  name: string
-  shape: QueryShape
-  description: string
-  /** Seed only — may omit concrete bytecode until curated. */
-  seed?: boolean
-  relatedEips?: number[]
 }
 
 export class EngineError extends Error {
