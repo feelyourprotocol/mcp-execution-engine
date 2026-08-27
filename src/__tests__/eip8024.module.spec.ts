@@ -31,6 +31,11 @@ describe('EIP-8024 module', () => {
     expect(EIP_8024_MODULE.opcodes?.[1]?.opcode).toBe(SWAPN)
     expect(EIP_8024_MODULE.opcodes?.[2]?.opcode).toBe(EXCHANGE)
     expect(EIP_8024_MODULE.keywords).toContain('DUPN')
+    expect(EIP_8024_MODULE.comparison).toEqual({
+      baselineForkId: 'osaka',
+      previewForkId: 'amsterdam',
+      note: 'Opcodes 0xe6–0xe8 are invalid on baseline; valid on preview.',
+    })
     expect(EIP_8024_MODULE).not.toHaveProperty('scenarios')
     expect(EIP_8024_MODULE).not.toHaveProperty('questions')
   })
@@ -67,5 +72,20 @@ describe('EIP-8024 module', () => {
     })
     expect(invalid.success).toBe(false)
     expect(invalid.error).toMatch(/stack/i)
+  })
+
+  it('rejects 8024 opcodes on osaka baseline for comparison', async () => {
+    const baseline = await simulateBytecode({
+      bytecode: dupnDemoHex(),
+      fork: { baseHardfork: 'osaka' },
+    })
+    expect(baseline.success).toBe(false)
+    expect(baseline.error).toMatch(/invalid/i)
+
+    const preview = await simulateBytecode({
+      bytecode: dupnDemoHex(),
+      fork: { baseHardfork: 'amsterdam' },
+    })
+    expect(preview.success).toBe(true)
   })
 })

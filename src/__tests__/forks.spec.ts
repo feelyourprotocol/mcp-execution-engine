@@ -25,6 +25,18 @@ describe('fork registry & resolve', () => {
     })
   })
 
+  it('maps mainnet-el alias to osaka', () => {
+    expect(normalizeForkConfig({ baseHardfork: 'mainnet-el', eips: [] })).toEqual({
+      baseHardfork: 'osaka',
+      eips: [],
+    })
+  })
+
+  it('resolves named osaka fork and alias', () => {
+    expect(resolveNamedFork('osaka')).toEqual({ baseHardfork: 'osaka', eips: [] })
+    expect(resolveNamedFork('mainnet-el')).toEqual({ baseHardfork: 'osaka', eips: [] })
+  })
+
   it('resolves named amsterdam fork and alias', () => {
     expect(resolveNamedFork('amsterdam')).toEqual({ baseHardfork: 'amsterdam', eips: [] })
     expect(resolveNamedFork('glamsterdam')).toEqual({ baseHardfork: 'amsterdam', eips: [] })
@@ -44,14 +56,25 @@ describe('fork registry & resolve', () => {
     expect(parseGasLimit('500000')).toBe(500_000n)
   })
 
-  it('describeCapabilities lists only runnable EIP-8024', () => {
+  it('describeCapabilities lists osaka baseline and runnable EIP-8024', () => {
     const caps = describeCapabilities()
     expect(caps.engineVersion).toBe('0.1.0')
+    expect(caps.baselineForkId).toBe('osaka')
+    expect(caps.allowedBaseHardforks).toEqual(['osaka', 'amsterdam'])
+    expect(caps.namedForks.some((fork) => fork.id === 'osaka')).toBe(true)
     expect(caps.namedForks.some((fork) => fork.id === 'amsterdam')).toBe(true)
-    expect(caps.namedForks[0]?.aliases).toContain('glamsterdam')
+    const osaka = caps.namedForks.find((fork) => fork.id === 'osaka')
+    const amsterdam = caps.namedForks.find((fork) => fork.id === 'amsterdam')
+    expect(osaka?.role).toBe('baseline')
+    expect(osaka?.stabilityRollup).toBe('firm')
+    expect(osaka?.aliases).toContain('mainnet-el')
+    expect(amsterdam?.role).toBe('preview')
+    expect(amsterdam?.aliases).toContain('glamsterdam')
     expect(caps.eips).toHaveLength(1)
     expect(caps.eips[0]?.eip).toBe(8024)
     expect(caps.eips[0]?.runnable).toBe(true)
+    expect(caps.eips[0]?.comparison?.baselineForkId).toBe('osaka')
+    expect(caps.eips[0]?.comparison?.previewForkId).toBe('amsterdam')
     expect(caps.eips[0]?.opcodes?.some((op) => op.name === 'DUPN')).toBe(true)
     expect(caps.eips[0]).not.toHaveProperty('scenarios')
     expect(caps.eips.every((eip) => eip.runnable)).toBe(true)

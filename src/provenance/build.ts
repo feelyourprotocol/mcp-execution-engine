@@ -55,9 +55,13 @@ function buildCaveat(engineVersion: string, config: ForkConfig, rollup?: Stabili
   const eipList =
     config.eips && config.eips.length > 0 ? ` with EIP(s) ${config.eips.join(', ')}` : ''
   const rollupNote = rollup ? ` Stability: ${rollup}.` : ''
+  const activationNote =
+    rollup === 'firm'
+      ? ' Rules reflect the current mainnet EL baseline as implemented in this engine build.'
+      : ' Fork rules may change before mainnet activation — verify against latest spec.'
   return (
     `Result from mcp-execution-engine v${engineVersion} simulating ${config.baseHardfork}${eipList}.` +
-    `${rollupNote} Fork rules may change before mainnet activation — verify against latest spec.`
+    `${rollupNote}${activationNote}`
   )
 }
 

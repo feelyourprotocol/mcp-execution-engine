@@ -13,16 +13,27 @@ export const ENGINE_CEILINGS: EngineCeilings = {
   maxTraceSteps: 10_000,
 }
 
-export const ALLOWED_BASE_HARDFORKS = ['amsterdam'] as const
+export const BASELINE_FORK_ID = 'osaka'
+
+export const ALLOWED_BASE_HARDFORKS = ['osaka', 'amsterdam'] as const
 
 export type AllowedBaseHardfork = (typeof ALLOWED_BASE_HARDFORKS)[number]
 
 export const NAMED_FORKS: NamedFork[] = [
   {
+    id: 'osaka',
+    label: 'Osaka (current mainnet EL)',
+    config: { baseHardfork: 'osaka', eips: [] },
+    stabilityRollup: 'firm',
+    role: 'baseline',
+    aliases: ['mainnet-el'],
+  },
+  {
     id: 'amsterdam',
     label: 'Amsterdam (scheduled EL fork)',
     config: { baseHardfork: 'amsterdam', eips: [] },
     stabilityRollup: 'stabilizing',
+    role: 'preview',
     aliases: ['glamsterdam'],
   },
 ]
@@ -71,6 +82,9 @@ export function resolveNamedFork(id: string): ForkConfig {
 }
 
 export function hardforkToEnum(baseHardfork: string): Hardfork {
+  if (baseHardfork === 'osaka') {
+    return Hardfork.Osaka
+  }
   if (baseHardfork === 'amsterdam') {
     return Hardfork.Amsterdam
   }
@@ -121,6 +135,7 @@ export function describeCapabilities() {
       maxTraceSteps: ENGINE_CEILINGS.maxTraceSteps,
     },
     namedForks: NAMED_FORKS,
+    baselineForkId: BASELINE_FORK_ID,
     eips: EIP_CAPABILITIES,
     allowedBaseHardforks: [...ALLOWED_BASE_HARDFORKS],
   }

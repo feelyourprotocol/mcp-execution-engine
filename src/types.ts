@@ -12,6 +12,9 @@ export type ChangeNature =
 
 export type StabilityRollup = 'experimental' | 'emerging' | 'stabilizing' | 'firm'
 
+/** Named fork role for fork comparisons (baseline vs preview). */
+export type ForkRole = 'baseline' | 'preview'
+
 /** À-la-carte or named fork capability set. */
 export interface ForkConfig {
   baseHardfork: string
@@ -48,8 +51,17 @@ export interface NamedFork {
   label: string
   config: ForkConfig
   stabilityRollup?: StabilityRollup
+  /** Baseline (mainnet today) vs preview (upcoming fork). */
+  role?: ForkRole
   /** Alternate names agents may use (e.g. glamsterdam → amsterdam). */
   aliases?: string[]
+}
+
+/** How to compare a preview EIP against the live baseline fork. */
+export interface EipComparison {
+  baselineForkId: string
+  previewForkId: string
+  note?: string
 }
 
 export interface StepTrace {
@@ -109,6 +121,8 @@ export interface EipCapability {
   keywords: string[]
   relatedForks: string[]
   opcodes?: EipOpcode[]
+  /** Optional baseline vs preview fork pair when comparing against mainnet. */
+  comparison?: EipComparison
   status?: string
   forkInclusion?: string
   implMaturity?: string
@@ -126,6 +140,8 @@ export interface CapabilityDescription {
     maxTraceSteps: number
   }
   namedForks: NamedFork[]
+  /** Current mainnet EL baseline for fork comparisons (see `namedForks` with `role: baseline`). */
+  baselineForkId: string
   eips: EipCapability[]
   allowedBaseHardforks: string[]
 }

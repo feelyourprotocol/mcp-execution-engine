@@ -13,6 +13,30 @@ describe('simulateBytecode', () => {
     expect(first).toEqual(second)
   })
 
+  it('runs simple PUSH1 STOP on osaka baseline and returns firm provenance', async () => {
+    const result = await simulateBytecode({
+      bytecode: PUSH1_STOP_HEX,
+      fork: { baseHardfork: 'osaka', eips: [] },
+    })
+
+    expect(result.success).toBe(true)
+    expect(result.error).toBeNull()
+    expect(result.provenance.forkConfig.baseHardfork).toBe('osaka')
+    expect(result.provenance.stabilityRollup).toBe('firm')
+    expect(result.provenance.caveat).toMatch(/mainnet EL baseline/)
+    expect(result.provenance.caveat).not.toMatch(/may change before mainnet activation/)
+  })
+
+  it('rejects DUPN bytecode on osaka baseline (invalid opcode)', async () => {
+    const result = await simulateBytecode({
+      bytecode: dupnDemoHex(),
+      fork: { baseHardfork: 'osaka', eips: [] },
+    })
+
+    expect(result.success).toBe(false)
+    expect(result.error).toMatch(/invalid/i)
+  })
+
   it('runs simple PUSH1 STOP and returns provenance', async () => {
     const result = await simulateBytecode({
       bytecode: PUSH1_STOP_HEX,

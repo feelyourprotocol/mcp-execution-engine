@@ -27,6 +27,11 @@ export const EIP_8024_MODULE: EipCapability = {
   shapes: ['simulate'],
   keywords: ['DUPN', 'SWAPN', 'EXCHANGE', 'stack opcodes', 'stack too deep', 'eip-8024'],
   relatedForks: ['amsterdam', 'glamsterdam'],
+  comparison: {
+    baselineForkId: 'osaka',
+    previewForkId: 'amsterdam',
+    note: 'Opcodes 0xe6–0xe8 are invalid on baseline; valid on preview.',
+  },
   opcodes: [
     {
       name: 'DUPN',
@@ -71,5 +76,5 @@ export const EIP_8024_MODULE: EipCapability = {
   testMaturity: 'Opcode execution tests',
   specAnchor: 'EIP-8024',
   notes:
-    'Amsterdam already bundles EIP-8024 in EthereumJS v10. Passing eips:[8024] is accepted but does not disable the opcodes. There is no pre-8024 base hardfork on this server yet.',
+    'Amsterdam already bundles EIP-8024 in EthereumJS v10. Passing eips:[8024] is accepted but does not disable the opcodes. Use named fork osaka (baseline) vs amsterdam (preview) to compare behavior.',
 }
