@@ -36,10 +36,12 @@ Do **not** add per-EIP engine exports that mirror MCP tools. EIP work belongs in
 
 ## Adding a runnable EIP module
 
-1. Create `src/modules/eip-NNNN/` — `index.ts` (descriptor) + optional `opcodes.ts` / helpers for encoding facts
+**Read website `canonical.ts` first** — [add-mcp-module skill](.cursor/skills/add-mcp-module/SKILL.md).
+
+1. Create `src/modules/eip-NNNN/` — `index.ts` (descriptor) + optional helpers for encoding facts
 2. Register in `src/modules/index.ts`
 3. Add tests in `src/__tests__/` (fixtures OK)
-4. Human catalogue page: `website/mcp-docs/use/eips/eip-NNNN.md` (separate repo path when working from monorepo)
+4. Human catalogue page: `website/mcp-docs/use/eips/eip-NNNN.md` — **required for every live exploration** (Runnable or Planned)
 5. Run `npm run typecheck`, `npm run test:ci`, `npm run lf:ci`
 
 Template: [`src/modules/eip-8024/`](src/modules/eip-8024/).

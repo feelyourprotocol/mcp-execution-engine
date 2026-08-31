@@ -10,21 +10,29 @@ alwaysApply: true
 | Layer | Role |
 | --- | --- |
 | Website exploration | Human textbook — pedagogy, widgets, curated examples |
-| MCP docs `use/eips/eip-NNNN` | Human inspiration — what to ask an agent, Connect |
+| MCP docs `use/eips/eip-NNNN` | Human inspiration — same problem set, prompts, Connect |
 | Engine module + generic tools | Runtime — execute **caller-supplied** bytecode |
 
-## Twin, not clone
+## Canonical source of truth
 
-- Same **core question** (e.g. “can Amsterdam run DUPN?”) — different **artifact**
+- **Schema:** `website/src/explorations/canonicalTypes.ts`
+- **Instance:** `website/src/explorations/eip-NNNN/canonical.ts` → `CANONICAL`
+- Replicate into engine `EipCapability` and mcp-docs prose. **Website wins** on conflict.
+- Do **not** import from `website/src/explorations/` into this repo.
+
+## Twin, not clone — no orphan explorations
+
+- Same **core question** — different **artifact**
+- Exploration is a **slice**; MCP is a **superset**
+- Every **live** exploration needs an MCP-docs EIP page (Runnable or Planned)
 - Website owns **interactive examples**; MCP owns **general execution**
 - Do **not** replay exploration widget bytecode in the engine catalog
-- Do **not** import from `website/src/explorations/` into this repo
+
+## Adding exploration does not auto-add MCP module
+
+Website `add-exploration` skill is out of scope for engine work unless requested. A new exploration without a runnable module still needs `mcp-docs/use/eips/eip-NNNN.md`. Module work: [add-mcp-module skill](../skills/add-mcp-module/SKILL.md).
 
 ## Cross-links (human docs only)
 
-- Exploration → MCP docs: `/use/eips/eip-NNNN` (future website icon)
+- Exploration → MCP docs: `/use/eips/eip-NNNN` (when page exists)
 - MCP docs → exploration: feelyourprotocol.org route + EIP spec
-
-## Adding exploration does not add MCP
-
-The website `add-exploration` skill is out of scope for engine/gateway work unless explicitly requested. A new exploration without a runnable module does not appear in `describeCapabilities()`.

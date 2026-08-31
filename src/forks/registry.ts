@@ -15,11 +15,18 @@ export const ENGINE_CEILINGS: EngineCeilings = {
 
 export const BASELINE_FORK_ID = 'osaka'
 
-export const ALLOWED_BASE_HARDFORKS = ['osaka', 'amsterdam'] as const
+export const ALLOWED_BASE_HARDFORKS = ['prague', 'osaka', 'amsterdam'] as const
 
 export type AllowedBaseHardfork = (typeof ALLOWED_BASE_HARDFORKS)[number]
 
 export const NAMED_FORKS: NamedFork[] = [
+  {
+    id: 'prague',
+    label: 'Prague (pre-Fusaka ModExp)',
+    config: { baseHardfork: 'prague', eips: [] },
+    stabilityRollup: 'firm',
+    role: 'baseline',
+  },
   {
     id: 'osaka',
     label: 'Osaka (current mainnet EL)',
@@ -82,6 +89,9 @@ export function resolveNamedFork(id: string): ForkConfig {
 }
 
 export function hardforkToEnum(baseHardfork: string): Hardfork {
+  if (baseHardfork === 'prague') {
+    return Hardfork.Prague
+  }
   if (baseHardfork === 'osaka') {
     return Hardfork.Osaka
   }
