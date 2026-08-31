@@ -6,25 +6,17 @@
       "id": "simulate",
       "status": "shipped",
       "engineFn": "simulateBytecode",
-      "mcpTool": "simulate_evm_bytecode",
-      "transport": { "stdio": "planned-step-3", "http": "planned-step-5" },
+      "mcpTool": "run_evm_bytecode",
+      "transport": { "stdio": "live", "http": "planned-step-5" },
       "summary": "Run raw bytecode under a fork / EIP configuration; optional execution trace."
-    },
-    {
-      "id": "compare",
-      "status": "shipped",
-      "engineFn": "compareVariants",
-      "mcpTool": null,
-      "transport": { "stdio": "planned-step-3", "http": "planned-step-5" },
-      "summary": "Run multiple labelled variants (each with own fork + bytecode) and diff results."
     },
     {
       "id": "probe",
       "status": "shipped",
       "engineFn": "describeCapabilities",
       "mcpTool": "describe_capabilities",
-      "transport": { "stdio": "planned-step-3", "http": "planned-step-5" },
-      "summary": "Describe supported forks, EIPs, ceilings, and presets."
+      "transport": { "stdio": "live", "http": "planned-step-5" },
+      "summary": "Describe supported forks, runnable EIP modules, opcodes, and encoding."
     },
     {
       "id": "generate",
@@ -49,13 +41,6 @@
       "title": "EIP-8024 DUPN stack demo on Amsterdam",
       "input": "shapes/simulate/examples/02-dupn-amsterdam/input.json",
       "notes": "shapes/simulate/examples/02-dupn-amsterdam/notes.md"
-    },
-    {
-      "id": "compare/01-two-bytecodes",
-      "shape": "compare",
-      "title": "Compare PUSH1 STOP vs DUPN demo",
-      "input": "shapes/compare/examples/01-two-bytecodes/input.json",
-      "notes": "shapes/compare/examples/01-two-bytecodes/notes.md"
     },
     {
       "id": "probe/01-capabilities",

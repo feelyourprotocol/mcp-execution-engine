@@ -1,0 +1,35 @@
+---
+description: Execution engine invariants — generic verbs, honest catalog, no demo programs in modules
+alwaysApply: true
+---
+
+# Execution engine structure
+
+## Generic library vs EIP modules
+
+- **Query shapes** (`simulate`, `probe`, later `generate`) are the stable API — not per-EIP functions
+- **EIP modules** (`src/modules/eip-NNNN/`) describe what became possible: `summary`, `opcodes`, encoding, `keywords`, `runnable`
+- Only `runnable: true` modules belong in `EIP_MODULES` / `describeCapabilities()`
+
+## Catalog honesty
+
+- Unimplemented or website-only EIPs stay **off** the live catalog
+- Modules describe **support**, not pedagogical demo programs
+- Demo bytecode belongs in `src/__tests__/fixtures/`, not module descriptors
+
+## Service boundaries (do not break)
+
+- Stateless / BYOS — callers supply bytecode
+- Raw bytecode only — no Solidity compile in the engine
+- Provenance on every simulate result
+- No archive node, no multi-block historical backtesting
+
+## Gateway boundary
+
+This repo has **no MCP transport**. Tool names and Zod schemas live in `mcp-gateway`. Engine exports library functions and types only.
+
+## When editing
+
+- Register new modules in `src/modules/index.ts`
+- Run `npm run typecheck`, `npm run test:ci`, `npm run lf:ci` before finishing
+- Human EIP pages live in `website/mcp-docs/use/eips/` — link, do not duplicate long prose in code

@@ -16,10 +16,9 @@ import { readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { compareVariants } from '../src/diff/diffResults.js'
 import { describeCapabilities } from '../src/forks/registry.js'
 import { simulateBytecode } from '../src/simulate/simulateBytecode.js'
-import type { CompareVariantsInput, SimulateBytecodeInput } from '../src/types.js'
+import type { SimulateBytecodeInput } from '../src/types.js'
 import { EngineError } from '../src/types.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -69,7 +68,7 @@ Commands:
   overview          What we have (shapes + engine version)
   shapes            List query shapes and status
   endpoints         Print lab/endpoints/README.md (engine vs gateway vs URL)
-  io <shape>        Print lab/shapes/<shape>/io.md (simulate | compare)
+  io <shape>        Print lab/shapes/<shape>/io.md (simulate)
   list              Runnable examples
   run <example-id>  Run an example (e.g. simulate/01-push1-stop)
 
@@ -153,11 +152,6 @@ async function cmdRun(catalog: Catalog, exampleId: string): Promise<void> {
     case 'simulate': {
       const input = JSON.parse(readLabFile(ex.input!)) as SimulateBytecodeInput
       result = await simulateBytecode(input)
-      break
-    }
-    case 'compare': {
-      const input = JSON.parse(readLabFile(ex.input!)) as CompareVariantsInput
-      result = await compareVariants(input)
       break
     }
     case 'probe':

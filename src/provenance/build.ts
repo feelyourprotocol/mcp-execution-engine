@@ -55,9 +55,13 @@ function buildCaveat(engineVersion: string, config: ForkConfig, rollup?: Stabili
   const eipList =
     config.eips && config.eips.length > 0 ? ` with EIP(s) ${config.eips.join(', ')}` : ''
   const rollupNote = rollup ? ` Stability: ${rollup}.` : ''
+  const activationNote =
+    rollup === 'firm'
+      ? ' Rules reflect the current mainnet EL baseline as implemented in this engine build.'
+      : ' Fork rules may change before mainnet activation — verify against latest spec.'
   return (
     `Result from mcp-execution-engine v${engineVersion} simulating ${config.baseHardfork}${eipList}.` +
-    `${rollupNote} Fork rules may change before mainnet activation — verify against latest spec.`
+    `${rollupNote}${activationNote}`
   )
 }
 
@@ -70,33 +74,6 @@ export function buildProvenance(engineVersion: string, forkConfig: ForkConfig): 
     perEip: buildPerEipProvenance(forkConfig),
     stabilityRollup,
     caveat: buildCaveat(engineVersion, forkConfig, stabilityRollup),
-    asOf: PROVENANCE_AS_OF,
-  }
-}
-
-export function mergeProvenanceForCompare(
-  engineVersion: string,
-  forkConfigs: ForkConfig[],
-): Provenance {
-  const mergedEips = [...new Set(forkConfigs.flatMap((config) => config.eips ?? []))].sort(
-    (a, b) => a - b,
-  )
-
-  const composite: ForkConfig = {
-    baseHardfork: forkConfigs[0]?.baseHardfork ?? 'amsterdam',
-    eips: mergedEips,
-  }
-
-  const stabilityRollup = rollupFromForkConfig(composite)
-
-  return {
-    engineVersion,
-    forkConfig: composite,
-    perEip: buildPerEipProvenance(composite),
-    stabilityRollup,
-    caveat:
-      `Comparison across ${forkConfigs.length} variant(s). ` +
-      buildCaveat(engineVersion, composite, stabilityRollup),
     asOf: PROVENANCE_AS_OF,
   }
 }

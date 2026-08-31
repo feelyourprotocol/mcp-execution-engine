@@ -1,0 +1,38 @@
+---
+description: How MCP engine modules relate to website explorations — twin not clone
+alwaysApply: true
+---
+
+# Website relation (explorations vs MCP)
+
+## One capability, three presentations
+
+| Layer | Role |
+| --- | --- |
+| Website exploration | Human textbook — pedagogy, widgets, curated examples |
+| MCP docs `use/eips/eip-NNNN` | Human inspiration — same problem set, prompts, Connect |
+| Engine module + generic tools | Runtime — execute **caller-supplied** bytecode |
+
+## Canonical source of truth
+
+- **Schema:** `website/src/explorations/canonicalTypes.ts`
+- **Instance:** `website/src/explorations/eip-NNNN/canonical.ts` → `CANONICAL`
+- Replicate into engine `EipCapability` and mcp-docs prose. **Website wins** on conflict.
+- Do **not** import from `website/src/explorations/` into this repo.
+
+## Twin, not clone — no orphan explorations
+
+- Same **core question** — different **artifact**
+- Exploration is a **slice**; MCP is a **superset**
+- Every **live** exploration needs an MCP-docs EIP page (Runnable or Planned)
+- Website owns **interactive examples**; MCP owns **general execution**
+- Do **not** replay exploration widget bytecode in the engine catalog
+
+## Adding exploration does not auto-add MCP module
+
+Website `add-exploration` skill is out of scope for engine work unless requested. A new exploration without a runnable module still needs `mcp-docs/use/eips/eip-NNNN.md`. Module work: [add-mcp-module skill](../skills/add-mcp-module/SKILL.md).
+
+## Cross-links (human docs only)
+
+- Exploration → MCP docs: `/use/eips/eip-NNNN` (when page exists)
+- MCP docs → exploration: feelyourprotocol.org route + EIP spec

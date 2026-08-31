@@ -1,6 +1,6 @@
-export { compareVariants } from './diff/diffResults.js'
 export {
   ALLOWED_BASE_HARDFORKS,
+  BASELINE_FORK_ID,
   buildCommon,
   describeCapabilities,
   EIP_CAPABILITIES,
@@ -13,24 +13,33 @@ export {
   resolveNamedFork,
 } from './forks/registry.js'
 export { parseBytecodeHex, parseGasLimit, resolveFork } from './forks/resolve.js'
-export { getPreset, listPresets, PRESETS } from './presets/index.js'
-export { buildProvenance, mergeProvenanceForCompare, PROVENANCE_AS_OF } from './provenance/build.js'
+export { EIP_8024_MODULE } from './modules/eip-8024/index.js'
+export {
+  DUPN,
+  DUPN_SWAPN_MAX_DEPTH,
+  DUPN_SWAPN_MIN_DEPTH,
+  encodeDupnSwapnImmediate,
+  encodeExchangeImmediate,
+  EXCHANGE,
+  EXCHANGE_XOR_MASK,
+  SWAPN,
+} from './modules/eip-8024/opcodes.js'
+export { EIP_MODULES, getEipModule, listEipModules } from './modules/index.js'
+export { buildProvenance, PROVENANCE_AS_OF } from './provenance/build.js'
 export { simulateBytecode } from './simulate/simulateBytecode.js'
 export { stepToTrace } from './simulate/trace.js'
 export type {
   CapabilityDescription,
   ChangeNature,
-  CompareDiffEntry,
-  CompareVariantInput,
-  CompareVariantResult,
-  CompareVariantsInput,
-  CompareVariantsResult,
   EipCapability,
+  EipComparison,
+  EipOpcode,
+  EipOpcodeImmediate,
   EipProvenance,
   EngineCeilings,
   ForkConfig,
+  ForkRole,
   NamedFork,
-  PresetDefinition,
   Provenance,
   QueryShape,
   SimulateBytecodeInput,

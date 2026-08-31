@@ -1,5 +1,5 @@
 /** Query shapes the MCP surface exposes (generic verbs). */
-export type QueryShape = 'simulate' | 'compare' | 'generate' | 'probe'
+export type QueryShape = 'simulate' | 'generate' | 'probe'
 
 /** Nature of a protocol change — drives which query shapes apply. */
 export type ChangeNature =
@@ -11,6 +11,9 @@ export type ChangeNature =
   | 'economic'
 
 export type StabilityRollup = 'experimental' | 'emerging' | 'stabilizing' | 'firm'
+
+/** Named fork role for fork comparisons (baseline vs preview). */
+export type ForkRole = 'baseline' | 'preview'
 
 /** À-la-carte or named fork capability set. */
 export interface ForkConfig {
@@ -43,24 +46,22 @@ export interface EngineCeilings {
   maxTraceSteps: number
 }
 
-export interface EipCapability {
-  eip: number
-  name?: string
-  changeNature?: ChangeNature
-  shapes?: QueryShape[]
-  status?: string
-  forkInclusion?: string
-  implMaturity?: string
-  testMaturity?: string
-  specAnchor?: string
-  notes?: string
-}
-
 export interface NamedFork {
   id: string
   label: string
   config: ForkConfig
   stabilityRollup?: StabilityRollup
+  /** Baseline (mainnet today) vs preview (upcoming fork). */
+  role?: ForkRole
+  /** Alternate names agents may use (e.g. glamsterdam → amsterdam). */
+  aliases?: string[]
+}
+
+/** How to compare a preview EIP against the live baseline fork. */
+export interface EipComparison {
+  baselineForkId: string
+  previewForkId: string
+  note?: string
 }
 
 export interface StepTrace {
@@ -88,33 +89,46 @@ export interface SimulateBytecodeResult {
   provenance: Provenance
 }
 
-export interface CompareVariantInput {
-  label: string
-  fork: ForkConfig
-  bytecode: string
-  gasLimit?: string
-  trace?: boolean
+export interface EipOpcodeImmediate {
+  /** Spec formula so agents can construct bytecode (not a demo program). */
+  encoding: string
+  minDepth?: number
+  maxDepth?: number
+  notes?: string
 }
 
-export interface CompareVariantsInput {
-  variants: CompareVariantInput[]
+/** Opcode this EIP adds or changes — facts for constructing requests. */
+export interface EipOpcode {
+  name: string
+  opcode: number
+  opcodeHex: string
+  effect: string
+  immediate?: EipOpcodeImmediate
 }
 
-export interface CompareVariantResult {
-  label: string
-  result: SimulateBytecodeResult
-}
-
-export interface CompareDiffEntry {
-  dimension: string
-  byLabel: Record<string, string | boolean | null>
-  note?: string
-}
-
-export interface CompareVariantsResult {
-  variants: CompareVariantResult[]
-  diffs: CompareDiffEntry[]
-  provenance: Provenance
+/**
+ * Catalog entry for one EIP module. Only `runnable: true` entries belong in
+ * `describeCapabilities()`. Describes what became possible, not demo programs.
+ */
+export interface EipCapability {
+  eip: number
+  name: string
+  /** One-line capability: what callers can do. */
+  summary: string
+  changeNature: ChangeNature
+  runnable: boolean
+  shapes: QueryShape[]
+  keywords: string[]
+  relatedForks: string[]
+  opcodes?: EipOpcode[]
+  /** Optional baseline vs preview fork pair when comparing against mainnet. */
+  comparison?: EipComparison
+  status?: string
+  forkInclusion?: string
+  implMaturity?: string
+  testMaturity?: string
+  specAnchor?: string
+  notes?: string
 }
 
 export interface CapabilityDescription {
@@ -126,19 +140,10 @@ export interface CapabilityDescription {
     maxTraceSteps: number
   }
   namedForks: NamedFork[]
+  /** Current mainnet EL baseline for fork comparisons (see `namedForks` with `role: baseline`). */
+  baselineForkId: string
   eips: EipCapability[]
   allowedBaseHardforks: string[]
-  presets: PresetDefinition[]
-}
-
-export interface PresetDefinition {
-  id: string
-  name: string
-  shape: QueryShape
-  description: string
-  /** Seed only — may omit concrete bytecode until curated. */
-  seed?: boolean
-  relatedEips?: number[]
 }
 
 export class EngineError extends Error {

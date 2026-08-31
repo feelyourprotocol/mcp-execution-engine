@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { ENGINE_CEILINGS } from '../forks/registry.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
 import { EngineError } from '../types.js'
-import { dupnDemoBytecodeHex, PUSH1_STOP_HEX } from './fixtures/eip8024.js'
+import { dupnDemoHex, PUSH1_STOP_HEX } from './fixtures/eip8024.js'
 
 describe('simulateBytecode', () => {
   it('is deterministic for identical input', async () => {
@@ -11,6 +11,30 @@ describe('simulateBytecode', () => {
     const first = await simulateBytecode(input)
     const second = await simulateBytecode(input)
     expect(first).toEqual(second)
+  })
+
+  it('runs simple PUSH1 STOP on osaka baseline and returns firm provenance', async () => {
+    const result = await simulateBytecode({
+      bytecode: PUSH1_STOP_HEX,
+      fork: { baseHardfork: 'osaka', eips: [] },
+    })
+
+    expect(result.success).toBe(true)
+    expect(result.error).toBeNull()
+    expect(result.provenance.forkConfig.baseHardfork).toBe('osaka')
+    expect(result.provenance.stabilityRollup).toBe('firm')
+    expect(result.provenance.caveat).toMatch(/mainnet EL baseline/)
+    expect(result.provenance.caveat).not.toMatch(/may change before mainnet activation/)
+  })
+
+  it('rejects DUPN bytecode on osaka baseline (invalid opcode)', async () => {
+    const result = await simulateBytecode({
+      bytecode: dupnDemoHex(),
+      fork: { baseHardfork: 'osaka', eips: [] },
+    })
+
+    expect(result.success).toBe(false)
+    expect(result.error).toMatch(/invalid/i)
   })
 
   it('runs simple PUSH1 STOP and returns provenance', async () => {
@@ -39,7 +63,7 @@ describe('simulateBytecode', () => {
 
   it('runs DUPN on amsterdam (EIP-8024 bundled in fork)', async () => {
     const result = await simulateBytecode({
-      bytecode: dupnDemoBytecodeHex(),
+      bytecode: dupnDemoHex(),
       fork: { baseHardfork: 'amsterdam', eips: [] },
     })
 
@@ -49,7 +73,7 @@ describe('simulateBytecode', () => {
 
   it('accepts explicit eips:[8024] on amsterdam', async () => {
     const result = await simulateBytecode({
-      bytecode: dupnDemoBytecodeHex(),
+      bytecode: dupnDemoHex(),
       fork: { baseHardfork: 'amsterdam', eips: [8024] },
     })
 

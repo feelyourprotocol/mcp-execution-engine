@@ -1,6 +1,6 @@
 # mcp-execution-engine
 
-Deterministic future-fork EVM simulation core for the [Feel Your Protocol MCP server](https://mcp-docs.feelyourprotocol.org).
+Deterministic future-Ethereum-protocol simulation core for the [Feel Your Protocol MCP server](https://mcp-docs.feelyourprotocol.org).
 
 Pure TypeScript library wrapping EthereumJS v10 — **no HTTP, no MCP transport, no payments**. The [`mcp-gateway`](https://mcp-docs.feelyourprotocol.org/internals/gateway.html) (Step 3+) exposes engine calls as MCP tools for agents.
 
@@ -22,8 +22,7 @@ Website explorations are the **browser twin**; this engine is the **headless lab
 
 | Shape | Engine | Future MCP tool | Status |
 | --- | --- | --- | --- |
-| **simulate** | `simulateBytecode()` | `simulate_evm_bytecode` | Shipped |
-| **compare** | `compareVariants()` | TBD | Shipped |
+| **simulate** | `simulateBytecode()` | `run_evm_bytecode` | Shipped |
 | **probe** | `describeCapabilities()` | `describe_capabilities` | Shipped |
 | **generate** | `generateBal()` | `generate_eip7928_bal` | Planned (Step 6) |
 
@@ -37,7 +36,6 @@ Hands-on exploration lives in **`lab/`** — shapes, I/O contracts, runnable exa
 npm install
 npm run lab                              # overview
 npm run lab -- run simulate/01-push1-stop
-npm run lab -- run compare/01-two-bytecodes
 npm run lab -- run probe/01-capabilities
 npm run lab -- io simulate               # input/output fields
 npm run lab -- endpoints                 # engine → tool → URL ladder
