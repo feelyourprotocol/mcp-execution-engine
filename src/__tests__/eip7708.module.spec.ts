@@ -5,8 +5,6 @@ import { countEthTransferLogs } from '../simulate/logs.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
 import {
   PLAIN_CALLER,
-  PLAIN_CALLER,
-  PLAIN_RECIPIENT,
   PLAIN_RECIPIENT,
   REVERT_BYTECODE,
   REVERT_CALLEE,
