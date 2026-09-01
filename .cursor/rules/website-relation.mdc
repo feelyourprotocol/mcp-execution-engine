@@ -25,12 +25,13 @@ alwaysApply: true
 - Same **core question** — different **artifact**
 - Exploration is a **slice**; MCP is a **superset**
 - Every **live** exploration needs an MCP-docs EIP page (Runnable or Planned)
-- Website owns **interactive examples**; MCP owns **general execution**
+- Website owns **interactive examples**; MCP owns **general execution** of **caller-supplied** programs
 - Do **not** replay exploration widget bytecode in the engine catalog
+- A module is runnable only if a shipped verb’s **actual result fields** show the EIP effect (today: gas / return / stack / opcode trace — not logs, receipts, or BALs). Otherwise the twin is a Planned catalogue page
 
 ## Adding exploration does not auto-add MCP module
 
-Website `add-exploration` skill is out of scope for engine work unless requested. A new exploration without a runnable module still needs `mcp-docs/use/eips/eip-NNNN.md`. Module work: [add-mcp-module skill](../skills/add-mcp-module/SKILL.md).
+Website `add-exploration` is out of scope for engine work unless requested. The website [round-trip](https://github.com/feelyourprotocol/website/blob/main/.cursor/skills/round-trip-protocol-change/SKILL.md) adds the module only in **phase 3**, after a human GO. A new exploration without a runnable module still needs `mcp-docs/use/eips/eip-NNNN.md`. Module work: [add-mcp-module skill](../skills/add-mcp-module/SKILL.md).
 
 ## Cross-links (human docs only)
 
