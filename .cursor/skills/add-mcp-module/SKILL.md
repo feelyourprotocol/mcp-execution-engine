@@ -21,7 +21,7 @@ MCP is the **lab**, not a second widget. Same **core question** as the explorati
 1. **Ask in their words** — play, understand, or check *their* data. Catalogue prompts come from the briefing (“what they would ask”), not from widget preset hex.
 2. **Generic verbs only** — `describe_capabilities` + `run_evm_bytecode` today; `generate` when it ships. Never `run_eip_NNNN`.
 3. **BYOS / constructible** — catalog exposes encoding facts (opcodes, precompile ABI, immediates) so an agent can *build* a request. No demo programs in the module.
-4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today (`SimulateBytecodeResult`: success, gas, return, stack, optional opcode trace — **not** logs, receipts, or BALs). If the core question needs something we do not return yet → **`planned-module`** (or stop — do not fake it).
+4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today (`SimulateBytecodeResult`: success, gas, return, stack, optional opcode trace, optional **logs** / **decodedLogs** — not full receipts or BALs). If the core question needs something we do not return yet → **`planned-module`** (or stop — do not fake it).
 5. **Superset, not clone** — exploration is a curated slice; MCP runs arbitrary caller programs under a fork. Do not replay widget examples in the catalog or as the only tests.
 6. **Compare when it teaches** — repricing / on-vs-off capability: `comparison` forks and “run twice.” New-capability with no meaningful baseline: valid vs invalid (see 7951), not a fake gas delta.
 7. **Twin page always** — every **live** exploration gets `use/eips/eip-NNNN.md` (Runnable or Planned). Engine module only when (4) holds.
@@ -37,7 +37,7 @@ Match `CANONICAL.question.changeNature` + `mcp.shapes`. Closest **engine** sibli
 | Precompile new-capability | `eip-7951/` | CALL address + input layout | valid return vs invalid — not a fork gas compare |
 | New structure (BAL, …) | catalogue only until **generate** ships | honest Planned page (see `eip-7928.md`) | fixtures when the verb exists |
 | Limit / economic / exec-model | simulate if the result fields show it | encoding + fork notes | hit the limit / fee path; beyond-edge |
-| Needs logs, receipts, or other fields simulate does not return | **planned-module** | page says what will be observable | do not list in `EIP_MODULES` |
+| Needs full receipts, tx-level value, burn logs, or BAL fields simulate does not return | **planned-module** or extend simulate first | page says what is observable today | do not list in `EIP_MODULES` until honest |
 
 Copy the closest **module**, not the closest **website folder**. Helpers: `opcodes.ts` or `input.ts` — facts, not programs.
 

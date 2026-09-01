@@ -13,6 +13,7 @@ export {
   resolveNamedFork,
 } from './forks/registry.js'
 export { parseBytecodeHex, parseGasLimit, resolveFork } from './forks/resolve.js'
+export { EIP_7708_MODULE } from './modules/eip-7708/index.js'
 export { EIP_8024_MODULE } from './modules/eip-8024/index.js'
 export {
   DUPN,
@@ -26,6 +27,7 @@ export {
 } from './modules/eip-8024/opcodes.js'
 export { EIP_MODULES, getEipModule, listEipModules } from './modules/index.js'
 export { buildProvenance, PROVENANCE_AS_OF } from './provenance/build.js'
+export { countEthTransferLogs, mapExecLogs, systemAddressHex } from './simulate/logs.js'
 export { simulateBytecode } from './simulate/simulateBytecode.js'
 export { stepToTrace } from './simulate/trace.js'
 export type {
@@ -44,6 +46,13 @@ export type {
   QueryShape,
   SimulateBytecodeInput,
   SimulateBytecodeResult,
+  SimulateDecodedLog,
+  SimulateEthBurnLog,
+  SimulateEthTransferLog,
+  SimulateLogDecoration,
+  SimulateMessageCall,
+  SimulatePrefundAccount,
+  SimulateRawLog,
   StabilityRollup,
   StepTrace,
 } from './types.js'
