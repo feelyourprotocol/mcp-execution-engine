@@ -36,6 +36,8 @@ Do **not** add per-EIP engine exports that mirror MCP tools. EIP work belongs in
 
 ## Adding a runnable EIP module
 
+Full EIP → exploration → MCP path is orchestrated from the website [round-trip skill](https://github.com/feelyourprotocol/website/blob/main/.cursor/skills/round-trip-protocol-change/SKILL.md) (this repo is phase 3).
+
 **Read website `canonical.ts` first** — [add-mcp-module skill](.cursor/skills/add-mcp-module/SKILL.md).
 
 1. Create `src/modules/eip-NNNN/` — `index.ts` (descriptor) + optional helpers for encoding facts
