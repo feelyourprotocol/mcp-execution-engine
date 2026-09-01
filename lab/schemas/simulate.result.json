@@ -13,6 +13,47 @@
       "items": { "type": "string" }
     },
     "error": { "type": ["string", "null"] },
+    "logs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["address", "topics", "data"],
+        "properties": {
+          "address": { "type": "string" },
+          "topics": { "type": "array", "items": { "type": "string" } },
+          "data": { "type": "string" }
+        }
+      }
+    },
+    "decodedLogs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["index", "raw"],
+        "properties": {
+          "index": { "type": "integer" },
+          "raw": {
+            "type": "object",
+            "required": ["address", "topics", "data"],
+            "properties": {
+              "address": { "type": "string" },
+              "topics": { "type": "array", "items": { "type": "string" } },
+              "data": { "type": "string" }
+            }
+          },
+          "decoration": {
+            "type": "object",
+            "properties": {
+              "kind": { "type": "string" },
+              "from": { "type": "string" },
+              "to": { "type": "string" },
+              "valueWei": { "type": "string" },
+              "account": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
     "steps": {
       "type": "array",
       "items": {

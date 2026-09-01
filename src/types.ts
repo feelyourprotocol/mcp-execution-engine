@@ -72,8 +72,58 @@ export interface StepTrace {
   stack: string[]
 }
 
+export interface SimulatePrefundAccount {
+  address: string
+  balance?: string
+  code?: string
+}
+
+export interface SimulateMessageCall {
+  /** Hex address of the message sender. */
+  caller: string
+  /** Hex address of the call target. */
+  to: string
+  /** Value in wei as a decimal string. Default 0. */
+  value?: string
+  /** Optional calldata hex. Default empty. */
+  data?: string
+  /** Optional runtime bytecode installed at `to` before the call (test contracts). */
+  code?: string
+}
+
+export interface SimulateRawLog {
+  address: string
+  topics: string[]
+  data: string
+}
+
+export interface SimulateEthTransferLog {
+  kind: 'eth-transfer'
+  from: string
+  to: string
+  valueWei: string
+}
+
+export interface SimulateEthBurnLog {
+  kind: 'eth-burn'
+  account: string
+  valueWei: string
+}
+
+export type SimulateLogDecoration = SimulateEthTransferLog | SimulateEthBurnLog
+
+export interface SimulateDecodedLog {
+  index: number
+  raw: SimulateRawLog
+  decoration?: SimulateLogDecoration
+}
+
 export interface SimulateBytecodeInput {
-  bytecode: string
+  bytecode?: string
+  /** Value-bearing message call — use for plain ETH moves without wrapper bytecode. */
+  messageCall?: SimulateMessageCall
+  /** Extra accounts to prefund before execution (calldata targets, revert callees, etc.). */
+  accounts?: SimulatePrefundAccount[]
   fork?: ForkConfig
   gasLimit?: string
   trace?: boolean
@@ -86,6 +136,10 @@ export interface SimulateBytecodeResult {
   finalStack: string[]
   error: string | null
   steps?: StepTrace[]
+  /** Raw logs emitted during execution (empty when none). */
+  logs?: SimulateRawLog[]
+  /** EIP-7708 and other decodable logs indexed in emission order. */
+  decodedLogs?: SimulateDecodedLog[]
   provenance: Provenance
 }
 

@@ -1,4 +1,10 @@
-import { hexToBytes } from '@ethereumjs/util'
+import type { Address } from '@ethereumjs/util'
+import {
+  createAccount,
+  createAddressFromString,
+  hexToBytes,
+  type PrefixedHexString,
+} from '@ethereumjs/util'
 
 import type { ForkConfig } from '../types.js'
 import { EngineError } from '../types.js'
@@ -59,6 +65,68 @@ export function parseGasLimit(gasLimit?: string): bigint {
   }
 
   return parsed
+}
+
+export function parseAddress(address: string): ReturnType<typeof createAddressFromString> {
+  const trimmed = address.trim()
+  const normalized = trimmed.startsWith('0x') ? trimmed : `0x${trimmed}`
+  if (!/^0x[0-9a-fA-F]{40}$/.test(normalized)) {
+    throw new EngineError('Address must be a 20-byte hex string', 'invalid_address')
+  }
+  return createAddressFromString(normalized as PrefixedHexString)
+}
+
+export function parseWeiValue(value?: string): bigint {
+  if (value === undefined || value.trim() === '') {
+    return 0n
+  }
+
+  let parsed: bigint
+  try {
+    parsed = BigInt(value.trim())
+  } catch {
+    throw new EngineError('value must be an integer wei string', 'invalid_value')
+  }
+
+  if (parsed < 0n) {
+    throw new EngineError('value must not be negative', 'invalid_value')
+  }
+
+  return parsed
+}
+
+export function parseOptionalHexData(data?: string): Uint8Array {
+  if (data === undefined || data.trim() === '') {
+    return new Uint8Array()
+  }
+
+  const trimmed = data.trim()
+  const normalized = trimmed.startsWith('0x') ? trimmed : `0x${trimmed}`
+  if (!/^0x[0-9a-fA-F]*$/.test(normalized)) {
+    throw new EngineError('data must be a hex string', 'invalid_data')
+  }
+  if (normalized.length % 2 !== 0) {
+    throw new EngineError('data hex must have an even number of digits', 'invalid_data')
+  }
+  return hexToBytes(normalized as PrefixedHexString)
+}
+
+/** Prefund caller balance for value-bearing message calls. */
+export function defaultCallerBalance(value: bigint): bigint {
+  return value + BigInt(1e18)
+}
+
+export function prefundCallerAccount(
+  stateManager: {
+    putAccount: (address: Address, account?: ReturnType<typeof createAccount>) => Promise<void>
+  },
+  caller: ReturnType<typeof createAddressFromString>,
+  value: bigint,
+): Promise<void> {
+  return stateManager.putAccount(
+    caller,
+    createAccount({ nonce: 0n, balance: defaultCallerBalance(value) }),
+  )
 }
 
 export function resolveFork(fork?: ForkConfig): ResolvedFork {
