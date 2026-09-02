@@ -73,7 +73,7 @@ Stop and ask:
 
 Follow existing pages (`eip-8024.md`, `eip-7883.md`, `eip-7951.md`, planned `eip-7928.md`):
 
-1. Status banner (runnable locally vs planned; public MCP not launched)
+1. Status banner (ready for public MCP vs planned; public MCP not launched — do not advertise self-host)
 2. **What became possible** — core question; what the caller supplies
 3. **What you can ask** — 3–5 prompts from the briefing (play + understand + their data). No tool names in the prompt list
 4. **What the server does** — discover, then the verb (plain labels)
