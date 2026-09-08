@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://feelyourprotocol.org/schemas/mcp-engine/transaction.result.json",
+  "title": "RunTransactionResult",
+  "type": "object",
+  "required": ["success", "gasUsed", "gasUsedScope", "returnValue", "error", "provenance"],
+  "properties": {
+    "success": { "type": "boolean" },
+    "gasUsed": { "type": "string", "description": "Paid transaction gas (totalGasSpent)." },
+    "gasUsedScope": { "type": "string", "const": "transaction" },
+    "txRegularGas": { "type": "string" },
+    "txStateGas": { "type": "string" },
+    "returnValue": { "type": "string" },
+    "error": { "type": ["string", "null"] },
+    "logs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["address", "topics", "data"],
+        "properties": {
+          "address": { "type": "string" },
+          "topics": { "type": "array", "items": { "type": "string" } },
+          "data": { "type": "string" }
+        }
+      }
+    },
+    "decodedLogs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["index", "raw"],
+        "properties": {
+          "index": { "type": "integer" },
+          "raw": { "type": "object" },
+          "decoration": { "type": "object" }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["engineVersion", "forkConfig"],
+      "properties": {
+        "engineVersion": { "type": "string" },
+        "forkConfig": { "type": "object" },
+        "stabilityRollup": { "type": "string" },
+        "caveat": { "type": "string" },
+        "asOf": { "type": "string" }
+      }
+    }
+  }
+}

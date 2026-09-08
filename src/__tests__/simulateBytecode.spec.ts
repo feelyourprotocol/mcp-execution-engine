@@ -21,6 +21,7 @@ describe('simulateBytecode', () => {
 
     expect(result.success).toBe(true)
     expect(result.error).toBeNull()
+    expect(result.gasUsedScope).toBe('call-frame')
     expect(result.provenance.forkConfig.baseHardfork).toBe('osaka')
     expect(result.provenance.stabilityRollup).toBe('firm')
     expect(result.provenance.caveat).toMatch(/mainnet EL baseline/)
@@ -46,6 +47,7 @@ describe('simulateBytecode', () => {
     expect(result.success).toBe(true)
     expect(result.error).toBeNull()
     expect(BigInt(result.gasUsed)).toBeGreaterThan(0n)
+    expect(result.gasUsedScope).toBe('call-frame')
     expect(result.provenance.engineVersion).toBe('0.1.0')
     expect(result.provenance.caveat).toMatch(/amsterdam/)
   })
@@ -87,31 +89,7 @@ describe('simulateBytecode', () => {
     ).rejects.toThrow(EngineError)
   })
 
-  it('rejects input with both bytecode and messageCall', async () => {
-    await expect(
-      simulateBytecode({
-        bytecode: PUSH1_STOP_HEX,
-        messageCall: {
-          caller: '0x00000000000000000000000000000000000000ee',
-          to: '0x00000000000000000000000000000000000000aa',
-          value: '1',
-        },
-      }),
-    ).rejects.toThrow(/not both/i)
-  })
-
-  it('returns decoded EIP-7708 Transfer logs for messageCall on Amsterdam', async () => {
-    const result = await simulateBytecode({
-      messageCall: {
-        caller: '0x00000000000000000000000000000000000000ee',
-        to: '0x00000000000000000000000000000000000000aa',
-        value: '1',
-      },
-      fork: { baseHardfork: 'amsterdam' },
-    })
-
-    expect(result.decodedLogs?.some((entry) => entry.decoration?.kind === 'eth-transfer')).toBe(
-      true,
-    )
+  it('rejects empty bytecode', async () => {
+    await expect(simulateBytecode({ bytecode: '' })).rejects.toThrow(/bytecode/i)
   })
 })

@@ -3,10 +3,11 @@
   "$id": "https://feelyourprotocol.org/schemas/mcp-engine/simulate.result.json",
   "title": "SimulateBytecodeResult",
   "type": "object",
-  "required": ["success", "gasUsed", "returnValue", "finalStack", "error", "provenance"],
+  "required": ["success", "gasUsed", "gasUsedScope", "returnValue", "finalStack", "error", "provenance"],
   "properties": {
     "success": { "type": "boolean" },
     "gasUsed": { "type": "string" },
+    "gasUsedScope": { "type": "string", "const": "call-frame" },
     "returnValue": { "type": "string" },
     "finalStack": {
       "type": "array",

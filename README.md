@@ -12,7 +12,7 @@ Agent  →  MCP gateway (tools + transport)  →  execution engine (this repo)  
 
 | Piece | Role |
 | --- | --- |
-| **This repo** | Stateless simulation core — bytecode, traces, registry, provenance |
+| **This repo** | Stateless simulation core — bytecode, transactions, traces, registry, provenance |
 | **`mcp-gateway`** | MCP tools + stdio/HTTP transport (planned) |
 | **`mcp-docs`** | Public docs — [use](https://mcp-docs.feelyourprotocol.org/use/introduction.html) + [internals](https://mcp-docs.feelyourprotocol.org/internals/architecture.html) |
 
@@ -22,7 +22,8 @@ Website explorations are the **browser twin**; this engine is the **headless lab
 
 | Shape | Engine | Future MCP tool | Status |
 | --- | --- | --- | --- |
-| **simulate** | `simulateBytecode()` | `run_evm_bytecode` | Shipped |
+| **simulate** | `simulateBytecode()` | `run_bytecode` | Shipped |
+| **transaction** | `runTransaction()` | `run_transaction` | Shipped |
 | **probe** | `describeCapabilities()` | `describe_capabilities` | Shipped |
 | **generate** | `generateBal()` | `generate_eip7928_bal` | Planned (Step 6) |
 

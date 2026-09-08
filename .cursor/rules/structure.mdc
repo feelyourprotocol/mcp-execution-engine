@@ -7,7 +7,7 @@ alwaysApply: true
 
 ## Generic library vs EIP modules
 
-- **Query shapes** (`simulate`, `probe`, later `generate`) are the stable API — not per-EIP functions
+- **Query shapes** (`simulate`, `transaction`, `probe`, later `generate`) are the stable API — not per-EIP functions
 - **EIP modules** (`src/modules/eip-NNNN/`) describe what became possible: `summary`, `opcodes`, encoding, `keywords`, `runnable`
 - Only `runnable: true` modules belong in `EIP_MODULES` / `describeCapabilities()`
 
@@ -19,7 +19,7 @@ alwaysApply: true
 
 ## Service boundaries (do not break)
 
-- Stateless / BYOS — callers supply bytecode
+- Stateless / BYOS — callers supply bytecode or transaction fields
 - Raw bytecode only — no Solidity compile in the engine
 - Provenance on every simulate result
 - No archive node, no multi-block historical backtesting

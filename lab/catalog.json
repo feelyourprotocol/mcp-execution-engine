@@ -6,9 +6,17 @@
       "id": "simulate",
       "status": "shipped",
       "engineFn": "simulateBytecode",
-      "mcpTool": "run_evm_bytecode",
+      "mcpTool": "run_bytecode",
       "transport": { "stdio": "live", "http": "planned-step-5" },
       "summary": "Run raw bytecode under a fork / EIP configuration; optional execution trace."
+    },
+    {
+      "id": "transaction",
+      "status": "shipped",
+      "engineFn": "runTransaction",
+      "mcpTool": "run_transaction",
+      "transport": { "stdio": "live", "http": "planned-step-5" },
+      "summary": "Run a value-bearing transaction (paid gas, receipt logs, EIP-8037 dimensions)."
     },
     {
       "id": "probe",
@@ -41,6 +49,13 @@
       "title": "EIP-8024 DUPN stack demo on Amsterdam",
       "input": "shapes/simulate/examples/02-dupn-amsterdam/input.json",
       "notes": "shapes/simulate/examples/02-dupn-amsterdam/notes.md"
+    },
+    {
+      "id": "transaction/01-first-touch",
+      "shape": "transaction",
+      "title": "First-touch 1 wei transfer on Amsterdam",
+      "input": "shapes/transaction/examples/01-first-touch/input.json",
+      "notes": "shapes/transaction/examples/01-first-touch/notes.md"
     },
     {
       "id": "probe/01-capabilities",

@@ -18,7 +18,8 @@ import { fileURLToPath } from 'node:url'
 
 import { describeCapabilities } from '../src/forks/registry.js'
 import { simulateBytecode } from '../src/simulate/simulateBytecode.js'
-import type { SimulateBytecodeInput } from '../src/types.js'
+import { runTransaction } from '../src/transaction/runTransaction.js'
+import type { RunTransactionInput, SimulateBytecodeInput } from '../src/types.js'
 import { EngineError } from '../src/types.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -68,7 +69,7 @@ Commands:
   overview          What we have (shapes + engine version)
   shapes            List query shapes and status
   endpoints         Print lab/endpoints/README.md (engine vs gateway vs URL)
-  io <shape>        Print lab/shapes/<shape>/io.md (simulate)
+  io <shape>        Print lab/shapes/<shape>/io.md (simulate, transaction)
   list              Runnable examples
   run <example-id>  Run an example (e.g. simulate/01-push1-stop)
 
@@ -152,6 +153,11 @@ async function cmdRun(catalog: Catalog, exampleId: string): Promise<void> {
     case 'simulate': {
       const input = JSON.parse(readLabFile(ex.input!)) as SimulateBytecodeInput
       result = await simulateBytecode(input)
+      break
+    }
+    case 'transaction': {
+      const input = JSON.parse(readLabFile(ex.input!)) as RunTransactionInput
+      result = await runTransaction(input)
       break
     }
     case 'probe':
