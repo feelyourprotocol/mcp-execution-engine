@@ -18,7 +18,7 @@ Agent → mcp-gateway (tools) → mcp-execution-engine (this repo) → EthereumJ
 
 | Path | Role |
 | --- | --- |
-| `src/simulate/`, `src/diff/`, `src/provenance/`, `src/forks/` | Generic library — query shapes |
+| `src/simulate/`, `src/transaction/`, `src/provenance/`, `src/forks/` | Generic library — query shapes |
 | `src/modules/eip-NNNN/` | EIP capability descriptors (catalog only) |
 | `src/modules/index.ts` | Live module list → `describeCapabilities()` |
 | `src/__tests__/fixtures/` | Test-only bytecode; never the catalog |
@@ -29,7 +29,8 @@ Agent → mcp-gateway (tools) → mcp-execution-engine (this repo) → EthereumJ
 | Shape | Export | MCP tool (gateway) |
 | --- | --- | --- |
 | probe | `describeCapabilities()` | `describe_capabilities` |
-| simulate | `simulateBytecode()` | `run_evm_bytecode` |
+| simulate | `simulateBytecode()` | `run_bytecode` |
+| transaction | `runTransaction()` | `run_transaction` |
 | generate | (planned) | (planned) |
 
 Do **not** add per-EIP engine exports that mirror MCP tools. EIP work belongs in `src/modules/`.

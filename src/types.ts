@@ -1,5 +1,5 @@
 /** Query shapes the MCP surface exposes (generic verbs). */
-export type QueryShape = 'simulate' | 'generate' | 'probe'
+export type QueryShape = 'simulate' | 'transaction' | 'generate' | 'probe'
 
 /** Nature of a protocol change — drives which query shapes apply. */
 export type ChangeNature =
@@ -78,19 +78,6 @@ export interface SimulatePrefundAccount {
   code?: string
 }
 
-export interface SimulateMessageCall {
-  /** Hex address of the message sender. */
-  caller: string
-  /** Hex address of the call target. */
-  to: string
-  /** Value in wei as a decimal string. Default 0. */
-  value?: string
-  /** Optional calldata hex. Default empty. */
-  data?: string
-  /** Optional runtime bytecode installed at `to` before the call (test contracts). */
-  code?: string
-}
-
 export interface SimulateRawLog {
   address: string
   topics: string[]
@@ -119,9 +106,7 @@ export interface SimulateDecodedLog {
 }
 
 export interface SimulateBytecodeInput {
-  bytecode?: string
-  /** Value-bearing message call — use for plain ETH moves without wrapper bytecode. */
-  messageCall?: SimulateMessageCall
+  bytecode: string
   /** Extra accounts to prefund before execution (calldata targets, revert callees, etc.). */
   accounts?: SimulatePrefundAccount[]
   fork?: ForkConfig
@@ -131,7 +116,10 @@ export interface SimulateBytecodeInput {
 
 export interface SimulateBytecodeResult {
   success: boolean
+  /** Call-frame gas (`runCode`). Does not include transaction intrinsic. */
   gasUsed: string
+  /** How `gasUsed` was measured. Always `call-frame` for the bytecode verb. */
+  gasUsedScope: 'call-frame'
   returnValue: string
   finalStack: string[]
   error: string | null
@@ -139,6 +127,40 @@ export interface SimulateBytecodeResult {
   /** Raw logs emitted during execution (empty when none). */
   logs?: SimulateRawLog[]
   /** EIP-7708 and other decodable logs indexed in emission order. */
+  decodedLogs?: SimulateDecodedLog[]
+  provenance: Provenance
+}
+
+export interface RunTransactionInput {
+  /** Hex sender address (impersonated — no private key required). */
+  from: string
+  /** Hex recipient (or contract) address. */
+  to: string
+  /** Value in wei as a decimal string. Default 0. */
+  value?: string
+  /** Optional calldata hex. Default empty. */
+  data?: string
+  /** Optional runtime bytecode installed at `to` before the tx (test contracts). */
+  code?: string
+  /** Extra accounts to prefund before execution. */
+  accounts?: SimulatePrefundAccount[]
+  fork?: ForkConfig
+  /** Transaction gas limit as a decimal string. Default 1000000. */
+  gasLimit?: string
+}
+
+export interface RunTransactionResult {
+  success: boolean
+  /** Paid transaction gas (`totalGasSpent`: intrinsic + execution − refund, with floor). */
+  gasUsed: string
+  gasUsedScope: 'transaction'
+  /** EIP-8037 regular-gas total. Present on Amsterdam; omitted on Osaka. */
+  txRegularGas?: string
+  /** EIP-8037 state-gas total. Present on Amsterdam; omitted on Osaka. */
+  txStateGas?: string
+  returnValue: string
+  error: string | null
+  logs?: SimulateRawLog[]
   decodedLogs?: SimulateDecodedLog[]
   provenance: Provenance
 }

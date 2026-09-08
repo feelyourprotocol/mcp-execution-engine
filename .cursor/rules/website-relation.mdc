@@ -11,7 +11,7 @@ alwaysApply: true
 | --- | --- |
 | Website exploration | Human textbook — pedagogy, widgets, curated examples |
 | MCP docs `use/eips/eip-NNNN` | Human inspiration — same problem set, prompts, Connect |
-| Engine module + generic tools | Runtime — execute **caller-supplied** bytecode |
+| Engine module + generic tools | Runtime — execute **caller-supplied** bytecode or transactions |
 
 ## Canonical source of truth
 
@@ -27,7 +27,7 @@ alwaysApply: true
 - Every **live** exploration needs an MCP-docs EIP page (Runnable or Planned)
 - Website owns **interactive examples**; MCP owns **general execution** of **caller-supplied** programs
 - Do **not** replay exploration widget bytecode in the engine catalog
-- A module is runnable only if a shipped verb’s **actual result fields** show the EIP effect (today: gas / return / stack / opcode trace / **logs** — not full receipts or BALs). Otherwise the twin is a Planned catalogue page
+- A module is runnable only if a shipped verb’s **actual result fields** show the EIP effect (bytecode: gas / return / stack / opcode trace / logs; transaction: paid gas / receipt logs / 8037 dimensions — not BALs). Otherwise the twin is a Planned catalogue page
 
 ## Adding exploration does not auto-add MCP module
 

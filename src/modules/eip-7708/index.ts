@@ -3,12 +3,12 @@
  *
  * canonicalSource: website/src/explorations/eip-7708/canonical.ts
  *
- * Callers supply bytecode or a messageCall. Catalog describes when Transfer logs
- * appear; it does not ship demo programs.
+ * Callers supply a transaction (plain ETH) or bytecode with inner CALLs.
+ * Catalog describes when Transfer logs appear; it does not ship demo programs.
  */
 import type { EipCapability } from '../../types.js'
 import {
-  MESSAGE_CALL_LAYOUT,
+  TRANSACTION_LAYOUT,
   TRANSFER_EVENT_SIGNATURE,
   TRANSFER_LOG_EMITTER,
   VALUE_BEARING_CALL_NOTE,
@@ -18,10 +18,10 @@ export const EIP_7708_MODULE: EipCapability = {
   eip: 7708,
   name: 'ETH transfers emit a log',
   summary:
-    'Amsterdam emits synthetic ERC-20-style Transfer logs from the system address on nonzero ETH moves. Run caller bytecode or a value-bearing messageCall — compare logs on osaka vs amsterdam.',
+    'Amsterdam emits synthetic ERC-20-style Transfer logs from the system address on nonzero ETH moves. Run a value-bearing transaction (run_transaction) — compare logs on osaka vs amsterdam.',
   changeNature: 'new-capability',
   runnable: true,
-  shapes: ['simulate'],
+  shapes: ['transaction', 'simulate'],
   keywords: [
     'ETH transfer log',
     'Transfer event',
@@ -34,17 +34,18 @@ export const EIP_7708_MODULE: EipCapability = {
   comparison: {
     baselineForkId: 'osaka',
     previewForkId: 'amsterdam',
-    note: 'Transfer logs only on preview; same program on baseline has no EIP-7708 logs.',
+    note: 'Transfer logs only on preview; same tx on baseline has no EIP-7708 logs.',
   },
   opcodes: [
     {
       name: 'EIP-7708 Transfer log',
       opcode: 0,
       opcodeHex: TRANSFER_LOG_EMITTER,
-      effect: 'Synthetic Transfer log on successful nonzero value moves (CALL/CREATE paths).',
+      effect:
+        'Synthetic Transfer log on successful nonzero value moves (tx value and CALL/CREATE paths).',
       immediate: {
         encoding: TRANSFER_EVENT_SIGNATURE,
-        notes: `${VALUE_BEARING_CALL_NOTE} ${MESSAGE_CALL_LAYOUT}`,
+        notes: `${VALUE_BEARING_CALL_NOTE} ${TRANSACTION_LAYOUT}`,
       },
     },
   ],
@@ -54,5 +55,5 @@ export const EIP_7708_MODULE: EipCapability = {
   testMaturity: 'execution-specs eip7708_eth_transfer_logs',
   specAnchor: 'EIP-7708',
   notes:
-    'Use returned logs and decodedLogs — do not infer Transfer events from opcode traces alone. Burn logs and tx-level value need a future tx simulate path.',
+    'Use returned logs and decodedLogs from run_transaction — do not infer Transfer events from opcode traces alone. Inner CALL programs may use run_bytecode.',
 }

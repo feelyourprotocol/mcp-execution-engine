@@ -3,23 +3,23 @@
   "$id": "https://feelyourprotocol.org/schemas/mcp-engine/simulate.input.json",
   "title": "SimulateBytecodeInput",
   "type": "object",
+  "required": ["bytecode"],
   "properties": {
     "bytecode": {
       "type": "string",
-      "description": "Hex-encoded EVM bytecode (0x prefix optional). Required unless messageCall is set."
+      "description": "Hex-encoded EVM bytecode (0x prefix optional)."
     },
-    "messageCall": {
-      "type": "object",
-      "description": "Value-bearing message call — alternative to bytecode for plain ETH moves.",
-      "properties": {
-        "caller": { "type": "string", "description": "Hex sender address" },
-        "to": { "type": "string", "description": "Hex target address" },
-        "value": { "type": "string", "description": "Value in wei (decimal string). Default 0." },
-        "data": { "type": "string", "description": "Optional calldata hex" },
-        "code": { "type": "string", "description": "Optional runtime bytecode at to before the call" }
-      },
-      "required": ["caller", "to"],
-      "additionalProperties": false
+    "accounts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": { "type": "string" },
+          "balance": { "type": "string" },
+          "code": { "type": "string" }
+        }
+      }
     },
     "fork": {
       "type": "object",
@@ -41,6 +41,5 @@
       "description": "Include stack-only opcode trace when true"
     }
   },
-  "oneOf": [{ "required": ["bytecode"] }, { "required": ["messageCall"] }],
   "additionalProperties": false
 }

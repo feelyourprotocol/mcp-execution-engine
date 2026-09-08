@@ -25,11 +25,13 @@ export {
   EXCHANGE_XOR_MASK,
   SWAPN,
 } from './modules/eip-8024/opcodes.js'
+export { EIP_8037_MODULE } from './modules/eip-8037/index.js'
 export { EIP_MODULES, getEipModule, listEipModules } from './modules/index.js'
 export { buildProvenance, PROVENANCE_AS_OF } from './provenance/build.js'
 export { countEthTransferLogs, mapExecLogs, systemAddressHex } from './simulate/logs.js'
 export { simulateBytecode } from './simulate/simulateBytecode.js'
 export { stepToTrace } from './simulate/trace.js'
+export { runTransaction } from './transaction/runTransaction.js'
 export type {
   CapabilityDescription,
   ChangeNature,
@@ -44,13 +46,14 @@ export type {
   NamedFork,
   Provenance,
   QueryShape,
+  RunTransactionInput,
+  RunTransactionResult,
   SimulateBytecodeInput,
   SimulateBytecodeResult,
   SimulateDecodedLog,
   SimulateEthBurnLog,
   SimulateEthTransferLog,
   SimulateLogDecoration,
-  SimulateMessageCall,
   SimulatePrefundAccount,
   SimulateRawLog,
   StabilityRollup,

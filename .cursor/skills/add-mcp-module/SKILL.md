@@ -19,9 +19,9 @@ Concepts: [website-relation.mdc](../rules/website-relation.mdc), [structure.mdc]
 MCP is the **lab**, not a second widget. Same **core question** as the exploration; the caller brings **their** bytecode / inputs. These intents must hold for any EIP nature — do not cargo-cult EIP-8024.
 
 1. **Ask in their words** — play, understand, or check *their* data. Catalogue prompts come from the briefing (“what they would ask”), not from widget preset hex.
-2. **Generic verbs only** — `describe_capabilities` + `run_evm_bytecode` today; `generate` when it ships. Never `run_eip_NNNN`.
+2. **Generic verbs only** — `describe_capabilities` + `run_bytecode` + `run_transaction` today; `generate` when it ships. Never `run_eip_NNNN`.
 3. **BYOS / constructible** — catalog exposes encoding facts (opcodes, precompile ABI, immediates) so an agent can *build* a request. No demo programs in the module.
-4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today (`SimulateBytecodeResult`: success, gas, return, stack, optional opcode trace, optional **logs** / **decodedLogs** — not full receipts or BALs). If the core question needs something we do not return yet → **`planned-module`** (or stop — do not fake it).
+4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today. Bytecode (`SimulateBytecodeResult`): success, call-frame `gasUsed`, stack, optional trace/logs. Transaction (`RunTransactionResult`): paid `gasUsed`, optional `txRegularGas` / `txStateGas`, receipt logs. If the core question needs BAL / `runBlock` artifacts we do not return yet → **`planned-module`**. Wallet gasLimit questions use **`run_transaction`**, not `run_bytecode`.
 5. **Superset, not clone** — exploration is a curated slice; MCP runs arbitrary caller programs under a fork. Do not replay widget examples in the catalog or as the only tests.
 6. **Compare when it teaches** — repricing / on-vs-off capability: `comparison` forks and “run twice.” New-capability with no meaningful baseline: valid vs invalid (see 7951), not a fake gas delta.
 7. **Twin page always** — every **live** exploration gets `use/eips/eip-NNNN.md` (Runnable or Planned). Engine module only when (4) holds.
@@ -36,8 +36,8 @@ Match `CANONICAL.question.changeNature` + `mcp.shapes`. Closest **engine** sibli
 | Precompile repricing | `eip-7883/` | CALL address + input layout + comparison forks | gas baseline vs preview; bound rejection |
 | Precompile new-capability | `eip-7951/` | CALL address + input layout | valid return vs invalid — not a fork gas compare |
 | New structure (BAL, …) | catalogue only until **generate** ships | honest Planned page (see `eip-7928.md`) | fixtures when the verb exists |
-| Limit / economic / exec-model | simulate if the result fields show it | encoding + fork notes | hit the limit / fee path; beyond-edge |
-| Needs full receipts, tx-level value, burn logs, or BAL fields simulate does not return | **planned-module** or extend simulate first | page says what is observable today | do not list in `EIP_MODULES` until honest |
+| Limit / economic / exec-model | `run_transaction` if the unit is a tx (gasLimit, receipt); `run_bytecode` if opcodes | encoding + fork notes | hit the limit / fee path; beyond-edge |
+| Needs BAL / `runBlock` fields | **planned-module** until **generate** ships | page says what is observable today | do not list in `EIP_MODULES` until honest |
 
 Copy the closest **module**, not the closest **website folder**. Helpers: `opcodes.ts` or `input.ts` — facts, not programs.
 
@@ -96,6 +96,30 @@ cd mcp-execution-engine && npm run typecheck && npm run test:ci && npm run lf:ci
 
 Rebuild gateway if tool descriptions changed; restart MCP in Cursor.
 
+## Smoke-test prompts (always in the report)
+
+The human will paste these into a **fresh** agent chat with Feel Your Protocol MCP connected. They are **not** catalogue inspiration prompts — they are a short, ordered check that the twin actually runs.
+
+**How many:** 1–3, scaled to complexity.
+
+| Count | When |
+| --- | --- |
+| **1** | Thin twin (one observation, one fork or a simple valid/invalid) |
+| **2** | Typical runnable module (discover + the teaching compare or happy/fail pair) |
+| **3** | Richer EIP (extra path: bound rejection, funded vs empty, new slot, invalid encoding, …) |
+
+**Rules:**
+
+- Plain language a human can paste. No “call tool X with JSON …”.
+- First prompt should force **discover** (`describe_capabilities` / catalog row) when the module is `runnable`.
+- Later prompts should force the **verb** and the **observation** the report claimed (`gasUsed`, logs, return value, …).
+- Include **expected tell** (what “pass” looks like) next to each prompt — for the human, not for the agent under test to be spoon-fed if they only paste the quoted prompt.
+- For `planned-module`, 1 prompt is enough (catalog/docs honesty: Planned, not a fake run).
+- Do **not** paste widget demo hex. Addresses/values may be generic (`1 wei`, empty account, Osaka vs Amsterdam).
+- **MCP-only prefix** (same line on every prompt, or once above the list): the tester’s workspace often already contains this repo, so the model will otherwise read our source instead of the server. Prefix:
+
+  > Answer using only the installed Feel Your Protocol MCP server. Do not use workspace files, git history, or other background knowledge.
+
 ## Report template — then round-trip is complete
 
 ```markdown
@@ -116,4 +140,9 @@ Rebuild gateway if tool descriptions changed; restart MCP in Cursor.
 **Twin:** exploration slice vs MCP superset (one line)
 **Prompts sourced from:** briefing / carry-to-MCP
 **What we did not clone:** widget demo bytecode, …
+
+**Smoke-test prompts** (paste into a fresh MCP-connected chat; 1–3). Prefix every paste with the MCP-only line from the skill.
+
+1. *“…“* — expected: …
+2. *“…“* — expected: …
 ```

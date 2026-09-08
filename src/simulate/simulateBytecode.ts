@@ -6,9 +6,7 @@ import {
   parseAddress,
   parseBytecodeHex,
   parseGasLimit,
-  parseOptionalHexData,
   parseWeiValue,
-  prefundCallerAccount,
   resolveFork,
 } from '../forks/resolve.js'
 import { buildProvenance } from '../provenance/build.js'
@@ -17,22 +15,9 @@ import { EngineError } from '../types.js'
 import { mapExecLogs } from './logs.js'
 import { stepToTrace } from './trace.js'
 
-function hasBytecode(input: SimulateBytecodeInput): boolean {
-  return input.bytecode !== undefined && input.bytecode.trim() !== ''
-}
-
-function hasMessageCall(input: SimulateBytecodeInput): boolean {
-  return input.messageCall !== undefined
-}
-
-function validateInputMode(input: SimulateBytecodeInput): void {
-  const bytecode = hasBytecode(input)
-  const messageCall = hasMessageCall(input)
-  if (!bytecode && !messageCall) {
-    throw new EngineError('Provide bytecode or messageCall', 'invalid_input')
-  }
-  if (bytecode && messageCall) {
-    throw new EngineError('Provide bytecode or messageCall, not both', 'invalid_input')
+function validateInput(input: SimulateBytecodeInput): void {
+  if (input.bytecode === undefined || input.bytecode.trim() === '') {
+    throw new EngineError('Provide bytecode', 'invalid_input')
   }
 }
 
@@ -57,6 +42,7 @@ function buildResponse(
   const response: SimulateBytecodeResult = {
     success: !result.exceptionError,
     gasUsed: result.executionGasUsed.toString(),
+    gasUsedScope: 'call-frame',
     returnValue: bytesToHex(result.returnValue),
     finalStack: buildFinalStack(steps, result),
     error: result.exceptionError?.error ?? null,
@@ -90,7 +76,7 @@ async function applyPreflightAccounts(
 export async function simulateBytecode(
   input: SimulateBytecodeInput,
 ): Promise<SimulateBytecodeResult> {
-  validateInputMode(input)
+  validateInput(input)
 
   const gasLimit = parseGasLimit(input.gasLimit)
   const { config, common } = resolveFork(input.fork)
@@ -113,34 +99,8 @@ export async function simulateBytecode(
     })
   }
 
-  let result: ExecResult
-
-  if (input.messageCall) {
-    const caller = parseAddress(input.messageCall.caller)
-    const to = parseAddress(input.messageCall.to)
-    const value = parseWeiValue(input.messageCall.value)
-    const data = parseOptionalHexData(input.messageCall.data)
-
-    await prefundCallerAccount(evm.stateManager, caller, value)
-
-    if (input.messageCall.code !== undefined && input.messageCall.code.trim() !== '') {
-      const code = parseBytecodeHex(input.messageCall.code)
-      await evm.stateManager.putAccount(to, createAccount({ nonce: 0n, balance: BigInt(1e18) }))
-      await evm.stateManager.putCode(to, code)
-    }
-
-    const callResult = await evm.runCall({
-      caller,
-      to,
-      value,
-      data,
-      gasLimit,
-    })
-    result = callResult.execResult
-  } else {
-    const code = parseBytecodeHex(input.bytecode!)
-    result = await evm.runCode({ code, gasLimit })
-  }
+  const code = parseBytecodeHex(input.bytecode)
+  const result = await evm.runCode({ code, gasLimit })
 
   if (input.trace && traceLimitHit) {
     throw new EngineError(

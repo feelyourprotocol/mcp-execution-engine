@@ -1,12 +1,14 @@
 # Simulate
 
-> **Status:** Shipped (engine v0.1). MCP tool `run_evm_bytecode` — gateway Step 3.
+> **Status:** Shipped (engine v0.1). MCP tool `run_bytecode` — gateway.
 
 ## When to use
 
 - Test how **raw EVM bytecode** behaves under an upcoming fork or à la carte EIP set.
 - Inspect stack-level execution with an optional opcode trace.
-- Build intuition before wiring an agent through the gateway.
+- Opcode / precompile questions (EIP-8024, 7883, 7951).
+
+Wallet gas limits, receipts, and first-touch ETH transfers belong on [transaction](../transaction/about.md).
 
 ## What you send
 
@@ -14,7 +16,7 @@ Bytecode + fork configuration (+ optional gas limit and trace flag). See [io.md]
 
 ## What you get back
 
-Success/failure, gas used, return data, final stack, optional trace steps, and **provenance** on every result. See [schemas/simulate.result.json](../../schemas/simulate.result.json).
+Success/failure, **call-frame** `gasUsed` (always tagged `gasUsedScope: call-frame`), return data, final stack, optional trace steps, and **provenance** on every result. See [schemas/simulate.result.json](../../schemas/simulate.result.json).
 
 ## Examples
 
