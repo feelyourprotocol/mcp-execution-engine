@@ -76,6 +76,24 @@ export function parseAddress(address: string): ReturnType<typeof createAddressFr
   return createAddressFromString(normalized as PrefixedHexString)
 }
 
+/** EIP-7843 slot and other header integers are uint64. */
+export const UINT64_MAX = (1n << 64n) - 1n
+
+export function parseUint64Field(raw: string | undefined, field: string): bigint | undefined {
+  if (raw === undefined || raw.trim() === '') {
+    return undefined
+  }
+  const trimmed = raw.trim()
+  if (!/^[0-9]+$/.test(trimmed)) {
+    throw new EngineError(`${field} must be a whole number (0 or more)`, 'invalid_header')
+  }
+  const value = BigInt(trimmed)
+  if (value > UINT64_MAX) {
+    throw new EngineError(`${field} is larger than a 64-bit unsigned integer`, 'invalid_header')
+  }
+  return value
+}
+
 export function parseWeiValue(value?: string): bigint {
   if (value === undefined || value.trim() === '') {
     return 0n

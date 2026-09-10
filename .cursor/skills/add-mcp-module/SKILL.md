@@ -19,9 +19,9 @@ Concepts: [website-relation.mdc](../rules/website-relation.mdc), [structure.mdc]
 MCP is the **lab**, not a second widget. Same **core question** as the exploration; the caller brings **their** bytecode / inputs. These intents must hold for any EIP nature — do not cargo-cult EIP-8024.
 
 1. **Ask in their words** — play, understand, or check *their* data. Catalogue prompts come from the briefing (“what they would ask”), not from widget preset hex.
-2. **Generic verbs only** — `describe_capabilities` + `run_bytecode` + `run_transaction` today; `generate` when it ships. Never `run_eip_NNNN`.
+2. **Generic verbs only** — `describe_capabilities` + `run_bytecode` + `run_transaction` + `run_block` today; `generate` when it ships. Never `run_eip_NNNN`.
 3. **BYOS / constructible** — catalog exposes encoding facts (opcodes, precompile ABI, immediates) so an agent can *build* a request. No demo programs in the module.
-4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today. Bytecode (`SimulateBytecodeResult`): success, call-frame `gasUsed`, stack, optional trace/logs. Transaction (`RunTransactionResult`): paid `gasUsed`, optional `txRegularGas` / `txStateGas`, receipt logs. If the core question needs BAL / `runBlock` artifacts we do not return yet → **`planned-module`**. Wallet gasLimit questions use **`run_transaction`**, not `run_bytecode`.
+4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today. Bytecode (`SimulateBytecodeResult`): success, call-frame `gasUsed`, stack, optional trace/logs. Transaction (`RunTransactionResult`): paid `gasUsed`, optional `txRegularGas` / `txStateGas`, receipt logs. Block (`RunBlockResult`): per-tx receipts + header snapshot (`slotNumber`, `number`, `timestamp`). If the core question needs BAL JSON we do not return yet → **`planned-module`**. Wallet gasLimit questions use **`run_transaction`**, not `run_bytecode`. Multi-tx / header-slot questions use **`run_block`**.
 5. **Superset, not clone** — exploration is a curated slice; MCP runs arbitrary caller programs under a fork. Do not replay widget examples in the catalog or as the only tests.
 6. **Compare when it teaches** — repricing / on-vs-off capability: `comparison` forks and “run twice.” New-capability with no meaningful baseline: valid vs invalid (see 7951), not a fake gas delta.
 7. **Twin page always** — every **live** exploration gets `use/eips/eip-NNNN.md` (Runnable or Planned). Engine module only when (4) holds.
@@ -36,8 +36,9 @@ Match `CANONICAL.question.changeNature` + `mcp.shapes`. Closest **engine** sibli
 | Precompile repricing | `eip-7883/` | CALL address + input layout + comparison forks | gas baseline vs preview; bound rejection |
 | Precompile new-capability | `eip-7951/` | CALL address + input layout | valid return vs invalid — not a fork gas compare |
 | New structure (BAL, …) | catalogue only until **generate** ships | honest Planned page (see `eip-7928.md`) | fixtures when the verb exists |
+| Header slot / multi-tx receipts | `run_block` | header snapshot + per-tx receipts | slot / N txs / Osaka vs Amsterdam |
 | Limit / economic / exec-model | `run_transaction` if the unit is a tx (gasLimit, receipt); `run_bytecode` if opcodes | encoding + fork notes | hit the limit / fee path; beyond-edge |
-| Needs BAL / `runBlock` fields | **planned-module** until **generate** ships | page says what is observable today | do not list in `EIP_MODULES` until honest |
+| Needs BAL JSON | **planned-module** until **generate** ships | page says what is observable today | do not list in `EIP_MODULES` until honest |
 
 Copy the closest **module**, not the closest **website folder**. Helpers: `opcodes.ts` or `input.ts` — facts, not programs.
 

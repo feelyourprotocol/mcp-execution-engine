@@ -16,10 +16,11 @@ import { readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { runBlock } from '../src/block/runBlock.js'
 import { describeCapabilities } from '../src/forks/registry.js'
 import { simulateBytecode } from '../src/simulate/simulateBytecode.js'
 import { runTransaction } from '../src/transaction/runTransaction.js'
-import type { RunTransactionInput, SimulateBytecodeInput } from '../src/types.js'
+import type { RunBlockInput, RunTransactionInput, SimulateBytecodeInput } from '../src/types.js'
 import { EngineError } from '../src/types.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -69,7 +70,7 @@ Commands:
   overview          What we have (shapes + engine version)
   shapes            List query shapes and status
   endpoints         Print lab/endpoints/README.md (engine vs gateway vs URL)
-  io <shape>        Print lab/shapes/<shape>/io.md (simulate, transaction)
+  io <shape>        Print lab/shapes/<shape>/io.md (simulate, transaction, block)
   list              Runnable examples
   run <example-id>  Run an example (e.g. simulate/01-push1-stop)
 
@@ -158,6 +159,11 @@ async function cmdRun(catalog: Catalog, exampleId: string): Promise<void> {
     case 'transaction': {
       const input = JSON.parse(readLabFile(ex.input!)) as RunTransactionInput
       result = await runTransaction(input)
+      break
+    }
+    case 'block': {
+      const input = JSON.parse(readLabFile(ex.input!)) as RunBlockInput
+      result = await runBlock(input)
       break
     }
     case 'probe':

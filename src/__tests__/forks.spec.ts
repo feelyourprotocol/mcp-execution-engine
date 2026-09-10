@@ -7,7 +7,7 @@ import {
   normalizeForkConfig,
   resolveNamedFork,
 } from '../forks/registry.js'
-import { parseBytecodeHex, parseGasLimit } from '../forks/resolve.js'
+import { parseBytecodeHex, parseGasLimit, parseUint64Field } from '../forks/resolve.js'
 import { EngineError } from '../types.js'
 
 describe('fork registry & resolve', () => {
@@ -56,6 +56,13 @@ describe('fork registry & resolve', () => {
     expect(parseGasLimit('500000')).toBe(500_000n)
   })
 
+  it('parses uint64 header fields and rejects junk', () => {
+    expect(parseUint64Field(undefined, 'slotNumber')).toBeUndefined()
+    expect(parseUint64Field('42', 'slotNumber')).toBe(42n)
+    expect(() => parseUint64Field('4.2', 'slotNumber')).toThrow(/whole number/)
+    expect(() => parseUint64Field('-1', 'slotNumber')).toThrow(/whole number/)
+  })
+
   it('describeCapabilities lists prague, osaka, amsterdam and runnable EIPs', () => {
     const caps = describeCapabilities()
     expect(caps.engineVersion).toBe('0.1.0')
@@ -74,6 +81,7 @@ describe('fork registry & resolve', () => {
     expect(caps.eips).toHaveLength(5)
     expect(caps.eips.map((e) => e.eip).sort()).toEqual([7708, 7883, 7951, 8024, 8037])
     expect(caps.eips.every((eip) => eip.runnable)).toBe(true)
+    expect(caps.ceilings.maxTxsPerBlock).toBe(8)
     const e8024 = caps.eips.find((e) => e.eip === 8024)
     expect(e8024?.comparison?.baselineForkId).toBe('osaka')
     expect(e8024?.comparison?.previewForkId).toBe('amsterdam')
