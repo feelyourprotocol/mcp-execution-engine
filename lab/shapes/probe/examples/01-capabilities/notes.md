@@ -3,7 +3,7 @@
 After running `npm run lab -- run probe/01-capabilities`:
 
 - **`engineVersion`** — semver of this engine build.
-- **`ceilings`** — hard limits (max gas, bytecode size, trace steps).
+- **ceilings** — hard limits (max gas, bytecode size, trace steps, txs per lab block).
 - **`namedForks`** — curated shortcuts (`osaka` baseline, `amsterdam` preview).
 - **`baselineForkId`** — optional mainnet EL baseline (`osaka`) when you want before/after comparisons.
 - **`eips`** — runnable EIP modules only (`runnable: true`), with `summary`, `opcodes` (encoding rules), and `keywords`.

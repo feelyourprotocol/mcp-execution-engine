@@ -22,8 +22,9 @@ The MCP surface is organized as **intent-driven shapes**, not raw library export
 | --- | --- | --- | --- |
 | **simulate** | `simulateBytecode()` | `run_bytecode` | Shipped |
 | **transaction** | `runTransaction()` | `run_transaction` | Shipped |
+| **block** | `runBlock()` | `run_block` | Shipped |
 | **probe** | `describeCapabilities()` | `describe_capabilities` | Shipped |
-| **generate** | `generateBal()` | `generate_eip7928_bal` | Planned (Step 6) |
+| **generate** | `generateBal()` | (planned) | Planned (BAL / Step 6) |
 
 See [shapes/README.md](./shapes/README.md) for when to use each shape.
 
@@ -50,6 +51,7 @@ npm run lab                  # overview + next steps
 npm run lab -- list          # all runnable examples
 npm run lab -- run simulate/01-push1-stop
 npm run lab -- run transaction/01-first-touch
+npm run lab -- run block/01-first-touch
 npm run lab -- io simulate   # input/output fields for a shape
 npm run lab -- endpoints     # the endpoint ladder
 ```

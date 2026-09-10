@@ -11,6 +11,7 @@ export const ENGINE_CEILINGS: EngineCeilings = {
   defaultGasLimit: 1_000_000n,
   maxBytecodeBytes: 24_576,
   maxTraceSteps: 10_000,
+  maxTxsPerBlock: 8,
 }
 
 export const BASELINE_FORK_ID = 'osaka'
@@ -143,6 +144,7 @@ export function describeCapabilities() {
       defaultGasLimit: ENGINE_CEILINGS.defaultGasLimit.toString(),
       maxBytecodeBytes: ENGINE_CEILINGS.maxBytecodeBytes,
       maxTraceSteps: ENGINE_CEILINGS.maxTraceSteps,
+      maxTxsPerBlock: ENGINE_CEILINGS.maxTxsPerBlock,
     },
     namedForks: NAMED_FORKS,
     baselineForkId: BASELINE_FORK_ID,

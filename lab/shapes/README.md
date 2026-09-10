@@ -6,6 +6,7 @@ Intent-driven verbs that frame how agents and integrators think about protocol w
 | --- | --- | --- | --- |
 | [simulate](./simulate/about.md) | "What happens if I run this bytecode under fork X?" | `simulateBytecode()` | Optional opcode trace; call twice to compare gas |
 | [transaction](./transaction/about.md) | "What does this transaction cost or put in the receipt?" | `runTransaction()` | Paid gas, 8037 dimensions, 7708 tx-value logs |
+| [block](./block/about.md) | "What happens if I run these txs as one lab block?" | `runBlock()` | Header snapshot + per-tx receipts; optional slot |
 | [probe](./probe/about.md) | "What can this server do?" | `describeCapabilities()` | Registry, ceilings, EIP modules |
 | [generate](./generate/README.md) | "Produce structured protocol output (e.g. BAL)" | `generateBal()` — **planned** | Step 6 |
 
@@ -21,6 +22,7 @@ Every simulate result includes **provenance** — engine version, resolved fork,
 npm run lab -- list
 npm run lab -- run simulate/01-push1-stop
 npm run lab -- run transaction/01-first-touch
+npm run lab -- run block/01-first-touch
 npm run lab -- run probe/01-capabilities
 ```
 

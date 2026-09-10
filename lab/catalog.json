@@ -19,6 +19,14 @@
       "summary": "Run a value-bearing transaction (paid gas, receipt logs, EIP-8037 dimensions)."
     },
     {
+      "id": "block",
+      "status": "shipped",
+      "engineFn": "runBlock",
+      "mcpTool": "run_block",
+      "transport": { "stdio": "live", "http": "planned-step-5" },
+      "summary": "Run 1–8 impersonated txs as a lab block; optional header slot/number/timestamp."
+    },
+    {
       "id": "probe",
       "status": "shipped",
       "engineFn": "describeCapabilities",
@@ -56,6 +64,20 @@
       "title": "First-touch 1 wei transfer on Amsterdam",
       "input": "shapes/transaction/examples/01-first-touch/input.json",
       "notes": "shapes/transaction/examples/01-first-touch/notes.md"
+    },
+    {
+      "id": "block/01-first-touch",
+      "shape": "block",
+      "title": "First-touch 1 wei transfer as a lab block",
+      "input": "shapes/block/examples/01-first-touch/input.json",
+      "notes": "shapes/block/examples/01-first-touch/notes.md"
+    },
+    {
+      "id": "block/02-slot-header",
+      "shape": "block",
+      "title": "Amsterdam header slot 42 via SLOTNUM",
+      "input": "shapes/block/examples/02-slot-header/input.json",
+      "notes": "shapes/block/examples/02-slot-header/notes.md"
     },
     {
       "id": "probe/01-capabilities",

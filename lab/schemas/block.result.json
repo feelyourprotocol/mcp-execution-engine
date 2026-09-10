@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://feelyourprotocol.org/schemas/mcp-engine/block.result.json",
+  "title": "RunBlockResult",
+  "type": "object",
+  "required": ["success", "gasUsed", "gasUsedScope", "header", "transactions", "error", "provenance"],
+  "properties": {
+    "success": { "type": "boolean" },
+    "gasUsed": { "type": "string", "description": "Header gasUsed after lab generate." },
+    "gasUsedScope": { "type": "string", "const": "block" },
+    "header": {
+      "type": "object",
+      "required": ["number", "timestamp", "gasUsed"],
+      "properties": {
+        "number": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "gasUsed": { "type": "string" },
+        "slotNumber": { "type": "string" }
+      }
+    },
+    "transactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["success", "gasUsed", "gasUsedScope", "returnValue", "error"],
+        "properties": {
+          "success": { "type": "boolean" },
+          "gasUsed": { "type": "string" },
+          "gasUsedScope": { "type": "string", "const": "transaction" },
+          "txRegularGas": { "type": "string" },
+          "txStateGas": { "type": "string" },
+          "returnValue": { "type": "string" },
+          "error": { "type": ["string", "null"] },
+          "logs": { "type": "array" },
+          "decodedLogs": { "type": "array" }
+        }
+      }
+    },
+    "error": { "type": ["string", "null"] },
+    "provenance": {
+      "type": "object",
+      "required": ["engineVersion", "forkConfig"],
+      "properties": {
+        "engineVersion": { "type": "string" },
+        "forkConfig": { "type": "object" },
+        "stabilityRollup": { "type": "string" },
+        "caveat": { "type": "string" },
+        "asOf": { "type": "string" }
+      }
+    }
+  }
+}
