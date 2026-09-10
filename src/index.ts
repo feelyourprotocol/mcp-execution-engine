@@ -15,6 +15,8 @@ export {
 } from './forks/registry.js'
 export { parseBytecodeHex, parseGasLimit, parseUint64Field, resolveFork } from './forks/resolve.js'
 export { EIP_7708_MODULE } from './modules/eip-7708/index.js'
+export { EIP_7843_MODULE } from './modules/eip-7843/index.js'
+export { SLOTNUM, SLOTNUM_GAS } from './modules/eip-7843/opcodes.js'
 export { EIP_8024_MODULE } from './modules/eip-8024/index.js'
 export {
   DUPN,
