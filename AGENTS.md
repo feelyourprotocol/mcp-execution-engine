@@ -2,7 +2,7 @@
 
 Tool-agnostic entrypoint for coding agents working in **`mcp-execution-engine`**.
 
-**Read this file first.** Then load [`.cursor/rules/`](.cursor/rules/) — `structure.mdc`, `website-relation.mdc`.
+**Read this file first.** Then load [`.cursor/rules/`](.cursor/rules/) — `structure.mdc`, `website-relation.mdc`, `git.mdc` (defers to the website git rule).
 
 Human MCP user docs live in the website repo: [mcp-docs/use/](https://github.com/feelyourprotocol/website/tree/main/mcp-docs/use) → [mcp-docs.feelyourprotocol.org](https://mcp-docs.feelyourprotocol.org/use/introduction.html). Do not duplicate human inspiration pages here.
 
@@ -61,5 +61,4 @@ Template: [`src/modules/eip-8024/`](src/modules/eip-8024/).
 ## Habits
 
 - Finish with `npm run typecheck`, `npm run test:ci`, `npm run lf:ci` in this package
-- Do not commit unless asked
 - Do not list unimplemented EIPs in the live catalog (`runnable: false` modules stay out of `EIP_MODULES`)
