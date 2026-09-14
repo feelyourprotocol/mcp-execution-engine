@@ -7,7 +7,12 @@ import {
   normalizeForkConfig,
   resolveNamedFork,
 } from '../forks/registry.js'
-import { parseBytecodeHex, parseGasLimit, parseUint64Field } from '../forks/resolve.js'
+import {
+  parseBytecodeHex,
+  parseBytes32,
+  parseGasLimit,
+  parseUint64Field,
+} from '../forks/resolve.js'
 import { EngineError } from '../types.js'
 
 describe('fork registry & resolve', () => {
@@ -63,6 +68,12 @@ describe('fork registry & resolve', () => {
     expect(() => parseUint64Field('-1', 'slotNumber')).toThrow(/whole number/)
   })
 
+  it('parses 32-byte storage words and rejects oversized keys', () => {
+    expect(parseBytes32('0x03', 'storage.slot')).toHaveLength(32)
+    expect(() => parseBytes32(`0x${'aa'.repeat(33)}`, 'storage.slot')).toThrow(/32 bytes/)
+    expect(() => parseBytes32('xyz', 'storage.slot')).toThrow(/hex/)
+  })
+
   it('describeCapabilities lists prague, osaka, amsterdam and runnable EIPs', () => {
     const caps = describeCapabilities()
     expect(caps.engineVersion).toBe('0.1.0')
@@ -78,8 +89,8 @@ describe('fork registry & resolve', () => {
     expect(osaka?.aliases).toContain('mainnet-el')
     expect(amsterdam?.role).toBe('preview')
     expect(amsterdam?.aliases).toContain('glamsterdam')
-    expect(caps.eips).toHaveLength(6)
-    expect(caps.eips.map((e) => e.eip).sort()).toEqual([7708, 7843, 7883, 7951, 8024, 8037])
+    expect(caps.eips).toHaveLength(7)
+    expect(caps.eips.map((e) => e.eip).sort()).toEqual([7708, 7843, 7883, 7951, 8024, 8037, 8038])
     expect(caps.eips.every((eip) => eip.runnable)).toBe(true)
     expect(caps.ceilings.maxTxsPerBlock).toBe(8)
     const e8024 = caps.eips.find((e) => e.eip === 8024)
@@ -98,5 +109,9 @@ describe('fork registry & resolve', () => {
     const e8037 = caps.eips.find((e) => e.eip === 8037)
     expect(e8037?.changeNature).toBe('new-exec-model')
     expect(e8037?.comparison?.previewForkId).toBe('amsterdam')
+    const e8038 = caps.eips.find((e) => e.eip === 8038)
+    expect(e8038?.changeNature).toBe('repricing')
+    expect(e8038?.shapes).toEqual(['simulate', 'transaction'])
+    expect(e8038?.comparison?.baselineForkId).toBe('osaka')
   })
 })

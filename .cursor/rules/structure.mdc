@@ -19,10 +19,12 @@ alwaysApply: true
 
 ## Service boundaries (do not break)
 
-- Stateless / BYOS — callers supply bytecode or transaction fields
+- Isolated lab / BYOS — no archive node, no mainnet or L2 RPC. Callers supply bytecode, txs, **and constructed prestate** (accounts, code, storage). Empty world is not required.
+- `run_bytecode` / `simulateBytecode` is a **VM message-call** (`createVM` + `runCall`) with `gasUsedScope: call-frame`. Do not use detached `runCode` (SSTORE cannot persist that path).
+- Call isolation is the default — each engine call is a pure function of its input. Do not hide EVM in process globals. Optional snapshot continuation belongs in the gateway later, not as implicit engine state.
 - Raw bytecode only — no Solidity compile in the engine
 - Provenance on every simulate result
-- No archive node, no multi-block historical backtesting
+- No sequential multi-block **historical** backtesting (a lab `run_block` of constructed txs is in scope)
 
 ## Gateway boundary
 

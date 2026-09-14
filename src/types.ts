@@ -74,10 +74,19 @@ export interface StepTrace {
   stack: string[]
 }
 
+export interface SimulatePrefundStorageSlot {
+  /** Storage slot hex (≤32 bytes; left-padded). */
+  slot: string
+  /** Storage value hex (≤32 bytes; left-padded). */
+  value: string
+}
+
 export interface SimulatePrefundAccount {
   address: string
   balance?: string
   code?: string
+  /** Optional slots to seed (existing-slot SSTORE / SLOAD). */
+  storage?: SimulatePrefundStorageSlot[]
 }
 
 export interface SimulateRawLog {
@@ -109,7 +118,7 @@ export interface SimulateDecodedLog {
 
 export interface SimulateBytecodeInput {
   bytecode: string
-  /** Extra accounts to prefund before execution (calldata targets, revert callees, etc.). */
+  /** Extra accounts to prefund (code/balance/storage) before the message-call. */
   accounts?: SimulatePrefundAccount[]
   fork?: ForkConfig
   gasLimit?: string
@@ -118,10 +127,16 @@ export interface SimulateBytecodeInput {
 
 export interface SimulateBytecodeResult {
   success: boolean
-  /** Call-frame gas (`runCode`). Does not include transaction intrinsic. */
+  /** Call-frame gas (VM message-call). Does not include transaction intrinsic. */
   gasUsed: string
   /** How `gasUsed` was measured. Always `call-frame` for the bytecode verb. */
   gasUsedScope: 'call-frame'
+  /**
+   * EIP-8037 state gas spilled into this frame's regular gas.
+   * Present when non-zero (typically Amsterdam new-slot SSTORE).
+   * Program write cost ≈ `gasUsed` − `stateGasSpilled`.
+   */
+  stateGasSpilled?: string
   returnValue: string
   finalStack: string[]
   error: string | null

@@ -7,8 +7,9 @@
 - Test how **raw EVM bytecode** behaves under an upcoming fork or à la carte EIP set.
 - Inspect stack-level execution with an optional opcode trace.
 - Opcode / precompile questions (EIP-8024, 7883, 7951).
+- Program-gas SSTORE / SLOAD (EIP-8038). Constructed prestate in the same call (`accounts`).
 
-Wallet gas limits, receipts, and first-touch ETH transfers belong on [transaction](../transaction/about.md).
+Wallet gas limits, receipts, first-touch ETH transfers, and paid `txStateGas` belong on [transaction](../transaction/about.md).
 
 ## What you send
 

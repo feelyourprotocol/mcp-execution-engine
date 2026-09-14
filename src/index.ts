@@ -13,7 +13,13 @@ export {
   normalizeForkConfig,
   resolveNamedFork,
 } from './forks/registry.js'
-export { parseBytecodeHex, parseGasLimit, parseUint64Field, resolveFork } from './forks/resolve.js'
+export {
+  parseBytecodeHex,
+  parseBytes32,
+  parseGasLimit,
+  parseUint64Field,
+  resolveFork,
+} from './forks/resolve.js'
 export { EIP_7708_MODULE } from './modules/eip-7708/index.js'
 export { EIP_7843_MODULE } from './modules/eip-7843/index.js'
 export { SLOTNUM, SLOTNUM_GAS } from './modules/eip-7843/opcodes.js'
@@ -29,11 +35,13 @@ export {
   SWAPN,
 } from './modules/eip-8024/opcodes.js'
 export { EIP_8037_MODULE } from './modules/eip-8037/index.js'
+export { EIP_8038_MODULE } from './modules/eip-8038/index.js'
 export { EIP_MODULES, getEipModule, listEipModules } from './modules/index.js'
 export { buildProvenance, PROVENANCE_AS_OF } from './provenance/build.js'
 export { countEthTransferLogs, mapExecLogs, systemAddressHex } from './simulate/logs.js'
 export { simulateBytecode } from './simulate/simulateBytecode.js'
 export { stepToTrace } from './simulate/trace.js'
+export { LAB_BYTECODE_ADDRESS, LAB_BYTECODE_CALLER } from './transaction/lab.js'
 export { runTransaction } from './transaction/runTransaction.js'
 export type {
   CapabilityDescription,
@@ -64,6 +72,7 @@ export type {
   SimulateEthTransferLog,
   SimulateLogDecoration,
   SimulatePrefundAccount,
+  SimulatePrefundStorageSlot,
   SimulateRawLog,
   StabilityRollup,
   StepTrace,

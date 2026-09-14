@@ -20,8 +20,8 @@ MCP is the **lab**, not a second widget. Same **core question** as the explorati
 
 1. **Ask in their words** — play, understand, or check *their* data. Catalogue prompts come from the briefing (“what they would ask”), not from widget preset hex.
 2. **Generic verbs only** — `describe_capabilities` + `run_bytecode` + `run_transaction` + `run_block` today; `generate` when it ships. Never `run_eip_NNNN`.
-3. **BYOS / constructible** — catalog exposes encoding facts (opcodes, precompile ABI, immediates) so an agent can *build* a request. No demo programs in the module.
-4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today. Bytecode (`SimulateBytecodeResult`): success, call-frame `gasUsed`, stack, optional trace/logs. Transaction (`RunTransactionResult`): paid `gasUsed`, optional `txRegularGas` / `txStateGas`, receipt logs. Block (`RunBlockResult`): per-tx receipts + header snapshot (`slotNumber`, `number`, `timestamp`). If the core question needs BAL JSON we do not return yet → **`planned-module`**. Wallet gasLimit questions use **`run_transaction`**, not `run_bytecode`. Multi-tx / header-slot questions use **`run_block`**.
+3. **BYOS / constructible** — catalog exposes encoding facts (opcodes, precompile ABI, immediates) so an agent can *build* a request, including prestate (accounts, code, storage). No demo programs in the module.
+4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today. Bytecode (`SimulateBytecodeResult`): success, call-frame `gasUsed`, stack, optional trace/logs (and optional `stateGasSpilled` on Amsterdam). Transaction (`RunTransactionResult`): paid `gasUsed`, optional `txRegularGas` / `txStateGas`, receipt logs. Block (`RunBlockResult`): per-tx receipts + header snapshot (`slotNumber`, `number`, `timestamp`). If the core question needs BAL JSON we do not return yet → **`planned-module`**. Wallet gasLimit and paid-tx questions use **`run_transaction`**, not `run_bytecode`. Opcode / program-gas questions (including SSTORE write cost) use **`run_bytecode`**. Multi-tx / header-slot questions use **`run_block`**.
 5. **Superset, not clone** — exploration is a curated slice; MCP runs arbitrary caller programs under a fork. Do not replay widget examples in the catalog or as the only tests.
 6. **Compare when it teaches** — repricing / on-vs-off capability: `comparison` forks and “run twice.” New-capability with no meaningful baseline: valid vs invalid (see 7951), not a fake gas delta.
 7. **Twin page always** — every **live** exploration gets `use/eips/eip-NNNN.md` (Runnable or Planned). Engine module only when (4) holds.
@@ -37,7 +37,7 @@ Match `CANONICAL.question.changeNature` + `mcp.shapes`. Closest **engine** sibli
 | Precompile new-capability | `eip-7951/` | CALL address + input layout | valid return vs invalid — not a fork gas compare |
 | New structure (BAL, …) | catalogue only until **generate** ships | honest Planned page (see `eip-7928.md`) | fixtures when the verb exists |
 | Header slot / multi-tx receipts | `run_block` | header snapshot + per-tx receipts | slot / N txs / Osaka vs Amsterdam |
-| Limit / economic / exec-model | `run_transaction` if the unit is a tx (gasLimit, receipt); `run_bytecode` if opcodes | encoding + fork notes | hit the limit / fee path; beyond-edge |
+| Limit / economic / exec-model | `run_transaction` if the unit is a tx (gasLimit, receipt, `txStateGas`); `run_bytecode` if opcodes / program gas | encoding + fork notes | hit the limit / fee path; beyond-edge |
 | Needs BAL JSON | **planned-module** until **generate** ships | page says what is observable today | do not list in `EIP_MODULES` until honest |
 
 Copy the closest **module**, not the closest **website folder**. Helpers: `opcodes.ts` or `input.ts` — facts, not programs.
@@ -55,9 +55,31 @@ Copy the closest **module**, not the closest **website folder**. Helpers: `opcod
 Stop and ask:
 
 - Effect is not in today’s simulate result (logs, receipts, BAL, …) — do not stretch traces into a fake answer
-- Would require a **new MCP tool** or engine export
+- Would require a **new MCP tool** or a new query-shape export (a small additive field on an existing result is not this)
 - New **runtime** dependency
 - Briefing/`CANONICAL` said planned but EthereumJS can already run it (or the reverse)
+- Process-global EVM / session snapshot memory (layer 3) — still later, not a side-trip
+
+## Side-trips (structural, same phase)
+
+Phase 3 may include a **well-scoped structural expansion or re-arrangement** discovered while wiring the twin — for example the shipped verb cannot honestly show the EIP because of a lab-path gap (`runCode` vs a VM message-call), not because the EIP itself needs a fifth tool.
+
+**In scope when all of these hold:**
+
+- Same generic verbs (no `run_eip_NNNN`, no new tool)
+- Honest observation improves on a **shipped** result (or a small additive field on that result)
+- No new runtime dependency
+- Can finish tests + docs in this phase
+
+**Do it now** (do not wait for another GO). Apply the change **once**, then update every MCP surface that taught the old limitation:
+
+1. Engine verb + types + lab helpers
+2. Gateway Zod/JSON schemas and tool descriptions if input, output, or routing changed
+3. mcp-docs tool pages, `llms.txt` / `llms-full.txt`, internals, and **every** live EIP catalogue page / engine module note that mentioned the old path
+4. Tests: the expansion itself **and** regressions on other EIPs that use the adjusted verb (gas, success, stack — no silent deltas)
+5. Close with the **Side-trip** section in the phase-3 report (required when this path ran)
+
+Do **not** use a side-trip to start the comic, add session memory, or skip the round-trip STOP after the MCP report.
 
 ## Module steps (`runnable`)
 
@@ -146,4 +168,12 @@ The human will paste these into a **fresh** agent chat with Feel Your Protocol M
 
 1. *“…“* — expected: …
 2. *“…“* — expected: …
+
+### Side-trip (omit if none)
+
+**What:** …
+**Why in this phase:** well-scoped / same verbs / honest observation — …
+**Applied to:** engine / gateway / mcp-docs / EIP modules …
+**Tests:** change + no side-effects (which specs)
+**Docs:** …
 ```

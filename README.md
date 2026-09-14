@@ -12,7 +12,7 @@ Agent  →  MCP gateway (tools + transport)  →  execution engine (this repo)  
 
 | Piece | Role |
 | --- | --- |
-| **This repo** | Stateless simulation core — bytecode, transactions, traces, registry, provenance |
+| **This repo** | Isolated lab simulation core — bytecode, transactions, traces, registry, provenance (no chain RPC) |
 | **`mcp-gateway`** | MCP tools + stdio/HTTP transport (planned) |
 | **`mcp-docs`** | Public docs — [use](https://mcp-docs.feelyourprotocol.org/use/introduction.html) + [internals](https://mcp-docs.feelyourprotocol.org/internals/architecture.html) |
 
@@ -57,8 +57,9 @@ CI: `.github/workflows/ci.yml`
 
 ## Boundaries
 
+- Isolated lab / BYOS — no archive node, no mainnet or L2 sync; constructed prestate in the request is in scope
 - Raw bytecode only (no Solidity compilation)
-- No archive node / no mainnet sync
+- Call isolation — each function call is a pure function of its input
 - No sequential multi-block historical backtesting
 - Base protocol layer only
 

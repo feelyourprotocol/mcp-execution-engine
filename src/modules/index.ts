@@ -5,6 +5,7 @@ import { EIP_7883_MODULE } from './eip-7883/index.js'
 import { EIP_7951_MODULE } from './eip-7951/index.js'
 import { EIP_8024_MODULE } from './eip-8024/index.js'
 import { EIP_8037_MODULE } from './eip-8037/index.js'
+import { EIP_8038_MODULE } from './eip-8038/index.js'
 
 /** Live EIP modules. Only runnable modules are registered. */
 export const EIP_MODULES: EipCapability[] = [
@@ -14,6 +15,7 @@ export const EIP_MODULES: EipCapability[] = [
   EIP_7883_MODULE,
   EIP_7951_MODULE,
   EIP_8037_MODULE,
+  EIP_8038_MODULE,
 ]
 
 export function listEipModules(): EipCapability[] {

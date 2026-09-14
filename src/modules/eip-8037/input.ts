@@ -22,4 +22,4 @@ export const FIRST_TOUCH_NOTE =
   'Nonzero value to an empty account charges 120 × 1530 = 183600 state gas on Amsterdam. A simple transfer is gasUsed ≈ 204600 vs Osaka 21000. Pass gasLimit "21000" to see Amsterdam fail (intrinsic / state gas).'
 
 export const NEW_SLOT_NOTE =
-  'SSTORE into an empty slot charges 64 × 1530 = 97920 state gas on Amsterdam. Send a transaction to a contract with that bytecode (`code` on run_transaction). Execution SSTORE costs may also differ — compare gasUsed on osaka vs amsterdam rather than assuming the delta equals 97920.'
+  'SSTORE into an empty slot charges 64 × 1530 = 97920 state gas on Amsterdam. On run_bytecode that is stateGasSpilled (gasUsed includes the spill). On run_transaction it is txStateGas. Compare osaka vs amsterdam rather than assuming the paid-tx delta equals 97920.'
