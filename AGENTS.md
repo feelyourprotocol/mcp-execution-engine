@@ -2,13 +2,13 @@
 
 Tool-agnostic entrypoint for coding agents working in **`mcp-execution-engine`**.
 
-**Read this file first.** Then load [`.cursor/rules/`](.cursor/rules/) — `structure.mdc`, `website-relation.mdc`.
+**Read this file first.** Then load [`.cursor/rules/`](.cursor/rules/) — `structure.mdc`, `website-relation.mdc`, `git.mdc` (defers to the website git rule).
 
 Human MCP user docs live in the website repo: [mcp-docs/use/](https://github.com/feelyourprotocol/website/tree/main/mcp-docs/use) → [mcp-docs.feelyourprotocol.org](https://mcp-docs.feelyourprotocol.org/use/introduction.html). Do not duplicate human inspiration pages here.
 
 ## What this repo is
 
-Pure TypeScript simulation library — EthereumJS v10, stateless, no HTTP, no MCP transport. The [`mcp-gateway`](../mcp-gateway/) exposes engine calls as MCP tools.
+Pure TypeScript simulation library — EthereumJS v10, isolated lab (no chain RPC), no HTTP, no MCP transport. The [`mcp-gateway`](../mcp-gateway/) exposes engine calls as MCP tools.
 
 ```
 Agent → mcp-gateway (tools) → mcp-execution-engine (this repo) → EthereumJS
@@ -30,9 +30,12 @@ Agent → mcp-gateway (tools) → mcp-execution-engine (this repo) → EthereumJ
 | --- | --- | --- |
 | probe | `describeCapabilities()` | `describe_capabilities` |
 | simulate | `simulateBytecode()` | `run_bytecode` |
+
 | transaction | `runTransaction()` | `run_transaction` |
 | block | `runBlock()` | `run_block` |
 | generate | (planned) | (planned) |
+
+`simulateBytecode` is a VM message-call (`createVM` plus `runCall`) with call-frame gas. Do not use detached `runCode`.
 
 Do **not** add per-EIP engine exports that mirror MCP tools. EIP work belongs in `src/modules/`.
 
@@ -61,5 +64,4 @@ Template: [`src/modules/eip-8024/`](src/modules/eip-8024/).
 ## Habits
 
 - Finish with `npm run typecheck`, `npm run test:ci`, `npm run lf:ci` in this package
-- Do not commit unless asked
 - Do not list unimplemented EIPs in the live catalog (`runnable: false` modules stay out of `EIP_MODULES`)

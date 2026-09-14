@@ -8,6 +8,7 @@
     "success": { "type": "boolean" },
     "gasUsed": { "type": "string" },
     "gasUsedScope": { "type": "string", "const": "call-frame" },
+    "stateGasSpilled": { "type": "string" },
     "returnValue": { "type": "string" },
     "finalStack": {
       "type": "array",

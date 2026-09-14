@@ -14,6 +14,7 @@ import {
 import { buildProvenance } from '../provenance/build.js'
 import {
   applyPrefundAccounts,
+  applyPrefundStorage,
   createImpersonatedTx,
   installCodeAt,
   LAB_BASE_FEE,
@@ -106,6 +107,7 @@ export async function runBlock(input: RunBlockInput): Promise<RunBlockResult> {
       gasLimit: parseGasLimit(raw.gasLimit),
     })
   }
+  await applyPrefundStorage(vm, input.accounts)
 
   const neededBySender = new Map<string, { address: Address; wei: bigint }>()
   for (const tx of parsedTxs) {

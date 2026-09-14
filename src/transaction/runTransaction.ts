@@ -15,6 +15,7 @@ import type { RunTransactionInput, RunTransactionResult } from '../types.js'
 import { EngineError } from '../types.js'
 import {
   applyPrefundAccounts,
+  applyPrefundStorage,
   createImpersonatedTx,
   emptyTransactionResult,
   installCodeAt,
@@ -49,6 +50,7 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
   if (input.code !== undefined && input.code.trim() !== '') {
     await installCodeAt(vm, to, input.code)
   }
+  await applyPrefundStorage(vm, input.accounts)
 
   await putFundedAccount(vm, from, senderUpfrontCost(value, gasLimit))
 

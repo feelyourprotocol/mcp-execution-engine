@@ -2,7 +2,13 @@ import { createLegacyTx, type LegacyTx } from '@ethereumjs/tx'
 import { type Address, bytesToHex, createAccount } from '@ethereumjs/util'
 import { createVM, type RunTxResult } from '@ethereumjs/vm'
 
-import { parseAddress, parseBytecodeHex, parseWeiValue, resolveFork } from '../forks/resolve.js'
+import {
+  parseAddress,
+  parseBytecodeHex,
+  parseBytes32,
+  parseWeiValue,
+  resolveFork,
+} from '../forks/resolve.js'
 import { mapExecLogs } from '../simulate/logs.js'
 import type { RunBlockTxResult, RunTransactionResult, SimulatePrefundAccount } from '../types.js'
 
@@ -11,6 +17,10 @@ export const LAB_GAS_PRICE = 10n
 export const LAB_BASE_FEE = 1n
 export const LAB_BLOCK_GAS_LIMIT = 30_000_000n
 export const LAB_COINBASE = '0x00000000000000000000000000000000000000c1'
+/** Address that holds `run_bytecode` code for the lab message-call. */
+export const LAB_BYTECODE_ADDRESS = '0x00000000000000000000000000000000000000b1'
+/** Impersonated caller for the `run_bytecode` message-call. */
+export const LAB_BYTECODE_CALLER = '0x00000000000000000000000000000000000000b2'
 export const LAB_DEFAULT_BLOCK_NUMBER = 1n
 export const LAB_DEFAULT_TIMESTAMP = 1n
 
@@ -51,6 +61,31 @@ export async function applyPrefundAccounts(
     if (entry.code !== undefined && entry.code.trim() !== '') {
       await vm.stateManager.putCode(address, parseBytecodeHex(entry.code))
     }
+    await applyAccountStorageSlots(vm, address, entry.storage)
+  }
+}
+
+/** Re-apply storage after `installCodeAt` (putAccount can run after the first seed). */
+export async function applyPrefundStorage(
+  vm: Awaited<ReturnType<typeof createVM>>,
+  accounts: SimulatePrefundAccount[] | undefined,
+): Promise<void> {
+  if (!accounts?.length) return
+  for (const entry of accounts) {
+    await applyAccountStorageSlots(vm, parseAddress(entry.address), entry.storage)
+  }
+}
+
+async function applyAccountStorageSlots(
+  vm: Awaited<ReturnType<typeof createVM>>,
+  address: Address,
+  storage: SimulatePrefundAccount['storage'],
+): Promise<void> {
+  if (!storage?.length) return
+  for (const item of storage) {
+    const slot = parseBytes32(item.slot, 'storage.slot')
+    const value = parseBytes32(item.value, 'storage.value')
+    await vm.stateManager.putStorage(address, slot, value)
   }
 }
 

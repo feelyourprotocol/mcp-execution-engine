@@ -129,6 +129,29 @@ export function parseOptionalHexData(data?: string): Uint8Array {
   return hexToBytes(normalized as PrefixedHexString)
 }
 
+/** 32-byte word for storage keys/values. Shorter hex is left-padded. */
+export function parseBytes32(hex: string, field: string): Uint8Array {
+  const trimmed = hex.trim()
+  if (!trimmed) {
+    throw new EngineError(`${field} must not be empty`, 'invalid_storage')
+  }
+  const normalized = trimmed.startsWith('0x') ? trimmed : `0x${trimmed}`
+  if (!/^0x[0-9a-fA-F]*$/.test(normalized)) {
+    throw new EngineError(`${field} must be a hex string`, 'invalid_storage')
+  }
+  if (normalized.length % 2 !== 0) {
+    throw new EngineError(`${field} hex must have an even number of digits`, 'invalid_storage')
+  }
+  const bytes = hexToBytes(normalized as PrefixedHexString)
+  if (bytes.length > 32) {
+    throw new EngineError(`${field} exceeds 32 bytes`, 'invalid_storage')
+  }
+  if (bytes.length === 32) return bytes
+  const padded = new Uint8Array(32)
+  padded.set(bytes, 32 - bytes.length)
+  return padded
+}
+
 /** Prefund caller balance for value-bearing message calls. */
 export function defaultCallerBalance(value: bigint): bigint {
   return value + BigInt(1e18)

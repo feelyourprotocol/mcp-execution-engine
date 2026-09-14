@@ -17,7 +17,18 @@
         "properties": {
           "address": { "type": "string" },
           "balance": { "type": "string" },
-          "code": { "type": "string" }
+          "code": { "type": "string" },
+          "storage": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["slot", "value"],
+              "properties": {
+                "slot": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            }
+          }
         }
       }
     },

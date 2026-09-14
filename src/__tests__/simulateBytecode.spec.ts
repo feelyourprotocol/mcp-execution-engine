@@ -1,9 +1,17 @@
 import { describe, expect, it } from 'vitest'
 
 import { ENGINE_CEILINGS } from '../forks/registry.js'
+import { NEW_STORAGE_SLOT_STATE_GAS } from '../modules/eip-8037/input.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
+import { LAB_BYTECODE_ADDRESS } from '../transaction/lab.js'
 import { EngineError } from '../types.js'
 import { dupnDemoHex, PUSH1_STOP_HEX } from './fixtures/eip8024.js'
+import {
+  EXTCODESIZE_AA,
+  SSTORE_SLOT3_VALUE7,
+  SSTORE_THEN_SLOAD_SLOT3,
+  SSTORE_UNDERFLOW,
+} from './fixtures/eip8038.js'
 
 describe('simulateBytecode', () => {
   it('is deterministic for identical input', async () => {
@@ -21,6 +29,7 @@ describe('simulateBytecode', () => {
 
     expect(result.success).toBe(true)
     expect(result.error).toBeNull()
+    expect(result.gasUsed).toBe('3')
     expect(result.gasUsedScope).toBe('call-frame')
     expect(result.provenance.forkConfig.baseHardfork).toBe('osaka')
     expect(result.provenance.stabilityRollup).toBe('firm')
@@ -46,7 +55,7 @@ describe('simulateBytecode', () => {
 
     expect(result.success).toBe(true)
     expect(result.error).toBeNull()
-    expect(BigInt(result.gasUsed)).toBeGreaterThan(0n)
+    expect(result.gasUsed).toBe('3')
     expect(result.gasUsedScope).toBe('call-frame')
     expect(result.provenance.engineVersion).toBe('0.1.0')
     expect(result.provenance.caveat).toMatch(/amsterdam/)
@@ -91,5 +100,91 @@ describe('simulateBytecode', () => {
 
   it('rejects empty bytecode', async () => {
     await expect(simulateBytecode({ bytecode: '' })).rejects.toThrow(/bytecode/i)
+  })
+
+  it('persists SSTORE so a later SLOAD in the same program sees the write', async () => {
+    const result = await simulateBytecode({
+      bytecode: SSTORE_THEN_SLOAD_SLOT3,
+      fork: { baseHardfork: 'amsterdam' },
+    })
+
+    expect(result.success).toBe(true)
+    expect(result.finalStack.at(-1)).toBe('0x7')
+  })
+
+  it('charges existing-slot SSTORE program gas on Amsterdam vs Osaka', async () => {
+    const storage = [{ address: LAB_BYTECODE_ADDRESS, storage: [{ slot: '0x03', value: '0x01' }] }]
+    const osaka = await simulateBytecode({
+      bytecode: SSTORE_SLOT3_VALUE7,
+      accounts: storage,
+      fork: { baseHardfork: 'osaka' },
+    })
+    const amsterdam = await simulateBytecode({
+      bytecode: SSTORE_SLOT3_VALUE7,
+      accounts: storage,
+      fork: { baseHardfork: 'amsterdam' },
+    })
+
+    expect(osaka.success).toBe(true)
+    expect(amsterdam.success).toBe(true)
+    expect(osaka.gasUsed).toBe('5006')
+    expect(amsterdam.gasUsed).toBe('12106')
+    expect(osaka.stateGasSpilled).toBeUndefined()
+    expect(amsterdam.stateGasSpilled).toBeUndefined()
+  })
+
+  it('reports new-slot state gas spill on Amsterdam SSTORE', async () => {
+    const osaka = await simulateBytecode({
+      bytecode: SSTORE_SLOT3_VALUE7,
+      fork: { baseHardfork: 'osaka' },
+    })
+    const amsterdam = await simulateBytecode({
+      bytecode: SSTORE_SLOT3_VALUE7,
+      fork: { baseHardfork: 'amsterdam' },
+    })
+
+    expect(osaka.success).toBe(true)
+    expect(amsterdam.success).toBe(true)
+    expect(osaka.gasUsed).toBe('22106')
+    expect(amsterdam.stateGasSpilled).toBe(NEW_STORAGE_SLOT_STATE_GAS.toString())
+    expect(BigInt(amsterdam.gasUsed) - BigInt(amsterdam.stateGasSpilled ?? '0')).toBe(12106n)
+  })
+
+  it('reads EXTCODESIZE of a contract seeded in the same call', async () => {
+    const result = await simulateBytecode({
+      bytecode: EXTCODESIZE_AA,
+      accounts: [{ address: '0x00000000000000000000000000000000000000aa', code: '0x600100' }],
+      fork: { baseHardfork: 'amsterdam' },
+    })
+
+    expect(result.success).toBe(true)
+    expect(result.finalStack.at(-1)).toBe('0x3')
+    expect(result.gasUsed).toBe('3103')
+  })
+
+  it('does not take storage from an unrelated account as the execution slot', async () => {
+    const result = await simulateBytecode({
+      bytecode: SSTORE_SLOT3_VALUE7,
+      accounts: [
+        {
+          address: '0x00000000000000000000000000000000000000aa',
+          storage: [{ slot: '0x03', value: '0x01' }],
+        },
+      ],
+      fork: { baseHardfork: 'amsterdam' },
+    })
+
+    expect(result.success).toBe(true)
+    expect(result.stateGasSpilled).toBe(NEW_STORAGE_SLOT_STATE_GAS.toString())
+  })
+
+  it('fails SSTORE with a short stack', async () => {
+    const result = await simulateBytecode({
+      bytecode: SSTORE_UNDERFLOW,
+      fork: { baseHardfork: 'amsterdam' },
+    })
+
+    expect(result.success).toBe(false)
+    expect(result.error?.toLowerCase()).toMatch(/stack/)
   })
 })
