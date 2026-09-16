@@ -51,6 +51,7 @@ export type {
   ChangeNature,
   EipCapability,
   EipComparison,
+  EipIntroduction,
   EipOpcode,
   EipOpcodeImmediate,
   EipProvenance,

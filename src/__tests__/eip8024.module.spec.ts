@@ -31,11 +31,7 @@ describe('EIP-8024 module', () => {
     expect(EIP_8024_MODULE.opcodes?.[1]?.opcode).toBe(SWAPN)
     expect(EIP_8024_MODULE.opcodes?.[2]?.opcode).toBe(EXCHANGE)
     expect(EIP_8024_MODULE.keywords).toContain('DUPN')
-    expect(EIP_8024_MODULE.comparison).toEqual({
-      baselineForkId: 'osaka',
-      previewForkId: 'amsterdam',
-      note: 'Opcodes 0xe6–0xe8 are invalid on baseline; valid on preview.',
-    })
+    expect(EIP_8024_MODULE.comparison).toBeUndefined()
     expect(EIP_8024_MODULE).not.toHaveProperty('scenarios')
     expect(EIP_8024_MODULE).not.toHaveProperty('questions')
   })

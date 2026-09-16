@@ -13,17 +13,12 @@ export const EIP_7883_MODULE: EipCapability = {
   eip: 7883,
   name: 'ModExp gas cost increase',
   summary:
-    'Osaka EVM runs ModExp (0x05) with Fusaka gas formula and EIP-7823 bounds. Supply CALL bytecode; compare Prague vs Osaka for repricing.',
+    'Osaka EVM runs ModExp (0x05) with Fusaka gas formula and EIP-7823 bounds. Supply CALL bytecode; compare with predecessor fork (Prague) via eipIntroductions.',
   changeNature: 'repricing',
   runnable: true,
   shapes: ['simulate'],
   keywords: ['ModExp', 'modular exponentiation', 'gas repricing', 'precompile 0x05', 'RSA'],
-  relatedForks: ['prague', 'osaka'],
-  comparison: {
-    baselineForkId: 'prague',
-    previewForkId: 'osaka',
-    note: 'ModExp gas formula changed at Fusaka; EIP-7823 input bounds on Osaka.',
-  },
+  relatedForks: ['osaka', 'fusaka', 'mainnet-el'],
   opcodes: [
     {
       name: 'MODEXP',
@@ -42,5 +37,5 @@ export const EIP_7883_MODULE: EipCapability = {
   testMaturity: 'Precompile gas tests',
   specAnchor: 'EIP-7883',
   notes:
-    'Run the same ModExp CALL on prague then osaka to diff gasUsed. Oversized inputs may fail on Osaka per EIP-7823.',
+    'Run the same ModExp CALL on predecessor (prague) then osaka to diff gasUsed. Oversized inputs may fail on Osaka per EIP-7823.',
 }

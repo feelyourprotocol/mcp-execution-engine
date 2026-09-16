@@ -10,11 +10,7 @@ describe('EIP-7883 module', () => {
     expect(EIP_7883_MODULE.eip).toBe(7883)
     expect(EIP_7883_MODULE.runnable).toBe(true)
     expect(EIP_7883_MODULE.changeNature).toBe('repricing')
-    expect(EIP_7883_MODULE.comparison).toEqual({
-      baselineForkId: 'prague',
-      previewForkId: 'osaka',
-      note: 'ModExp gas formula changed at Fusaka; EIP-7823 input bounds on Osaka.',
-    })
+    expect(EIP_7883_MODULE.comparison).toBeUndefined()
     expect(EIP_7883_MODULE.opcodes?.[0]?.opcodeHex).toBe('0x05')
   })
 

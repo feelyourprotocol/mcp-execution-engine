@@ -19,11 +19,7 @@ describe('EIP-7708 module', () => {
     expect(EIP_7708_MODULE.runnable).toBe(true)
     expect(EIP_7708_MODULE.changeNature).toBe('new-capability')
     expect(EIP_7708_MODULE.shapes).toEqual(['transaction', 'simulate'])
-    expect(EIP_7708_MODULE.comparison).toEqual({
-      baselineForkId: 'osaka',
-      previewForkId: 'amsterdam',
-      note: 'Transfer logs only on preview; same tx on baseline has no EIP-7708 logs.',
-    })
+    expect(EIP_7708_MODULE.comparison).toBeUndefined()
     expect(EIP_7708_MODULE.opcodes?.[0]?.opcodeHex).toBe(
       '0xfffffffffffffffffffffffffffffffffffffffe',
     )

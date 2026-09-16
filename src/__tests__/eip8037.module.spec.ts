@@ -19,11 +19,7 @@ describe('EIP-8037 module', () => {
     expect(EIP_8037_MODULE.runnable).toBe(true)
     expect(EIP_8037_MODULE.changeNature).toBe('new-exec-model')
     expect(EIP_8037_MODULE.shapes).toEqual(['transaction', 'simulate'])
-    expect(EIP_8037_MODULE.comparison).toEqual({
-      baselineForkId: 'osaka',
-      previewForkId: 'amsterdam',
-      note: 'Value tx to empty account: Amsterdam gasUsed ≈ 204600 (21000 + 183600 state); Osaka 21000. gasLimit 21000 fails on Amsterdam.',
-    })
+    expect(EIP_8037_MODULE.comparison).toBeUndefined()
     expect(EIP_8037_MODULE.opcodes?.map((op) => op.opcodeHex).sort()).toEqual(['0x55', '0xf1'])
   })
 

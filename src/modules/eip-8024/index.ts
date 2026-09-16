@@ -27,11 +27,6 @@ export const EIP_8024_MODULE: EipCapability = {
   shapes: ['simulate'],
   keywords: ['DUPN', 'SWAPN', 'EXCHANGE', 'stack opcodes', 'stack too deep', 'eip-8024'],
   relatedForks: ['amsterdam', 'glamsterdam'],
-  comparison: {
-    baselineForkId: 'osaka',
-    previewForkId: 'amsterdam',
-    note: 'Opcodes 0xe6–0xe8 are invalid on baseline; valid on preview.',
-  },
   opcodes: [
     {
       name: 'DUPN',

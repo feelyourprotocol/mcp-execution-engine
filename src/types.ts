@@ -12,8 +12,8 @@ export type ChangeNature =
 
 export type StabilityRollup = 'experimental' | 'emerging' | 'stabilizing' | 'firm'
 
-/** Named fork role for fork comparisons (baseline vs preview). */
-export type ForkRole = 'baseline' | 'preview'
+/** Named fork role in the Berlin→Amsterdam lineage. */
+export type ForkRole = 'historical' | 'current' | 'preview'
 
 /** À-la-carte or named fork capability set. */
 export interface ForkConfig {
@@ -41,13 +41,30 @@ export interface NamedFork {
   keywords: string[]
   /** Query shapes that work for a generic run on this fork. */
   shapes: QueryShape[]
+  /** Position in the Berlin→Amsterdam lineage (0 = Berlin). */
+  order: number
+  /** Previous lineage fork, if any. */
+  predecessorId?: string
+  /** Next lineage fork, if any. */
+  successorId?: string
+  /** Protocol EIPs activated at this fork (facts — see also eipIntroductions). */
+  activatedEips: number[]
   /** Runnable catalog EIP numbers advertised on this fork. */
   relatedEips: number[]
   /** Exploration twins that are Planned (not in the live EIP catalog). */
   plannedEips?: number[]
-  /** Optional baseline vs preview pair when comparing this fork. */
-  comparison?: EipComparison
   notes?: string
+}
+
+/** When an EIP activated — compact facts for agents (encoding lives in runnable modules). */
+export interface EipIntroduction {
+  eip: number
+  name: string
+  summary: string
+  keywords: string[]
+  introducedAt: string
+  /** Query shapes where a shipped verb can honestly show the effect. */
+  observableShapes?: QueryShape[]
 }
 
 export interface EipProvenance {
@@ -62,6 +79,8 @@ export interface EipProvenance {
 export interface Provenance {
   engineVersion: string
   forkConfig: ForkConfig
+  /** Lineage predecessor for generic historical runs (compare pair hint). */
+  predecessorForkId?: string
   perEip?: EipProvenance[]
   stabilityRollup?: StabilityRollup
   caveat?: string
@@ -317,9 +336,11 @@ export interface CapabilityDescription {
     maxTraceSteps: number
     maxTxsPerBlock: number
   }
-  /** Named hardforks as catalog capabilities (summary, related EIPs, shapes) — not id-only shortcuts. */
+  /** Named hardforks as catalog capabilities (lineage, activated EIPs, related twins). */
   namedForks: NamedFork[]
-  /** Current mainnet EL baseline for fork comparisons (see `namedForks` with `role: baseline`). */
+  /** When each catalogued EIP activated (compare with predecessor of introducedAt). */
+  eipIntroductions: EipIntroduction[]
+  /** Current mainnet EL baseline for fork comparisons (Osaka). */
   baselineForkId: string
   eips: EipCapability[]
   allowedBaseHardforks: string[]
