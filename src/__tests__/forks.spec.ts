@@ -124,12 +124,14 @@ describe('fork registry & resolve', () => {
     expect(osaka?.aliases).toContain('mainnet-el')
     expect(osaka?.relatedEips).toEqual([7883, 7951])
     expect(amsterdam?.role).toBe('preview')
-    expect(amsterdam?.relatedEips).toEqual([7708, 7843, 8024, 8037, 8038])
-    expect(amsterdam?.plannedEips).toEqual([7928])
+    expect(amsterdam?.relatedEips).toEqual([7708, 7843, 7928, 8024, 8037, 8038])
+    expect(amsterdam?.plannedEips).toBeUndefined()
+    expect(caps.inspectKinds.some((k) => k.id === 'block-access-list')).toBe(true)
     expect(
       caps.eipIntroductions.some((row) => row.eip === 3855 && row.introducedAt === 'shanghai'),
     ).toBe(true)
-    expect(caps.eips).toHaveLength(7)
+    expect(caps.eips).toHaveLength(8)
+    expect(caps.eips.some((e) => e.eip === 7928 && e.shapes.includes('generate'))).toBe(true)
     const e8024 = caps.eips.find((e) => e.eip === 8024)
     expect(e8024?.comparison?.baselineForkId).toBe('osaka')
     expect(e8024?.comparison?.previewForkId).toBe('amsterdam')
@@ -148,7 +150,7 @@ describe('fork registry & resolve', () => {
       getNamedFork('osaka')?.relatedEips,
     )
     expect(advertisedEipsForForkConfig({ baseHardfork: 'amsterdam', eips: [] })).toEqual([
-      7708, 7843, 8024, 8037, 8038,
+      7708, 7843, 7928, 8024, 8037, 8038,
     ])
     expect(advertisedEipsForForkConfig({ baseHardfork: 'amsterdam', eips: [8024] })).toEqual([8024])
   })

@@ -1,20 +1,22 @@
-# Generate (planned)
+# Generate shape
 
-> **Status:** Not implemented in the engine yet. **Step 6** — EIP-7928 block-level access lists.
+> **Status:** Shipped — generic **`generate`** MCP tool (EIP-7928 block access list first).
 
-## What it will do
+Derive structured protocol artifacts from a lab block run — same transaction/header/account inputs as **`run_block`**, but returns the artifact (BAL JSON + hash) instead of only receipts and header gas.
 
-Produce structured protocol outputs such as **block-level access lists (BAL)** from a lab `runBlock` result — same patterns as the website [EIP-7928 exploration](https://feelyourprotocol.org).
+## MCP
 
-`run_block` (v0) already executes 1–8 txs and returns receipts + a header snapshot. It does **not** return BAL JSON. That stays here until generate ships.
+- Tool: **`generate`**
+- Engine: **`generateArtifact()`**
+- Default kind: **`block-access-list`** (Amsterdam / EIP-7928)
 
-## Future MCP tool
+## Honesty
 
-A generic generate verb on the gateway (not a per-EIP tool).
+- BYOS lab only (1–8 impersonated txs, prefunded accounts).
+- Does **not** verify the BAL of a mainnet block without archive parent state.
+- Pair with **`inspect`** for caller-supplied BAL structure and hash checks.
 
-## Until then
+## References
 
-- Interactive reference: website EIP-7928 exploration
-- MCP docs: [Coverage](https://mcp-docs.feelyourprotocol.org/use/coverage.html) (7928 listed as Planned)
-
-Examples and schemas will be added here when Step 6 lands.
+- Website [EIP-7928 exploration](https://feelyourprotocol.org/eip-7928-block-level-access-lists)
+- MCP docs: [EIP-7928](/use/eips/eip-7928)

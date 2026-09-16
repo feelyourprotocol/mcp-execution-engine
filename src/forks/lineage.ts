@@ -152,7 +152,6 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     activatedEips: [
       2780, 7708, 7843, 7778, 7928, 7954, 7976, 7981, 7997, 8024, 8037, 8038, 8246, 8282,
     ],
-    plannedEips: [7928],
     keywords: ['amsterdam', 'glamsterdam', 'preview fork', 'upcoming hardfork'],
     summary:
       'Run under Amsterdam (alias Glamsterdam) — default preview fork. Upcoming EL bundle; compare with Osaka for mainnet-today deltas. You do not need to name an EIP.',

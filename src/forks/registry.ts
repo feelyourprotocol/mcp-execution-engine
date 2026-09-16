@@ -203,5 +203,13 @@ export function describeCapabilities() {
     baselineForkId: BASELINE_FORK_ID,
     eips: enrichEipCapabilities(),
     allowedBaseHardforks: [...ALLOWED_BASE_HARDFORKS],
+    inspectKinds: [
+      {
+        id: 'block-access-list',
+        label: 'Block access list (EIP-7928)',
+        summary:
+          'JSON (Engine API) or RLP hex. Checks encoding, canonical structure, optional item cap vs block gas limit, and optional blockAccessListHash — not consensus replay against mainnet.',
+      },
+    ],
   }
 }

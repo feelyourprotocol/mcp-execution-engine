@@ -1,5 +1,11 @@
 /** Query shapes the MCP surface exposes (generic verbs). */
-export type QueryShape = 'simulate' | 'transaction' | 'block' | 'generate' | 'probe'
+export type QueryShape = 'simulate' | 'transaction' | 'block' | 'generate' | 'inspect' | 'probe'
+
+/** Structured artifacts the `generate` verb can derive from a lab block run. */
+export type GenerateArtifactKind = 'block-access-list'
+
+/** Caller-supplied structures the `inspect` verb can judge (layers A–C). */
+export type InspectArtifactKind = 'block-access-list'
 
 /** Nature of a protocol change — drives which query shapes apply. */
 export type ChangeNature =
@@ -285,6 +291,59 @@ export interface RunBlockResult {
   provenance: Provenance
 }
 
+export interface GenerateInput extends RunBlockInput {
+  /** Defaults to `block-access-list` (EIP-7928). */
+  kind?: GenerateArtifactKind
+}
+
+/** Engine API JSON account list — opaque here; validators live in @ethereumjs/util. */
+export type BlockAccessListJson = unknown[]
+
+export interface GenerateResult {
+  success: boolean
+  artifactKind: GenerateArtifactKind
+  bal: BlockAccessListJson
+  hash: string
+  itemCount: number
+  /** Max BAL items allowed for the lab block gas limit (EIP-7928 item cost). */
+  maxItems: string
+  gasUsed: string
+  header: RunBlockHeaderSnapshot
+  error: string | null
+  provenance: Provenance
+}
+
+export interface InspectInput {
+  kind?: InspectArtifactKind
+  /** BAL JSON array (Engine API shape) or RLP-encoded list as hex. */
+  artifact: unknown
+  /** Block gas limit for the item cap check. Decimal string; default engine max. */
+  blockGasLimit?: string
+  /** Optional `blockAccessListHash` to compare (32-byte hex). */
+  expectedHash?: string
+}
+
+export interface InspectResult {
+  kind: InspectArtifactKind
+  /** Layer A — parses as JSON or RLP. */
+  wellFormed: boolean
+  /** Layer B — canonical order, uniqueness, read/write rules, item cap when gas limit known. */
+  structureOk: boolean
+  /** Layer C — present when expectedHash was supplied. */
+  hashMatch?: boolean
+  itemCapOk?: boolean
+  errors: string[]
+  itemCount: number
+  computedHash: string
+  maxItems?: string
+}
+
+export interface InspectKindDescriptor {
+  id: InspectArtifactKind
+  label: string
+  summary: string
+}
+
 export interface EipOpcodeImmediate {
   /** Spec formula so agents can construct bytecode (not a demo program). */
   encoding: string
@@ -344,6 +403,8 @@ export interface CapabilityDescription {
   baselineForkId: string
   eips: EipCapability[]
   allowedBaseHardforks: string[]
+  /** Kinds accepted by the generic `inspect` verb (structure + hash, no chain state). */
+  inspectKinds: InspectKindDescriptor[]
 }
 
 export class EngineError extends Error {

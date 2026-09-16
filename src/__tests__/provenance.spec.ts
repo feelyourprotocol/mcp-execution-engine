@@ -16,8 +16,10 @@ describe('provenance', () => {
     expect(provenance.forkConfig.baseHardfork).toBe('amsterdam')
     expect(provenance.forkConfig.eips).toEqual([])
     expect(provenance.stabilityRollup).toBe('stabilizing')
-    expect(provenance.perEip?.map((entry) => entry.eip)).toEqual([7708, 7843, 8024, 8037, 8038])
-    expect(provenance.caveat).toMatch(/advertised modules: 7708, 7843, 8024, 8037, 8038/)
+    expect(provenance.perEip?.map((entry) => entry.eip)).toEqual([
+      7708, 7843, 7928, 8024, 8037, 8038,
+    ])
+    expect(provenance.caveat).toMatch(/advertised modules: 7708, 7843, 7928, 8024, 8037, 8038/)
     expect(provenance.caveat).toMatch(/mcp-execution-engine/)
   })
 
