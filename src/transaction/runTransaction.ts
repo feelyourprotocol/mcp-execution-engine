@@ -2,6 +2,7 @@ import { createBlock } from '@ethereumjs/block'
 import { createAddressFromString } from '@ethereumjs/util'
 import { createVM, runTx } from '@ethereumjs/vm'
 
+import { authorizationListJsonToBytes } from '../authorization/parseAuthorizationList.js'
 import { ENGINE_VERSION } from '../forks/registry.js'
 import {
   parseAddress,
@@ -16,6 +17,7 @@ import { EngineError } from '../types.js'
 import {
   applyPrefundAccounts,
   applyPrefundStorage,
+  createImpersonated7702Tx,
   createImpersonatedTx,
   emptyTransactionResult,
   installCodeAt,
@@ -39,6 +41,13 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
   const { config, common } = resolveFork(input.fork)
   const provenance = buildProvenance(ENGINE_VERSION, config)
 
+  if (input.authorizationList !== undefined && !common.isActivatedEIP(7702)) {
+    throw new EngineError(
+      'authorizationList requires a fork with EIP-7702 active (e.g. prague)',
+      'unsupported_eip',
+    )
+  }
+
   const from = parseAddress(input.from)
   const to = parseAddress(input.to)
   const value = parseWeiValue(input.value)
@@ -54,7 +63,23 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
 
   await putFundedAccount(vm, from, senderUpfrontCost(value, gasLimit))
 
-  const tx = createImpersonatedTx({ common, from, to, value, data, gasLimit })
+  const authBytes =
+    input.authorizationList !== undefined
+      ? authorizationListJsonToBytes(input.authorizationList)
+      : undefined
+
+  const tx =
+    authBytes !== undefined
+      ? createImpersonated7702Tx({
+          common,
+          from,
+          to,
+          value,
+          data,
+          gasLimit,
+          authorizationList: authBytes,
+        })
+      : createImpersonatedTx({ common, from, to, value, data, gasLimit })
   const block = createBlock(
     {
       header: {

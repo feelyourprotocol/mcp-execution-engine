@@ -36,11 +36,19 @@
     },
     {
       "id": "generate",
-      "status": "planned",
-      "engineFn": "generateBal",
-      "mcpTool": "generate_eip7928_bal",
-      "transport": { "stdio": "planned-step-6", "http": "planned-step-6" },
-      "summary": "Produce structured outputs such as block-level access lists (EIP-7928)."
+      "status": "shipped",
+      "engineFn": "generateArtifact",
+      "mcpTool": "generate",
+      "transport": { "stdio": "live", "http": "planned-step-5" },
+      "summary": "Derive structured artifacts from a lab block (block-access-list / EIP-7928 first)."
+    },
+    {
+      "id": "inspect",
+      "status": "shipped",
+      "engineFn": "inspectArtifact",
+      "mcpTool": "inspect",
+      "transport": { "stdio": "live", "http": "planned-step-5" },
+      "summary": "Judge caller-supplied structures (BAL JSON or RLP) without chain state."
     }
   ],
   "examples": [

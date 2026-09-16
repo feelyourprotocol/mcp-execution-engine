@@ -20,11 +20,7 @@ describe('EIP-8038 module', () => {
     expect(EIP_8038_MODULE.runnable).toBe(true)
     expect(EIP_8038_MODULE.changeNature).toBe('repricing')
     expect(EIP_8038_MODULE.shapes).toEqual(['simulate', 'transaction'])
-    expect(EIP_8038_MODULE.comparison).toEqual({
-      baselineForkId: 'osaka',
-      previewForkId: 'amsterdam',
-      note: 'Existing-slot first SSTORE (cold): Amsterdam regular gas 12_100 (2_100 access + 10_000 write) vs Osaka ~5_000. Cold SLOAD stays 2_100. EXTCODESIZE adds an extra 100 for the second read.',
-    })
+    expect(EIP_8038_MODULE.comparison).toBeUndefined()
     expect(EIP_8038_MODULE.opcodes?.map((op) => op.opcodeHex)).toEqual(['0x55', '0x54', '0x3b'])
     expect(EIP_8038_MODULE).not.toHaveProperty('scenarios')
   })

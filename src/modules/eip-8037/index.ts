@@ -25,11 +25,6 @@ export const EIP_8037_MODULE: EipCapability = {
     'gas limit 21000',
   ],
   relatedForks: ['amsterdam', 'glamsterdam'],
-  comparison: {
-    baselineForkId: 'osaka',
-    previewForkId: 'amsterdam',
-    note: 'Value tx to empty account: Amsterdam gasUsed ≈ 204600 (21000 + 183600 state); Osaka 21000. gasLimit 21000 fails on Amsterdam.',
-  },
   opcodes: [
     {
       name: 'First-touch value call',

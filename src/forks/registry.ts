@@ -1,8 +1,20 @@
 import { Common, Hardfork, Mainnet } from '@ethereumjs/common'
 
 import { EIP_MODULES, getEipModule } from '../modules/index.js'
-import type { EngineCeilings, ForkConfig, NamedFork } from '../types.js'
+import type { EipCapability, EngineCeilings, ForkConfig, NamedFork } from '../types.js'
 import { EngineError } from '../types.js'
+import { derivedComparisonForEip, listEipIntroductions } from './introductions.js'
+import {
+  BASELINE_FORK_ID,
+  defaultForkShapes,
+  FORK_LINEAGE,
+  lineageForkIds,
+  predecessorFork,
+  resolveForkAlias,
+  successorFork,
+} from './lineage.js'
+
+export { BASELINE_FORK_ID }
 
 export const ENGINE_VERSION = '0.1.0'
 
@@ -14,40 +26,64 @@ export const ENGINE_CEILINGS: EngineCeilings = {
   maxTxsPerBlock: 8,
 }
 
-export const BASELINE_FORK_ID = 'osaka'
-
-export const ALLOWED_BASE_HARDFORKS = ['prague', 'osaka', 'amsterdam'] as const
+export const ALLOWED_BASE_HARDFORKS = lineageForkIds()
 
 export type AllowedBaseHardfork = (typeof ALLOWED_BASE_HARDFORKS)[number]
 
-export const NAMED_FORKS: NamedFork[] = [
-  {
-    id: 'prague',
-    label: 'Prague (pre-Fusaka ModExp)',
-    config: { baseHardfork: 'prague', eips: [] },
-    stabilityRollup: 'firm',
-    role: 'baseline',
-  },
-  {
-    id: 'osaka',
-    label: 'Osaka (current mainnet EL)',
-    config: { baseHardfork: 'osaka', eips: [] },
-    stabilityRollup: 'firm',
-    role: 'baseline',
-    aliases: ['mainnet-el'],
-  },
-  {
-    id: 'amsterdam',
-    label: 'Amsterdam (scheduled EL fork)',
-    config: { baseHardfork: 'amsterdam', eips: [] },
-    stabilityRollup: 'stabilizing',
-    role: 'preview',
-    aliases: ['glamsterdam'],
-  },
-]
+/** Runnable catalog EIPs whose `relatedForks` include this named fork or an alias.
+ *  Do not call at module init — EIP modules import the lab path which loads this file.
+ */
+export function advertisedEipsForFork(id: string, aliases: string[] = []): number[] {
+  const names = new Set([id, ...aliases])
+  return EIP_MODULES.filter((mod) => mod.relatedForks.some((fork) => names.has(fork)))
+    .map((mod) => mod.eip)
+    .sort((a, b) => a - b)
+}
+
+function buildNamedForks(): NamedFork[] {
+  return FORK_LINEAGE.map((def) => ({
+    id: def.id,
+    label: def.label,
+    config: { baseHardfork: def.id, eips: [] },
+    stabilityRollup: def.stabilityRollup,
+    role: def.role,
+    aliases: def.aliases.length > 0 ? def.aliases : undefined,
+    summary: def.summary,
+    keywords: def.keywords,
+    shapes: defaultForkShapes(),
+    order: def.order,
+    predecessorId: predecessorFork(def.id),
+    successorId: successorFork(def.id),
+    activatedEips: [...def.activatedEips],
+    relatedEips: advertisedEipsForFork(def.id, def.aliases),
+    plannedEips: def.plannedEips,
+    notes: def.notes,
+  }))
+}
+
+export const NAMED_FORKS: NamedFork[] = buildNamedForks()
+
+/**
+ * Advertised modules for provenance on a run. Explicit `eips[]` wins;
+ * otherwise the named-fork catalog row (generic hardfork run).
+ */
+export function advertisedEipsForForkConfig(config: ForkConfig): number[] {
+  if (config.eips !== undefined && config.eips.length > 0) {
+    return [...config.eips].sort((a, b) => a - b)
+  }
+  const named = NAMED_FORKS.find((entry) => entry.config.baseHardfork === config.baseHardfork)
+  return named?.relatedEips ?? []
+}
 
 /** Live catalog — derived from EIP modules. Unimplemented EIPs are not listed. */
 export const EIP_CAPABILITIES = EIP_MODULES
+
+function enrichEipCapabilities(): EipCapability[] {
+  return EIP_CAPABILITIES.map((cap) => ({
+    ...cap,
+    comparison: derivedComparisonForEip(cap.eip),
+  }))
+}
 
 export function getEipCapability(eip: number) {
   return getEipModule(eip)
@@ -58,14 +94,14 @@ export function listKnownEips() {
 }
 
 function resolveBaseHardfork(id: string): string {
+  const canonical = resolveForkAlias(id)
+  if (canonical) {
+    return canonical
+  }
   if (ALLOWED_BASE_HARDFORKS.includes(id as AllowedBaseHardfork)) {
     return id
   }
-  const named = NAMED_FORKS.find((entry) => entry.aliases?.includes(id))
-  if (named) {
-    return named.config.baseHardfork
-  }
-  return id
+  return getNamedFork(id)?.config.baseHardfork ?? id
 }
 
 export function normalizeForkConfig(input?: ForkConfig): ForkConfig {
@@ -79,10 +115,16 @@ export function normalizeForkConfig(input?: ForkConfig): ForkConfig {
   }
 }
 
+export function getNamedFork(id: string): NamedFork | undefined {
+  const canonical = resolveForkAlias(id)
+  if (canonical) {
+    return NAMED_FORKS.find((entry) => entry.id === canonical)
+  }
+  return NAMED_FORKS.find((entry) => entry.id === id || (entry.aliases?.includes(id) ?? false))
+}
+
 export function resolveNamedFork(id: string): ForkConfig {
-  const named = NAMED_FORKS.find(
-    (entry) => entry.id === id || (entry.aliases?.includes(id) ?? false),
-  )
+  const named = getNamedFork(id)
   if (!named) {
     throw new EngineError(`Unknown named fork: ${id}`, 'unknown_named_fork')
   }
@@ -90,16 +132,26 @@ export function resolveNamedFork(id: string): ForkConfig {
 }
 
 export function hardforkToEnum(baseHardfork: string): Hardfork {
-  if (baseHardfork === 'prague') {
-    return Hardfork.Prague
+  switch (baseHardfork) {
+    case 'berlin':
+      return Hardfork.Berlin
+    case 'london':
+      return Hardfork.London
+    case 'paris':
+      return Hardfork.Paris
+    case 'shanghai':
+      return Hardfork.Shanghai
+    case 'cancun':
+      return Hardfork.Cancun
+    case 'prague':
+      return Hardfork.Prague
+    case 'osaka':
+      return Hardfork.Osaka
+    case 'amsterdam':
+      return Hardfork.Amsterdam
+    default:
+      throw new EngineError(`Unsupported base hardfork: ${baseHardfork}`, 'unsupported_hardfork')
   }
-  if (baseHardfork === 'osaka') {
-    return Hardfork.Osaka
-  }
-  if (baseHardfork === 'amsterdam') {
-    return Hardfork.Amsterdam
-  }
-  throw new EngineError(`Unsupported base hardfork: ${baseHardfork}`, 'unsupported_hardfork')
 }
 
 export function buildCommon(config: ForkConfig): Common {
@@ -147,8 +199,41 @@ export function describeCapabilities() {
       maxTxsPerBlock: ENGINE_CEILINGS.maxTxsPerBlock,
     },
     namedForks: NAMED_FORKS,
+    eipIntroductions: listEipIntroductions(),
     baselineForkId: BASELINE_FORK_ID,
-    eips: EIP_CAPABILITIES,
+    eips: enrichEipCapabilities(),
     allowedBaseHardforks: [...ALLOWED_BASE_HARDFORKS],
+    inspectKinds: [
+      {
+        id: 'block-access-list',
+        label: 'Block access list (EIP-7928)',
+        summary:
+          'JSON (Engine API) or RLP hex. Checks encoding, canonical structure, optional item cap vs block gas limit, and optional blockAccessListHash — not consensus replay against mainnet.',
+      },
+      {
+        id: 'authorization-list',
+        label: 'EIP-7702 authorization list',
+        summary:
+          'One or more signed authorization JSON objects. Recovers authority address and signing digest per item — not full tx execution.',
+      },
+      {
+        id: 'typed-transaction',
+        label: 'EIP-2718 typed transaction',
+        summary:
+          'Signed tx RLP hex. Decodes type, hash, sender, fee fields; optional hash match. Blob sidecars/KZG not validated.',
+      },
+      {
+        id: 'withdrawals',
+        label: 'EIP-4895 withdrawals',
+        summary:
+          'JSON withdrawal array. Field parse and optional withdrawalsRoot recomputation — list is caller-supplied, not generated from the lab.',
+      },
+      {
+        id: 'execution-requests',
+        label: 'EIP-7685 execution requests',
+        summary:
+          'JSON array of { type, data } request envelopes. Sorted-type check and requestsHash — opaque body bytes, not full SSZ validation.',
+      },
+    ],
   }
 }

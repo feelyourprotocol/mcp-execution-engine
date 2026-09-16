@@ -1,4 +1,10 @@
-import { createLegacyTx, type LegacyTx } from '@ethereumjs/tx'
+import {
+  createEOACode7702Tx,
+  createLegacyTx,
+  type EOACode7702Tx,
+  type LegacyTx,
+} from '@ethereumjs/tx'
+import type { EOACode7702AuthorizationListBytes } from '@ethereumjs/util'
 import { type Address, bytesToHex, createAccount } from '@ethereumjs/util'
 import { createVM, type RunTxResult } from '@ethereumjs/vm'
 
@@ -12,15 +18,12 @@ import {
 import { mapExecLogs } from '../simulate/logs.js'
 import type { RunBlockTxResult, RunTransactionResult, SimulatePrefundAccount } from '../types.js'
 
+export { LAB_BYTECODE_ADDRESS, LAB_BYTECODE_CALLER, LAB_COINBASE } from './addresses.js'
+
 /** Lab gas price — above a 1 wei base fee so legacy txs are valid on 1559 forks. */
 export const LAB_GAS_PRICE = 10n
 export const LAB_BASE_FEE = 1n
 export const LAB_BLOCK_GAS_LIMIT = 30_000_000n
-export const LAB_COINBASE = '0x00000000000000000000000000000000000000c1'
-/** Address that holds `run_bytecode` code for the lab message-call. */
-export const LAB_BYTECODE_ADDRESS = '0x00000000000000000000000000000000000000b1'
-/** Impersonated caller for the `run_bytecode` message-call. */
-export const LAB_BYTECODE_CALLER = '0x00000000000000000000000000000000000000b2'
 export const LAB_DEFAULT_BLOCK_NUMBER = 1n
 export const LAB_DEFAULT_TIMESTAMP = 1n
 
@@ -41,6 +44,33 @@ export function createImpersonatedTx(opts: {
       to: opts.to,
       value: opts.value,
       data: opts.data,
+    },
+    { common: opts.common, freeze: false },
+  )
+  tx.getSenderAddress = () => opts.from
+  return tx
+}
+
+export function createImpersonated7702Tx(opts: {
+  common: ReturnType<typeof resolveFork>['common']
+  from: Address
+  to: Address
+  value: bigint
+  data: Uint8Array
+  gasLimit: bigint
+  authorizationList: EOACode7702AuthorizationListBytes
+  nonce?: bigint
+}): EOACode7702Tx {
+  const tx = createEOACode7702Tx(
+    {
+      nonce: opts.nonce ?? 0n,
+      gasLimit: opts.gasLimit,
+      maxFeePerGas: LAB_GAS_PRICE,
+      maxPriorityFeePerGas: LAB_GAS_PRICE,
+      to: opts.to,
+      value: opts.value,
+      data: opts.data,
+      authorizationList: opts.authorizationList,
     },
     { common: opts.common, freeze: false },
   )

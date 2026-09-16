@@ -23,11 +23,6 @@ export const EIP_7843_MODULE: EipCapability = {
   shapes: ['block'],
   keywords: ['SLOTNUM', 'slot number', 'beacon slot', 'TIMESTAMP', 'header.slotNumber'],
   relatedForks: ['amsterdam', 'glamsterdam'],
-  comparison: {
-    baselineForkId: 'osaka',
-    previewForkId: 'amsterdam',
-    note: 'Opcode 0x4b is invalid on baseline; on preview it pushes header.slotNumber (2 gas).',
-  },
   opcodes: [
     {
       name: 'SLOTNUM',

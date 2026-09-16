@@ -35,7 +35,7 @@ Match `CANONICAL.question.changeNature` + `mcp.shapes`. Closest **engine** sibli
 | New opcodes | `src/modules/eip-8024/` | opcode + immediate encoding | valid exec + invalid encoding / depth |
 | Precompile repricing | `eip-7883/` | CALL address + input layout + comparison forks | gas baseline vs preview; bound rejection |
 | Precompile new-capability | `eip-7951/` | CALL address + input layout | valid return vs invalid — not a fork gas compare |
-| New structure (BAL, …) | catalogue only until **generate** ships | honest Planned page (see `eip-7928.md`) | fixtures when the verb exists |
+| New structure (BAL, …) | **generate** + optional **inspect** | runnable module (see `eip-7928.md`) | MCP curriculum tests |
 | Header slot / multi-tx receipts | `run_block` | header snapshot + per-tx receipts | slot / N txs / Osaka vs Amsterdam |
 | Limit / economic / exec-model | `run_transaction` if the unit is a tx (gasLimit, receipt, `txStateGas`); `run_bytecode` if opcodes / program gas | encoding + fork notes | hit the limit / fee path; beyond-edge |
 | Needs BAL JSON | **planned-module** until **generate** ships | page says what is observable today | do not list in `EIP_MODULES` until honest |

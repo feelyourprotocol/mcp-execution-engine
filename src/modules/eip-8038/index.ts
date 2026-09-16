@@ -6,7 +6,7 @@
  * Callers supply SSTORE / SLOAD / EXTCODESIZE bytecode. Catalog describes
  * encoding and fork compare; it does not ship demo programs.
  */
-import { LAB_BYTECODE_ADDRESS } from '../../transaction/lab.js'
+import { LAB_BYTECODE_ADDRESS } from '../../transaction/addresses.js'
 import type { EipCapability } from '../../types.js'
 import {
   EXTCODESIZE,
@@ -30,11 +30,6 @@ export const EIP_8038_MODULE: EipCapability = {
   shapes: ['simulate', 'transaction'],
   keywords: ['state access gas', 'STORAGE_WRITE', 'ACCOUNT_WRITE', 'SSTORE', 'EXTCODESIZE'],
   relatedForks: ['amsterdam', 'glamsterdam'],
-  comparison: {
-    baselineForkId: 'osaka',
-    previewForkId: 'amsterdam',
-    note: 'Existing-slot first SSTORE (cold): Amsterdam regular gas 12_100 (2_100 access + 10_000 write) vs Osaka ~5_000. Cold SLOAD stays 2_100. EXTCODESIZE adds an extra 100 for the second read.',
-  },
   opcodes: [
     {
       name: 'SSTORE',

@@ -1,5 +1,7 @@
 export { runBlock } from './block/runBlock.js'
 export {
+  advertisedEipsForFork,
+  advertisedEipsForForkConfig,
   ALLOWED_BASE_HARDFORKS,
   BASELINE_FORK_ID,
   buildCommon,
@@ -8,6 +10,7 @@ export {
   ENGINE_CEILINGS,
   ENGINE_VERSION,
   getEipCapability,
+  getNamedFork,
   listKnownEips,
   NAMED_FORKS,
   normalizeForkConfig,
@@ -20,9 +23,12 @@ export {
   parseUint64Field,
   resolveFork,
 } from './forks/resolve.js'
+export { generateArtifact } from './generate/generateArtifact.js'
+export { inspectArtifact } from './inspect/inspectArtifact.js'
 export { EIP_7708_MODULE } from './modules/eip-7708/index.js'
 export { EIP_7843_MODULE } from './modules/eip-7843/index.js'
 export { SLOTNUM, SLOTNUM_GAS } from './modules/eip-7843/opcodes.js'
+export { EIP_7928_MODULE } from './modules/eip-7928/index.js'
 export { EIP_8024_MODULE } from './modules/eip-8024/index.js'
 export {
   DUPN,
@@ -44,16 +50,25 @@ export { stepToTrace } from './simulate/trace.js'
 export { LAB_BYTECODE_ADDRESS, LAB_BYTECODE_CALLER } from './transaction/lab.js'
 export { runTransaction } from './transaction/runTransaction.js'
 export type {
+  BlockAccessListJson,
   CapabilityDescription,
   ChangeNature,
   EipCapability,
   EipComparison,
+  EipIntroduction,
   EipOpcode,
   EipOpcodeImmediate,
   EipProvenance,
   EngineCeilings,
   ForkConfig,
   ForkRole,
+  GenerateArtifactKind,
+  GenerateInput,
+  GenerateResult,
+  InspectArtifactKind,
+  InspectInput,
+  InspectKindDescriptor,
+  InspectResult,
   NamedFork,
   Provenance,
   QueryShape,

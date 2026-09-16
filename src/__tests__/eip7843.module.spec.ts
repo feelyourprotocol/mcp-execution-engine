@@ -26,11 +26,7 @@ describe('EIP-7843 module', () => {
     expect(EIP_7843_MODULE.opcodes?.[0]?.opcodeHex).toBe('0x4b')
     expect(EIP_7843_MODULE.opcodes?.[0]?.effect).toMatch(String(SLOTNUM_GAS))
     expect(EIP_7843_MODULE.keywords).toContain('SLOTNUM')
-    expect(EIP_7843_MODULE.comparison).toEqual({
-      baselineForkId: 'osaka',
-      previewForkId: 'amsterdam',
-      note: 'Opcode 0x4b is invalid on baseline; on preview it pushes header.slotNumber (2 gas).',
-    })
+    expect(EIP_7843_MODULE.comparison).toBeUndefined()
     expect(EIP_7843_MODULE).not.toHaveProperty('scenarios')
     expect(EIP_7843_MODULE).not.toHaveProperty('questions')
   })

@@ -5,12 +5,13 @@ alwaysApply: true
 
 # Website relation (explorations vs MCP)
 
-## One capability, three presentations
+## One capability, four presentations
 
 | Layer | Role |
 | --- | --- |
 | Website exploration | Human textbook — pedagogy, widgets, curated examples |
 | MCP docs `use/eips/eip-NNNN` | Human inspiration — same problem set, prompts, Connect |
+| MCP docs `use/forks/<id>` | Human catalogue for a **named hardfork** (generic run; no EIP required) |
 | Engine module + generic tools | Runtime — execute **caller-supplied** bytecode or transactions |
 
 ## Canonical source of truth

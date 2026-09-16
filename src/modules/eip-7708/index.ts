@@ -31,11 +31,6 @@ export const EIP_7708_MODULE: EipCapability = {
     'EIP-7708',
   ],
   relatedForks: ['amsterdam', 'glamsterdam'],
-  comparison: {
-    baselineForkId: 'osaka',
-    previewForkId: 'amsterdam',
-    note: 'Transfer logs only on preview; same tx on baseline has no EIP-7708 logs.',
-  },
   opcodes: [
     {
       name: 'EIP-7708 Transfer log',

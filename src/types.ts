@@ -1,5 +1,18 @@
+import type { EOACode7702AuthorizationListItem } from '@ethereumjs/util'
+
 /** Query shapes the MCP surface exposes (generic verbs). */
-export type QueryShape = 'simulate' | 'transaction' | 'block' | 'generate' | 'probe'
+export type QueryShape = 'simulate' | 'transaction' | 'block' | 'generate' | 'inspect' | 'probe'
+
+/** Structured artifacts the `generate` verb can derive from a lab block run. */
+export type GenerateArtifactKind = 'block-access-list'
+
+/** Caller-supplied structures the `inspect` verb can judge (layers A–C). */
+export type InspectArtifactKind =
+  | 'block-access-list'
+  | 'authorization-list'
+  | 'typed-transaction'
+  | 'withdrawals'
+  | 'execution-requests'
 
 /** Nature of a protocol change — drives which query shapes apply. */
 export type ChangeNature =
@@ -12,13 +25,59 @@ export type ChangeNature =
 
 export type StabilityRollup = 'experimental' | 'emerging' | 'stabilizing' | 'firm'
 
-/** Named fork role for fork comparisons (baseline vs preview). */
-export type ForkRole = 'baseline' | 'preview'
+/** Named fork role in the Berlin→Amsterdam lineage. */
+export type ForkRole = 'historical' | 'current' | 'preview'
 
 /** À-la-carte or named fork capability set. */
 export interface ForkConfig {
   baseHardfork: string
   eips?: number[]
+}
+
+/**
+ * Catalog entry for one named hardfork. First-class next to EIP modules:
+ * callers can run bytecode / a tx / a lab block under the fork without
+ * naming an EIP. `relatedEips` are advertised runnable modules, not a
+ * complete EthereumJS bundle list.
+ */
+export interface NamedFork {
+  id: string
+  label: string
+  config: ForkConfig
+  stabilityRollup?: StabilityRollup
+  /** Baseline (mainnet today) vs preview (upcoming fork). */
+  role?: ForkRole
+  /** Alternate names agents may use (e.g. glamsterdam → amsterdam). */
+  aliases?: string[]
+  /** One-line capability: what callers can do on this fork. */
+  summary: string
+  keywords: string[]
+  /** Query shapes that work for a generic run on this fork. */
+  shapes: QueryShape[]
+  /** Position in the Berlin→Amsterdam lineage (0 = Berlin). */
+  order: number
+  /** Previous lineage fork, if any. */
+  predecessorId?: string
+  /** Next lineage fork, if any. */
+  successorId?: string
+  /** Protocol EIPs activated at this fork (facts — see also eipIntroductions). */
+  activatedEips: number[]
+  /** Runnable catalog EIP numbers advertised on this fork. */
+  relatedEips: number[]
+  /** Exploration twins that are Planned (not in the live EIP catalog). */
+  plannedEips?: number[]
+  notes?: string
+}
+
+/** When an EIP activated — compact facts for agents (encoding lives in runnable modules). */
+export interface EipIntroduction {
+  eip: number
+  name: string
+  summary: string
+  keywords: string[]
+  introducedAt: string
+  /** Query shapes where a shipped verb can honestly show the effect. */
+  observableShapes?: QueryShape[]
 }
 
 export interface EipProvenance {
@@ -33,6 +92,8 @@ export interface EipProvenance {
 export interface Provenance {
   engineVersion: string
   forkConfig: ForkConfig
+  /** Lineage predecessor for generic historical runs (compare pair hint). */
+  predecessorForkId?: string
   perEip?: EipProvenance[]
   stabilityRollup?: StabilityRollup
   caveat?: string
@@ -46,17 +107,6 @@ export interface EngineCeilings {
   maxTraceSteps: number
   /** Hard cap on transactions in one `runBlock` lab request. */
   maxTxsPerBlock: number
-}
-
-export interface NamedFork {
-  id: string
-  label: string
-  config: ForkConfig
-  stabilityRollup?: StabilityRollup
-  /** Baseline (mainnet today) vs preview (upcoming fork). */
-  role?: ForkRole
-  /** Alternate names agents may use (e.g. glamsterdam → amsterdam). */
-  aliases?: string[]
 }
 
 /** How to compare a preview EIP against the live baseline fork. */
@@ -164,6 +214,8 @@ export interface RunTransactionInput {
   fork?: ForkConfig
   /** Transaction gas limit as a decimal string. Default 1000000. */
   gasLimit?: string
+  /** Signed EIP-7702 authorization JSON items — builds a type-4 tx on Prague+. */
+  authorizationList?: EOACode7702AuthorizationListItem[]
 }
 
 export interface RunTransactionResult {
@@ -248,6 +300,63 @@ export interface RunBlockResult {
   provenance: Provenance
 }
 
+export interface GenerateInput extends RunBlockInput {
+  /** Defaults to `block-access-list` (EIP-7928). */
+  kind?: GenerateArtifactKind
+}
+
+/** Engine API JSON account list — opaque here; validators live in @ethereumjs/util. */
+export type BlockAccessListJson = unknown[]
+
+export interface GenerateResult {
+  success: boolean
+  artifactKind: GenerateArtifactKind
+  bal: BlockAccessListJson
+  hash: string
+  itemCount: number
+  /** Max BAL items allowed for the lab block gas limit (EIP-7928 item cost). */
+  maxItems: string
+  gasUsed: string
+  header: RunBlockHeaderSnapshot
+  error: string | null
+  provenance: Provenance
+}
+
+export interface InspectInput {
+  kind?: InspectArtifactKind
+  /** Shape depends on `kind` — see probe `inspectKinds`. */
+  artifact: unknown
+  /** Block gas limit for BAL item cap check. Decimal string; default engine max. */
+  blockGasLimit?: string
+  /** Optional 32-byte commitment hex (BAL hash, tx hash, withdrawalsRoot, requestsHash). */
+  expectedHash?: string
+  /** Fork for typed-transaction decode (default prague). */
+  fork?: ForkConfig
+}
+
+export interface InspectResult {
+  kind: InspectArtifactKind
+  /** Layer A — parses as JSON or RLP. */
+  wellFormed: boolean
+  /** Layer B — canonical order, uniqueness, read/write rules, item cap when gas limit known. */
+  structureOk: boolean
+  /** Layer C — present when expectedHash was supplied. */
+  hashMatch?: boolean
+  itemCapOk?: boolean
+  errors: string[]
+  itemCount: number
+  computedHash: string
+  maxItems?: string
+  /** Kind-specific fields (authorities, tx decode summary, roots, …). */
+  details?: Record<string, unknown>
+}
+
+export interface InspectKindDescriptor {
+  id: InspectArtifactKind
+  label: string
+  summary: string
+}
+
 export interface EipOpcodeImmediate {
   /** Spec formula so agents can construct bytecode (not a demo program). */
   encoding: string
@@ -299,11 +408,16 @@ export interface CapabilityDescription {
     maxTraceSteps: number
     maxTxsPerBlock: number
   }
+  /** Named hardforks as catalog capabilities (lineage, activated EIPs, related twins). */
   namedForks: NamedFork[]
-  /** Current mainnet EL baseline for fork comparisons (see `namedForks` with `role: baseline`). */
+  /** When each catalogued EIP activated (compare with predecessor of introducedAt). */
+  eipIntroductions: EipIntroduction[]
+  /** Current mainnet EL baseline for fork comparisons (Osaka). */
   baselineForkId: string
   eips: EipCapability[]
   allowedBaseHardforks: string[]
+  /** Kinds accepted by the generic `inspect` verb (structure + hash, no chain state). */
+  inspectKinds: InspectKindDescriptor[]
 }
 
 export class EngineError extends Error {

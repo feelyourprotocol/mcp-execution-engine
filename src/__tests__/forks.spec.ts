@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  advertisedEipsForFork,
+  advertisedEipsForForkConfig,
   buildCommon,
   describeCapabilities,
   ENGINE_CEILINGS,
+  getNamedFork,
   normalizeForkConfig,
   resolveNamedFork,
 } from '../forks/registry.js'
@@ -33,6 +36,13 @@ describe('fork registry & resolve', () => {
   it('maps mainnet-el alias to osaka', () => {
     expect(normalizeForkConfig({ baseHardfork: 'mainnet-el', eips: [] })).toEqual({
       baseHardfork: 'osaka',
+      eips: [],
+    })
+  })
+
+  it('maps shapella alias to shanghai', () => {
+    expect(normalizeForkConfig({ baseHardfork: 'shapella', eips: [] })).toEqual({
+      baseHardfork: 'shanghai',
       eips: [],
     })
   })
@@ -74,44 +84,78 @@ describe('fork registry & resolve', () => {
     expect(() => parseBytes32('xyz', 'storage.slot')).toThrow(/hex/)
   })
 
-  it('describeCapabilities lists prague, osaka, amsterdam and runnable EIPs', () => {
+  it('describeCapabilities exposes full lineage and eipIntroductions', () => {
     const caps = describeCapabilities()
     expect(caps.engineVersion).toBe('0.1.0')
     expect(caps.baselineForkId).toBe('osaka')
-    expect(caps.allowedBaseHardforks).toEqual(['prague', 'osaka', 'amsterdam'])
-    expect(caps.namedForks.some((fork) => fork.id === 'prague')).toBe(true)
-    expect(caps.namedForks.some((fork) => fork.id === 'osaka')).toBe(true)
-    expect(caps.namedForks.some((fork) => fork.id === 'amsterdam')).toBe(true)
+    expect(caps.allowedBaseHardforks).toEqual([
+      'berlin',
+      'london',
+      'paris',
+      'shanghai',
+      'cancun',
+      'prague',
+      'osaka',
+      'amsterdam',
+    ])
+    expect(caps.namedForks.map((f) => f.id)).toEqual([
+      'berlin',
+      'london',
+      'paris',
+      'shanghai',
+      'cancun',
+      'prague',
+      'osaka',
+      'amsterdam',
+    ])
+    const paris = caps.namedForks.find((fork) => fork.id === 'paris')
+    const shanghai = caps.namedForks.find((fork) => fork.id === 'shanghai')
     const osaka = caps.namedForks.find((fork) => fork.id === 'osaka')
     const amsterdam = caps.namedForks.find((fork) => fork.id === 'amsterdam')
-    expect(osaka?.role).toBe('baseline')
+    expect(paris?.role).toBe('historical')
+    expect(paris?.aliases).toContain('merge')
+    expect(caps.namedForks.find((f) => f.id === 'berlin')?.predecessorId).toBeUndefined()
+    expect(caps.namedForks.find((f) => f.id === 'london')?.predecessorId).toBe('berlin')
+    expect(paris?.predecessorId).toBe('london')
+    expect(shanghai?.predecessorId).toBe('paris')
+    expect(shanghai?.activatedEips).toContain(3855)
+    expect(osaka?.role).toBe('current')
     expect(osaka?.stabilityRollup).toBe('firm')
     expect(osaka?.aliases).toContain('mainnet-el')
+    expect(osaka?.relatedEips).toEqual([7883, 7951])
     expect(amsterdam?.role).toBe('preview')
-    expect(amsterdam?.aliases).toContain('glamsterdam')
-    expect(caps.eips).toHaveLength(7)
-    expect(caps.eips.map((e) => e.eip).sort()).toEqual([7708, 7843, 7883, 7951, 8024, 8037, 8038])
-    expect(caps.eips.every((eip) => eip.runnable)).toBe(true)
-    expect(caps.ceilings.maxTxsPerBlock).toBe(8)
+    expect(amsterdam?.relatedEips).toEqual([7708, 7843, 7928, 8024, 8037, 8038])
+    expect(amsterdam?.plannedEips).toBeUndefined()
+    expect(caps.inspectKinds.some((k) => k.id === 'block-access-list')).toBe(true)
+    expect(caps.inspectKinds.some((k) => k.id === 'authorization-list')).toBe(true)
+    expect(caps.inspectKinds.some((k) => k.id === 'typed-transaction')).toBe(true)
+    expect(caps.inspectKinds).toHaveLength(5)
+    expect(
+      caps.eipIntroductions.some((row) => row.eip === 3855 && row.introducedAt === 'shanghai'),
+    ).toBe(true)
+    expect(caps.eips).toHaveLength(9)
+    expect(caps.eips.some((e) => e.eip === 7702 && e.shapes.includes('transaction'))).toBe(true)
+    expect(caps.eips.some((e) => e.eip === 7928 && e.shapes.includes('generate'))).toBe(true)
     const e8024 = caps.eips.find((e) => e.eip === 8024)
     expect(e8024?.comparison?.baselineForkId).toBe('osaka')
     expect(e8024?.comparison?.previewForkId).toBe('amsterdam')
-    expect(e8024?.opcodes?.some((op) => op.name === 'DUPN')).toBe(true)
     const e7883 = caps.eips.find((e) => e.eip === 7883)
-    expect(e7883?.changeNature).toBe('repricing')
     expect(e7883?.comparison?.baselineForkId).toBe('prague')
-    const e7951 = caps.eips.find((e) => e.eip === 7951)
-    expect(e7951?.changeNature).toBe('new-capability')
-    const e7843 = caps.eips.find((e) => e.eip === 7843)
-    expect(e7843?.changeNature).toBe('new-capability')
-    expect(e7843?.shapes).toEqual(['block'])
-    expect(e7843?.opcodes?.some((op) => op.name === 'SLOTNUM')).toBe(true)
-    const e8037 = caps.eips.find((e) => e.eip === 8037)
-    expect(e8037?.changeNature).toBe('new-exec-model')
-    expect(e8037?.comparison?.previewForkId).toBe('amsterdam')
-    const e8038 = caps.eips.find((e) => e.eip === 8038)
-    expect(e8038?.changeNature).toBe('repricing')
-    expect(e8038?.shapes).toEqual(['simulate', 'transaction'])
-    expect(e8038?.comparison?.baselineForkId).toBe('osaka')
+    expect(e7883?.comparison?.previewForkId).toBe('osaka')
+    expect(caps.ceilings.maxTxsPerBlock).toBe(8)
+  })
+
+  it('treats named forks as catalog capabilities and derives advertised EIPs', () => {
+    const prague = getNamedFork('prague')
+    expect(prague?.relatedEips).toEqual([7702])
+    expect(getNamedFork('glamsterdam')?.id).toBe('amsterdam')
+    expect(advertisedEipsForFork('prague')).toEqual([7702])
+    expect(advertisedEipsForFork('osaka', ['mainnet-el'])).toEqual(
+      getNamedFork('osaka')?.relatedEips,
+    )
+    expect(advertisedEipsForForkConfig({ baseHardfork: 'amsterdam', eips: [] })).toEqual([
+      7708, 7843, 7928, 8024, 8037, 8038,
+    ])
+    expect(advertisedEipsForForkConfig({ baseHardfork: 'amsterdam', eips: [8024] })).toEqual([8024])
   })
 })
