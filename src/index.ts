@@ -1,5 +1,7 @@
 export { runBlock } from './block/runBlock.js'
 export {
+  advertisedEipsForFork,
+  advertisedEipsForForkConfig,
   ALLOWED_BASE_HARDFORKS,
   BASELINE_FORK_ID,
   buildCommon,
@@ -8,6 +10,7 @@ export {
   ENGINE_CEILINGS,
   ENGINE_VERSION,
   getEipCapability,
+  getNamedFork,
   listKnownEips,
   NAMED_FORKS,
   normalizeForkConfig,

@@ -21,6 +21,35 @@ export interface ForkConfig {
   eips?: number[]
 }
 
+/**
+ * Catalog entry for one named hardfork. First-class next to EIP modules:
+ * callers can run bytecode / a tx / a lab block under the fork without
+ * naming an EIP. `relatedEips` are advertised runnable modules, not a
+ * complete EthereumJS bundle list.
+ */
+export interface NamedFork {
+  id: string
+  label: string
+  config: ForkConfig
+  stabilityRollup?: StabilityRollup
+  /** Baseline (mainnet today) vs preview (upcoming fork). */
+  role?: ForkRole
+  /** Alternate names agents may use (e.g. glamsterdam → amsterdam). */
+  aliases?: string[]
+  /** One-line capability: what callers can do on this fork. */
+  summary: string
+  keywords: string[]
+  /** Query shapes that work for a generic run on this fork. */
+  shapes: QueryShape[]
+  /** Runnable catalog EIP numbers advertised on this fork. */
+  relatedEips: number[]
+  /** Exploration twins that are Planned (not in the live EIP catalog). */
+  plannedEips?: number[]
+  /** Optional baseline vs preview pair when comparing this fork. */
+  comparison?: EipComparison
+  notes?: string
+}
+
 export interface EipProvenance {
   eip: number
   status?: string
@@ -46,17 +75,6 @@ export interface EngineCeilings {
   maxTraceSteps: number
   /** Hard cap on transactions in one `runBlock` lab request. */
   maxTxsPerBlock: number
-}
-
-export interface NamedFork {
-  id: string
-  label: string
-  config: ForkConfig
-  stabilityRollup?: StabilityRollup
-  /** Baseline (mainnet today) vs preview (upcoming fork). */
-  role?: ForkRole
-  /** Alternate names agents may use (e.g. glamsterdam → amsterdam). */
-  aliases?: string[]
 }
 
 /** How to compare a preview EIP against the live baseline fork. */
@@ -299,6 +317,7 @@ export interface CapabilityDescription {
     maxTraceSteps: number
     maxTxsPerBlock: number
   }
+  /** Named hardforks as catalog capabilities (summary, related EIPs, shapes) — not id-only shortcuts. */
   namedForks: NamedFork[]
   /** Current mainnet EL baseline for fork comparisons (see `namedForks` with `role: baseline`). */
   baselineForkId: string

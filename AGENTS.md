@@ -18,9 +18,10 @@ Agent → mcp-gateway (tools) → mcp-execution-engine (this repo) → EthereumJ
 
 | Path | Role |
 | --- | --- |
-| `src/simulate/`, `src/transaction/`, `src/provenance/`, `src/forks/` | Generic library — query shapes |
+| `src/simulate/`, `src/transaction/`, `src/provenance/`, `src/forks/` | Generic library — query shapes; named forks are catalog capabilities |
 | `src/modules/eip-NNNN/` | EIP capability descriptors (catalog only) |
-| `src/modules/index.ts` | Live module list → `describeCapabilities()` |
+| `src/modules/index.ts` | Live module list → `describeCapabilities().eips` |
+| `src/forks/registry.ts` | Named forks + `describeCapabilities()` |
 | `src/__tests__/fixtures/` | Test-only bytecode; never the catalog |
 | `lab/` | Local shape runner; not a substitute for MCP when connected |
 
@@ -37,7 +38,7 @@ Agent → mcp-gateway (tools) → mcp-execution-engine (this repo) → EthereumJ
 
 `simulateBytecode` is a VM message-call (`createVM` plus `runCall`) with call-frame gas. Do not use detached `runCode`.
 
-Do **not** add per-EIP engine exports that mirror MCP tools. EIP work belongs in `src/modules/`.
+Do **not** add per-EIP engine exports that mirror MCP tools. EIP work belongs in `src/modules/`. Named forks belong in `src/forks/registry.ts` (`NAMED_FORKS`) — do not add `run_amsterdam`.
 
 ## Adding a runnable EIP module
 

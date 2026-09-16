@@ -23,5 +23,5 @@ export function listEipModules(): EipCapability[] {
 }
 
 export function getEipModule(eip: number): EipCapability | undefined {
-  return EIP_MODULES.find((entry) => entry.eip === eip)
+  return EIP_MODULES.find((entry) => entry?.eip === eip)
 }

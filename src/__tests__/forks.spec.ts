@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  advertisedEipsForFork,
+  advertisedEipsForForkConfig,
   buildCommon,
   describeCapabilities,
   ENGINE_CEILINGS,
+  getNamedFork,
   normalizeForkConfig,
   resolveNamedFork,
 } from '../forks/registry.js'
@@ -87,8 +90,20 @@ describe('fork registry & resolve', () => {
     expect(osaka?.role).toBe('baseline')
     expect(osaka?.stabilityRollup).toBe('firm')
     expect(osaka?.aliases).toContain('mainnet-el')
+    expect(osaka?.summary).toMatch(/current mainnet EL/i)
+    expect(osaka?.keywords).toContain('osaka')
+    expect(osaka?.shapes).toEqual(['simulate', 'transaction', 'block'])
+    expect(osaka?.relatedEips).toEqual([7883, 7951])
     expect(amsterdam?.role).toBe('preview')
     expect(amsterdam?.aliases).toContain('glamsterdam')
+    expect(amsterdam?.summary).toMatch(/You do not need to name an EIP/i)
+    expect(amsterdam?.keywords).toEqual(
+      expect.arrayContaining(['amsterdam', 'glamsterdam', 'preview fork']),
+    )
+    expect(amsterdam?.shapes).toEqual(['simulate', 'transaction', 'block'])
+    expect(amsterdam?.relatedEips).toEqual([7708, 7843, 8024, 8037, 8038])
+    expect(amsterdam?.plannedEips).toEqual([7928])
+    expect(amsterdam?.comparison?.baselineForkId).toBe('osaka')
     expect(caps.eips).toHaveLength(7)
     expect(caps.eips.map((e) => e.eip).sort()).toEqual([7708, 7843, 7883, 7951, 8024, 8037, 8038])
     expect(caps.eips.every((eip) => eip.runnable)).toBe(true)
@@ -113,5 +128,22 @@ describe('fork registry & resolve', () => {
     expect(e8038?.changeNature).toBe('repricing')
     expect(e8038?.shapes).toEqual(['simulate', 'transaction'])
     expect(e8038?.comparison?.baselineForkId).toBe('osaka')
+  })
+
+  it('treats named forks as catalog capabilities and derives advertised EIPs', () => {
+    const prague = getNamedFork('prague')
+    expect(prague?.relatedEips).toEqual([7883])
+    expect(getNamedFork('glamsterdam')?.id).toBe('amsterdam')
+    expect(advertisedEipsForFork('prague')).toEqual(getNamedFork('prague')?.relatedEips)
+    expect(advertisedEipsForFork('osaka', ['mainnet-el'])).toEqual(
+      getNamedFork('osaka')?.relatedEips,
+    )
+    expect(advertisedEipsForFork('amsterdam', ['glamsterdam'])).toEqual([
+      7708, 7843, 8024, 8037, 8038,
+    ])
+    expect(advertisedEipsForForkConfig({ baseHardfork: 'amsterdam', eips: [] })).toEqual([
+      7708, 7843, 8024, 8037, 8038,
+    ])
+    expect(advertisedEipsForForkConfig({ baseHardfork: 'amsterdam', eips: [8024] })).toEqual([8024])
   })
 })

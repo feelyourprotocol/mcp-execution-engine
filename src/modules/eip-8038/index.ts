@@ -6,7 +6,7 @@
  * Callers supply SSTORE / SLOAD / EXTCODESIZE bytecode. Catalog describes
  * encoding and fork compare; it does not ship demo programs.
  */
-import { LAB_BYTECODE_ADDRESS } from '../../transaction/lab.js'
+import { LAB_BYTECODE_ADDRESS } from '../../transaction/addresses.js'
 import type { EipCapability } from '../../types.js'
 import {
   EXTCODESIZE,

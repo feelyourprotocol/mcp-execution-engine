@@ -3,7 +3,7 @@
  *
  * canonicalSource: website/src/explorations/eip-8038/canonical.ts
  */
-import { LAB_BYTECODE_ADDRESS } from '../../transaction/lab.js'
+import { LAB_BYTECODE_ADDRESS } from '../../transaction/addresses.js'
 
 export const SSTORE = 0x55
 export const SLOAD = 0x54

@@ -1,4 +1,4 @@
-import { getEipCapability, NAMED_FORKS } from '../forks/registry.js'
+import { advertisedEipsForForkConfig, getEipCapability, NAMED_FORKS } from '../forks/registry.js'
 import type { EipProvenance, ForkConfig, Provenance, StabilityRollup } from '../types.js'
 
 export const PROVENANCE_AS_OF = '2026-07-20'
@@ -33,7 +33,7 @@ function rollupFromForkConfig(config: ForkConfig): StabilityRollup | undefined {
 }
 
 function buildPerEipProvenance(config: ForkConfig): EipProvenance[] | undefined {
-  const eips = config.eips ?? []
+  const eips = advertisedEipsForForkConfig(config)
   if (eips.length === 0) {
     return undefined
   }
@@ -52,8 +52,14 @@ function buildPerEipProvenance(config: ForkConfig): EipProvenance[] | undefined 
 }
 
 function buildCaveat(engineVersion: string, config: ForkConfig, rollup?: StabilityRollup): string {
+  const explicit = [...(config.eips ?? [])]
+  const advertised = advertisedEipsForForkConfig(config)
   const eipList =
-    config.eips && config.eips.length > 0 ? ` with EIP(s) ${config.eips.join(', ')}` : ''
+    explicit.length > 0
+      ? ` with EIP(s) ${explicit.join(', ')}`
+      : advertised.length > 0
+        ? ` (advertised modules: ${advertised.join(', ')})`
+        : ''
   const rollupNote = rollup ? ` Stability: ${rollup}.` : ''
   const activationNote =
     rollup === 'firm'

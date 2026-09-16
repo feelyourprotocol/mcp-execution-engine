@@ -5,8 +5,8 @@
 ## When to use
 
 - Discover **what the engine supports** before calling simulate.
-- Inspect registered **runnable** EIP modules, query shapes, opcodes, encoding, ceilings, and named forks.
-- Agents use this to decide whether a fork/EIP is available and what limits apply.
+- Inspect named **fork capabilities**, registered **runnable** EIP modules, query shapes, opcodes, encoding, ceilings.
+- Agents use this to decide whether a **hardfork** (Amsterdam, Osaka, Prague) or an EIP is available and what limits apply. A fork run does not require naming an EIP.
 
 ## What you send
 
@@ -14,7 +14,7 @@ Nothing — `describeCapabilities()` takes no input.
 
 ## What you get back
 
-A registry snapshot: engine version, ceilings, named forks, runnable EIP modules (opcodes + encoding), allowed base hardforks.
+A registry snapshot: engine version, ceilings, named fork capabilities (summary, related EIPs, shapes), runnable EIP modules (opcodes + encoding), allowed base hardforks.
 
 ## Examples
 
