@@ -133,7 +133,8 @@ describe('fork registry & resolve', () => {
     expect(
       caps.eipIntroductions.some((row) => row.eip === 3855 && row.introducedAt === 'shanghai'),
     ).toBe(true)
-    expect(caps.eips).toHaveLength(8)
+    expect(caps.eips).toHaveLength(9)
+    expect(caps.eips.some((e) => e.eip === 7702 && e.shapes.includes('transaction'))).toBe(true)
     expect(caps.eips.some((e) => e.eip === 7928 && e.shapes.includes('generate'))).toBe(true)
     const e8024 = caps.eips.find((e) => e.eip === 8024)
     expect(e8024?.comparison?.baselineForkId).toBe('osaka')
@@ -146,9 +147,9 @@ describe('fork registry & resolve', () => {
 
   it('treats named forks as catalog capabilities and derives advertised EIPs', () => {
     const prague = getNamedFork('prague')
-    expect(prague?.relatedEips).toEqual([])
+    expect(prague?.relatedEips).toEqual([7702])
     expect(getNamedFork('glamsterdam')?.id).toBe('amsterdam')
-    expect(advertisedEipsForFork('prague')).toEqual([])
+    expect(advertisedEipsForFork('prague')).toEqual([7702])
     expect(advertisedEipsForFork('osaka', ['mainnet-el'])).toEqual(
       getNamedFork('osaka')?.relatedEips,
     )

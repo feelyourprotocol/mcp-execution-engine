@@ -3,7 +3,6 @@ import {
   bytesToHex,
   eoaCode7702AuthorizationHashedMessageToSign,
   type EOACode7702AuthorizationListBytesItem,
-  type EOACode7702AuthorizationListItem,
   eoaCode7702AuthorizationListJSONItemToBytes,
   eoaCode7702RecoverAuthority,
   MAX_INTEGER,
@@ -11,39 +10,9 @@ import {
   validateNoLeadingZeroes,
 } from '@ethereumjs/util'
 
+import { normalizeAuthItems } from '../../authorization/normalize.js'
 import type { InspectInput, InspectResult } from '../../types.js'
 import { emptyInspectScalars, pushError } from '../shared.js'
-
-function isAuthItem(value: unknown): value is EOACode7702AuthorizationListItem {
-  if (typeof value !== 'object' || value === null) {
-    return false
-  }
-  const record = value as Record<string, unknown>
-  return (
-    typeof record.chainId === 'string' &&
-    typeof record.address === 'string' &&
-    typeof record.nonce === 'string' &&
-    typeof record.yParity === 'string' &&
-    typeof record.r === 'string' &&
-    typeof record.s === 'string'
-  )
-}
-
-function normalizeAuthItems(artifact: unknown): EOACode7702AuthorizationListItem[] | undefined {
-  if (isAuthItem(artifact)) {
-    return [artifact]
-  }
-  if (!Array.isArray(artifact)) {
-    return undefined
-  }
-  if (artifact.length === 0) {
-    return []
-  }
-  if (artifact.every(isAuthItem)) {
-    return artifact
-  }
-  return undefined
-}
 
 function verifyAuthorizationListItem(item: EOACode7702AuthorizationListBytesItem): void {
   if (item.length !== 6) {

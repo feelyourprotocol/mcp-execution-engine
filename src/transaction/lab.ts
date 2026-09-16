@@ -1,4 +1,10 @@
-import { createLegacyTx, type LegacyTx } from '@ethereumjs/tx'
+import {
+  createEOACode7702Tx,
+  createLegacyTx,
+  type EOACode7702Tx,
+  type LegacyTx,
+} from '@ethereumjs/tx'
+import type { EOACode7702AuthorizationListBytes } from '@ethereumjs/util'
 import { type Address, bytesToHex, createAccount } from '@ethereumjs/util'
 import { createVM, type RunTxResult } from '@ethereumjs/vm'
 
@@ -38,6 +44,33 @@ export function createImpersonatedTx(opts: {
       to: opts.to,
       value: opts.value,
       data: opts.data,
+    },
+    { common: opts.common, freeze: false },
+  )
+  tx.getSenderAddress = () => opts.from
+  return tx
+}
+
+export function createImpersonated7702Tx(opts: {
+  common: ReturnType<typeof resolveFork>['common']
+  from: Address
+  to: Address
+  value: bigint
+  data: Uint8Array
+  gasLimit: bigint
+  authorizationList: EOACode7702AuthorizationListBytes
+  nonce?: bigint
+}): EOACode7702Tx {
+  const tx = createEOACode7702Tx(
+    {
+      nonce: opts.nonce ?? 0n,
+      gasLimit: opts.gasLimit,
+      maxFeePerGas: LAB_GAS_PRICE,
+      maxPriorityFeePerGas: LAB_GAS_PRICE,
+      to: opts.to,
+      value: opts.value,
+      data: opts.data,
+      authorizationList: opts.authorizationList,
     },
     { common: opts.common, freeze: false },
   )

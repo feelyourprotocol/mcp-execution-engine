@@ -1,3 +1,5 @@
+import type { EOACode7702AuthorizationListItem } from '@ethereumjs/util'
+
 /** Query shapes the MCP surface exposes (generic verbs). */
 export type QueryShape = 'simulate' | 'transaction' | 'block' | 'generate' | 'inspect' | 'probe'
 
@@ -212,6 +214,8 @@ export interface RunTransactionInput {
   fork?: ForkConfig
   /** Transaction gas limit as a decimal string. Default 1000000. */
   gasLimit?: string
+  /** Signed EIP-7702 authorization JSON items — builds a type-4 tx on Prague+. */
+  authorizationList?: EOACode7702AuthorizationListItem[]
 }
 
 export interface RunTransactionResult {
