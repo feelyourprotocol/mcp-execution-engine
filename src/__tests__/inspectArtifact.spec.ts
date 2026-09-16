@@ -5,8 +5,8 @@ import { inspectArtifact } from '../inspect/inspectArtifact.js'
 import { BAL_RECIPIENT, BAL_SENDER, BAL_SENDER_PREFUND } from './fixtures/eip7928.js'
 
 describe('inspectArtifact', () => {
-  it('flags malformed artifact', () => {
-    const result = inspectArtifact({ artifact: { not: 'an array' } })
+  it('flags malformed artifact', async () => {
+    const result = await inspectArtifact({ artifact: { not: 'an array' } })
     expect(result.wellFormed).toBe(false)
     expect(result.errors.length).toBeGreaterThan(0)
   })
@@ -18,7 +18,7 @@ describe('inspectArtifact', () => {
       accounts: [BAL_SENDER_PREFUND],
     })
 
-    const result = inspectArtifact({
+    const result = await inspectArtifact({
       artifact: generated.bal,
       expectedHash: '0x' + '11'.repeat(32),
     })

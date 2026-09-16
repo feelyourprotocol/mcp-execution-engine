@@ -43,7 +43,7 @@ describe('generateArtifact', () => {
     expect(bal.some((a) => a.balanceChanges.length > 0)).toBe(true)
     expect(bal.some((a) => a.nonceChanges.length > 0)).toBe(true)
 
-    const inspected = inspectArtifact({ artifact: result.bal, expectedHash: result.hash })
+    const inspected = await inspectArtifact({ artifact: result.bal, expectedHash: result.hash })
     expect(inspected.wellFormed).toBe(true)
     expect(inspected.structureOk).toBe(true)
     expect(inspected.hashMatch).toBe(true)

@@ -210,6 +210,30 @@ export function describeCapabilities() {
         summary:
           'JSON (Engine API) or RLP hex. Checks encoding, canonical structure, optional item cap vs block gas limit, and optional blockAccessListHash — not consensus replay against mainnet.',
       },
+      {
+        id: 'authorization-list',
+        label: 'EIP-7702 authorization list',
+        summary:
+          'One or more signed authorization JSON objects. Recovers authority address and signing digest per item — not full tx execution.',
+      },
+      {
+        id: 'typed-transaction',
+        label: 'EIP-2718 typed transaction',
+        summary:
+          'Signed tx RLP hex. Decodes type, hash, sender, fee fields; optional hash match. Blob sidecars/KZG not validated.',
+      },
+      {
+        id: 'withdrawals',
+        label: 'EIP-4895 withdrawals',
+        summary:
+          'JSON withdrawal array. Field parse and optional withdrawalsRoot recomputation — list is caller-supplied, not generated from the lab.',
+      },
+      {
+        id: 'execution-requests',
+        label: 'EIP-7685 execution requests',
+        summary:
+          'JSON array of { type, data } request envelopes. Sorted-type check and requestsHash — opaque body bytes, not full SSZ validation.',
+      },
     ],
   }
 }

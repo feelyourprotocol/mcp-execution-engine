@@ -5,7 +5,12 @@ export type QueryShape = 'simulate' | 'transaction' | 'block' | 'generate' | 'in
 export type GenerateArtifactKind = 'block-access-list'
 
 /** Caller-supplied structures the `inspect` verb can judge (layers A–C). */
-export type InspectArtifactKind = 'block-access-list'
+export type InspectArtifactKind =
+  | 'block-access-list'
+  | 'authorization-list'
+  | 'typed-transaction'
+  | 'withdrawals'
+  | 'execution-requests'
 
 /** Nature of a protocol change — drives which query shapes apply. */
 export type ChangeNature =
@@ -315,12 +320,14 @@ export interface GenerateResult {
 
 export interface InspectInput {
   kind?: InspectArtifactKind
-  /** BAL JSON array (Engine API shape) or RLP-encoded list as hex. */
+  /** Shape depends on `kind` — see probe `inspectKinds`. */
   artifact: unknown
-  /** Block gas limit for the item cap check. Decimal string; default engine max. */
+  /** Block gas limit for BAL item cap check. Decimal string; default engine max. */
   blockGasLimit?: string
-  /** Optional `blockAccessListHash` to compare (32-byte hex). */
+  /** Optional 32-byte commitment hex (BAL hash, tx hash, withdrawalsRoot, requestsHash). */
   expectedHash?: string
+  /** Fork for typed-transaction decode (default prague). */
+  fork?: ForkConfig
 }
 
 export interface InspectResult {
@@ -336,6 +343,8 @@ export interface InspectResult {
   itemCount: number
   computedHash: string
   maxItems?: string
+  /** Kind-specific fields (authorities, tx decode summary, roots, …). */
+  details?: Record<string, unknown>
 }
 
 export interface InspectKindDescriptor {

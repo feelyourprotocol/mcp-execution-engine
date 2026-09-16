@@ -127,6 +127,9 @@ describe('fork registry & resolve', () => {
     expect(amsterdam?.relatedEips).toEqual([7708, 7843, 7928, 8024, 8037, 8038])
     expect(amsterdam?.plannedEips).toBeUndefined()
     expect(caps.inspectKinds.some((k) => k.id === 'block-access-list')).toBe(true)
+    expect(caps.inspectKinds.some((k) => k.id === 'authorization-list')).toBe(true)
+    expect(caps.inspectKinds.some((k) => k.id === 'typed-transaction')).toBe(true)
+    expect(caps.inspectKinds).toHaveLength(5)
     expect(
       caps.eipIntroductions.some((row) => row.eip === 3855 && row.introducedAt === 'shanghai'),
     ).toBe(true)
