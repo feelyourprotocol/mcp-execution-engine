@@ -22,6 +22,7 @@ export const ENGINE_VERSION = '0.1.0'
 
 export const ENGINE_CEILINGS: EngineCeilings = {
   maxGasLimit: 30_000_000n,
+  maxTransactionGasLimit: 110_000_000n,
   defaultGasLimit: 1_000_000n,
   maxBytecodeBytes: 24_576,
   maxTraceSteps: 10_000,
@@ -196,6 +197,7 @@ export function describeCapabilities() {
     engineVersion: ENGINE_VERSION,
     ceilings: {
       maxGasLimit: ENGINE_CEILINGS.maxGasLimit.toString(),
+      maxTransactionGasLimit: ENGINE_CEILINGS.maxTransactionGasLimit.toString(),
       defaultGasLimit: ENGINE_CEILINGS.defaultGasLimit.toString(),
       maxBytecodeBytes: ENGINE_CEILINGS.maxBytecodeBytes,
       maxTraceSteps: ENGINE_CEILINGS.maxTraceSteps,

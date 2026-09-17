@@ -57,6 +57,8 @@ export interface EipIntroduction {
 
 export interface EngineCeilings {
   maxGasLimit: bigint
+  /** Higher tx-only ceiling for Glamsterdam's EIP-8037 state-gas reservoir. */
+  maxTransactionGasLimit: bigint
   defaultGasLimit: bigint
   maxBytecodeBytes: number
   maxTraceSteps: number
@@ -96,6 +98,7 @@ export interface CapabilityDescription {
   engineVersion: string
   ceilings: {
     maxGasLimit: string
+    maxTransactionGasLimit: string
     defaultGasLimit: string
     maxBytecodeBytes: number
     maxTraceSteps: number

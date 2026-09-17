@@ -127,7 +127,7 @@ describe('fork registry & resolve', () => {
     expect(fusaka?.aliases).toContain('osaka')
     expect(fusaka?.relatedEips).toEqual([7883, 7951])
     expect(glamsterdam?.role).toBe('preview')
-    expect(glamsterdam?.relatedEips).toEqual([7708, 7843, 7928, 8024, 8037, 8038])
+    expect(glamsterdam?.relatedEips).toEqual([7708, 7843, 7928, 7954, 8024, 8037, 8038])
     expect(glamsterdam?.plannedEips).toBeUndefined()
     expect(glamsterdam?.aliases).toContain('amsterdam')
     expect(caps.inspectKinds.some((k) => k.id === 'block-access-list')).toBe(true)
@@ -137,9 +137,14 @@ describe('fork registry & resolve', () => {
     expect(
       caps.eipIntroductions.some((row) => row.eip === 3855 && row.introducedAt === 'shapella'),
     ).toBe(true)
-    expect(caps.eips).toHaveLength(8)
+    expect(caps.eips).toHaveLength(9)
     expect(caps.eips.some((e) => e.eip === 7702)).toBe(false)
     expect(caps.eips.some((e) => e.eip === 7928 && e.shapes.includes('generate'))).toBe(true)
+    expect(caps.eips.some((e) => e.eip === 7954 && e.shapes.includes('transaction'))).toBe(true)
+    expect(caps.eipIntroductions.find((e) => e.eip === 7954)?.name).toBe(
+      'Increase Maximum Contract Size',
+    )
+    expect(caps.eipIntroductions.find((e) => e.eip === 8246)?.name).toBe('Remove SELFDESTRUCT Burn')
     const e8024 = caps.eips.find((e) => e.eip === 8024)
     expect(e8024?.comparison?.baselineForkId).toBe('fusaka')
     expect(e8024?.comparison?.previewForkId).toBe('glamsterdam')
@@ -147,6 +152,7 @@ describe('fork registry & resolve', () => {
     expect(e7883?.comparison?.baselineForkId).toBe('pectra')
     expect(e7883?.comparison?.previewForkId).toBe('fusaka')
     expect(caps.ceilings.maxTxsPerBlock).toBe(8)
+    expect(caps.ceilings.maxTransactionGasLimit).toBe('110000000')
   })
 
   it('treats named forks as catalog capabilities and derives advertised EIPs', () => {
@@ -158,7 +164,7 @@ describe('fork registry & resolve', () => {
       getNamedFork('fusaka')?.relatedEips,
     )
     expect(advertisedEipsForForkConfig({ baseHardfork: 'glamsterdam', eips: [] })).toEqual([
-      7708, 7843, 7928, 8024, 8037, 8038,
+      7708, 7843, 7928, 7954, 8024, 8037, 8038,
     ])
     expect(advertisedEipsForForkConfig({ baseHardfork: 'glamsterdam', eips: [8024] })).toEqual([
       8024,
