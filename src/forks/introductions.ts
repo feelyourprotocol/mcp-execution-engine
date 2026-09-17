@@ -339,11 +339,12 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   },
   {
     eip: 7954,
-    name: 'SELFDESTRUCT no burn',
-    summary: 'SELFDESTRUCT no longer burns ETH on Glamsterdam.',
-    keywords: ['selfdestruct', '7954'],
+    name: 'Increase Maximum Contract Size',
+    summary:
+      'Contract creation allows up to 64 KiB runtime code and 128 KiB initcode on Glamsterdam.',
+    keywords: ['contract size', 'runtime code', 'initcode', '7954'],
     introducedAt: 'glamsterdam',
-    observableShapes: ['simulate', 'transaction'],
+    observableShapes: ['transaction'],
   },
   {
     eip: 7976,
@@ -392,10 +393,11 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   },
   {
     eip: 8246,
-    name: 'EIP-8246 (Glamsterdam bundle)',
-    summary: 'Bundled in Glamsterdam client — see execution-specs for behavior.',
-    keywords: ['8246'],
+    name: 'Remove SELFDESTRUCT Burn',
+    summary: 'SELFDESTRUCT no longer burns the remaining ETH balance on Glamsterdam.',
+    keywords: ['selfdestruct', 'burn', '8246'],
     introducedAt: 'glamsterdam',
+    observableShapes: ['simulate', 'transaction'],
   },
   {
     eip: 8282,

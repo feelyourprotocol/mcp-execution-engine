@@ -41,7 +41,10 @@ export function parseBytecodeHex(bytecode: string): Uint8Array {
   return bytes
 }
 
-export function parseGasLimit(gasLimit?: string): bigint {
+export function parseGasLimit(
+  gasLimit?: string,
+  ceiling: bigint = ENGINE_CEILINGS.maxGasLimit,
+): bigint {
   if (gasLimit === undefined) {
     return ENGINE_CEILINGS.defaultGasLimit
   }
@@ -57,11 +60,8 @@ export function parseGasLimit(gasLimit?: string): bigint {
     throw new EngineError('gasLimit must be positive', 'invalid_gas_limit')
   }
 
-  if (parsed > ENGINE_CEILINGS.maxGasLimit) {
-    throw new EngineError(
-      `gasLimit exceeds ceiling (${ENGINE_CEILINGS.maxGasLimit.toString()})`,
-      'gas_limit_too_high',
-    )
+  if (parsed > ceiling) {
+    throw new EngineError(`gasLimit exceeds ceiling (${ceiling.toString()})`, 'gas_limit_too_high')
   }
 
   return parsed

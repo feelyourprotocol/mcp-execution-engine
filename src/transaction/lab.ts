@@ -34,7 +34,7 @@ export const LAB_DEFAULT_TIMESTAMP = 1n
 export function createImpersonatedTx(opts: {
   common: ReturnType<typeof resolveFork>['common']
   from: Address
-  to: Address
+  to?: Address
   value: bigint
   data: Uint8Array
   gasLimit: bigint
@@ -152,8 +152,14 @@ export function txFieldsFromRunTx(result: RunTxResult): RunBlockTxResult {
 export function transactionResultFromRunTx(
   result: RunTxResult,
   provenance: RunTransactionResult['provenance'],
+  deployedCodeSize?: number,
 ): RunTransactionResult {
-  return { ...txFieldsFromRunTx(result), provenance }
+  const response: RunTransactionResult = { ...txFieldsFromRunTx(result), provenance }
+  if (result.execResult.exceptionError === undefined && result.createdAddress !== undefined) {
+    response.createdAddress = result.createdAddress.toString()
+    response.deployedCodeSize = deployedCodeSize ?? result.execResult.returnValue.length
+  }
+  return response
 }
 
 export function emptyTransactionResult(

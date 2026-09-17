@@ -11,8 +11,8 @@ import type { ForkConfig } from './protocol.js'
 export interface RunTransactionInput {
   /** Hex sender address (impersonated — no private key required). */
   from: string
-  /** Hex recipient (or contract) address. */
-  to: string
+  /** Hex recipient address. Omit for contract creation; then `data` is initcode. */
+  to?: string
   /** Value in wei as a decimal string. Default 0. */
   value?: string
   /** Optional calldata hex. Default empty. */
@@ -39,6 +39,10 @@ export interface RunTransactionResult {
   txStateGas?: string
   returnValue: string
   error: string | null
+  /** Address created by a successful contract-creation transaction. */
+  createdAddress?: string
+  /** Runtime code bytes stored by a successful contract-creation transaction. */
+  deployedCodeSize?: number
   logs?: SimulateRawLog[]
   decodedLogs?: SimulateDecodedLog[]
   provenance: Provenance
