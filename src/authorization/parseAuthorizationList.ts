@@ -4,7 +4,7 @@ import {
   eoaCode7702AuthorizationListJSONItemToBytes,
 } from '@ethereumjs/util'
 
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 
 export function authorizationListJsonToBytes(
   items: EOACode7702AuthorizationListItem[],

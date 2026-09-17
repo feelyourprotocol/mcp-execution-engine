@@ -7,7 +7,7 @@
  * existing BAL to `inspect` for encoding, structure, and hash checks — not
  * mainnet block replay.
  */
-import type { EipCapability } from '../../types.js'
+import type { EipCapability } from '../../types/index.js'
 
 export const EIP_7928_MODULE: EipCapability = {
   eip: 7928,

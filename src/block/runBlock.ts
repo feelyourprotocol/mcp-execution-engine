@@ -2,8 +2,8 @@ import { ENGINE_VERSION } from '../forks/registry.js'
 import { resolveFork } from '../forks/resolve.js'
 import { buildProvenance } from '../provenance/build.js'
 import { txFieldsFromRunTx } from '../transaction/lab.js'
-import type { RunBlockInput, RunBlockResult, RunBlockTxResult } from '../types.js'
-import { EngineError } from '../types.js'
+import type { RunBlockInput, RunBlockResult, RunBlockTxResult } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 import { executeLabBlock } from './executeLabBlock.js'
 
 function emptyBlockResult(

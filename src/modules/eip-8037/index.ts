@@ -6,7 +6,7 @@
  * Callers supply a transaction (or SSTORE bytecode via run_bytecode). Catalog
  * describes when extra gasUsed appears; it does not ship demo programs.
  */
-import type { EipCapability } from '../../types.js'
+import type { EipCapability } from '../../types/index.js'
 import { FIRST_TOUCH_NOTE, NEW_SLOT_NOTE, TRANSACTION_LAYOUT } from './input.js'
 
 export const EIP_8037_MODULE: EipCapability = {

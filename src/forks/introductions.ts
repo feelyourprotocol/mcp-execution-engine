@@ -1,4 +1,4 @@
-import type { EipIntroduction } from '../types.js'
+import type { EipIntroduction } from '../types/index.js'
 import { type LineageForkId, predecessorFork, resolveForkAlias } from './lineage.js'
 
 /** When each EIP activated — compact facts for agents (not runnable twin encoding). */

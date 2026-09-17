@@ -3,7 +3,7 @@
  *
  * canonicalSource: website/src/explorations/eip-7702/canonical.ts
  */
-import type { EipCapability } from '../../types.js'
+import type { EipCapability } from '../../types/index.js'
 import { COMPARE_NOTE, DELEGATION_DESIGNATOR_PREFIX, TRANSACTION_LAYOUT } from './input.js'
 
 export const EIP_7702_MODULE: EipCapability = {

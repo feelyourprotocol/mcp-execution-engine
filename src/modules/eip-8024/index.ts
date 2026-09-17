@@ -1,4 +1,4 @@
-import type { EipCapability } from '../../types.js'
+import type { EipCapability } from '../../types/index.js'
 import {
   DUPN,
   DUPN_SWAPN_MAX_DEPTH,

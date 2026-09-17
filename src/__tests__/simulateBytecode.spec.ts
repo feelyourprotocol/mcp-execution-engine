@@ -4,7 +4,7 @@ import { ENGINE_CEILINGS } from '../forks/registry.js'
 import { NEW_STORAGE_SLOT_STATE_GAS } from '../modules/eip-8037/input.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
 import { LAB_BYTECODE_ADDRESS } from '../transaction/lab.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 import { dupnDemoHex, PUSH1_STOP_HEX } from './fixtures/eip8024.js'
 import {
   EXTCODESIZE_AA,

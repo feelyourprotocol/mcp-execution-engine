@@ -2,8 +2,8 @@ import { createTxFromRLP } from '@ethereumjs/tx'
 import { bytesToHex, hexToBytes } from '@ethereumjs/util'
 
 import { resolveFork } from '../../forks/resolve.js'
-import type { InspectInput, InspectResult } from '../../types.js'
-import { EngineError } from '../../types.js'
+import type { InspectInput, InspectResult } from '../../types/index.js'
+import { EngineError } from '../../types/index.js'
 import { emptyInspectScalars, normalizeHexArtifact, pushError } from '../shared.js'
 
 export function inspectTypedTransaction(input: InspectInput): InspectResult {

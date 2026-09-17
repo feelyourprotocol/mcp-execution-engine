@@ -1,5 +1,5 @@
-import type { InspectInput, InspectResult } from '../types.js'
-import { EngineError } from '../types.js'
+import type { InspectInput, InspectResult } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 import { inspectAuthorizationList } from './kinds/authorizationList.js'
 import { inspectBlockAccessList } from './kinds/blockAccessList.js'
 import { inspectExecutionRequests } from './kinds/executionRequests.js'

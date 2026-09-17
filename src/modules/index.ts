@@ -1,4 +1,4 @@
-import type { EipCapability } from '../types.js'
+import type { EipCapability } from '../types/index.js'
 import { EIP_7702_MODULE } from './eip-7702/index.js'
 import { EIP_7708_MODULE } from './eip-7708/index.js'
 import { EIP_7843_MODULE } from './eip-7843/index.js'

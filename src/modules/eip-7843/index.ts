@@ -10,7 +10,7 @@
  * accepted but is not a pre/post toggle. run_bytecode uses a mock header
  * (slot 0) — a chosen slot requires run_block.
  */
-import type { EipCapability } from '../../types.js'
+import type { EipCapability } from '../../types/index.js'
 import { SLOTNUM, SLOTNUM_GAS } from './opcodes.js'
 
 export const EIP_7843_MODULE: EipCapability = {

@@ -12,8 +12,8 @@ import {
   resolveFork,
 } from '../forks/resolve.js'
 import { buildProvenance } from '../provenance/build.js'
-import type { RunTransactionInput, RunTransactionResult } from '../types.js'
-import { EngineError } from '../types.js'
+import type { RunTransactionInput, RunTransactionResult } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 import {
   applyPrefundAccounts,
   applyPrefundStorage,

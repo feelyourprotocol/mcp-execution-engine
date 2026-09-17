@@ -5,7 +5,7 @@ import { UINT64_MAX } from '../forks/resolve.js'
 import { EIP_7843_MODULE } from '../modules/eip-7843/index.js'
 import { SLOTNUM, SLOTNUM_GAS } from '../modules/eip-7843/opcodes.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 import {
   SLOTNUM_CALLER,
   SLOTNUM_CONTRACT,

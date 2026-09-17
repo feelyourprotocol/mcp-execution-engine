@@ -8,7 +8,7 @@ import {
 } from '@ethereumjs/util'
 import { sha256 } from '@noble/hashes/sha2.js'
 
-import type { InspectInput, InspectResult } from '../../types.js'
+import type { InspectInput, InspectResult } from '../../types/index.js'
 import { emptyInspectScalars, parseExpectedHash32, pushError } from '../shared.js'
 
 function isRequestJson(value: unknown): value is RequestJSON {

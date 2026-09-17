@@ -1,7 +1,7 @@
 import { genWithdrawalsTrieRoot } from '@ethereumjs/block'
 import { bytesToHex, createWithdrawal, type JSONRPCWithdrawal } from '@ethereumjs/util'
 
-import type { InspectInput, InspectResult } from '../../types.js'
+import type { InspectInput, InspectResult } from '../../types/index.js'
 import { emptyInspectScalars, parseExpectedHash32, pushError } from '../shared.js'
 
 function isWithdrawalJson(value: unknown): value is JSONRPCWithdrawal {

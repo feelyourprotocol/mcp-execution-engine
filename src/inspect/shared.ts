@@ -1,6 +1,6 @@
 import { hexToBytes } from '@ethereumjs/util'
 
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 
 export function pushError(errors: string[], error: unknown): void {
   if (error instanceof Error) {

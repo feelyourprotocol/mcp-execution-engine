@@ -5,7 +5,7 @@ import {
   getNamedFork,
   NAMED_FORKS,
 } from '../forks/registry.js'
-import type { EipProvenance, ForkConfig, Provenance, StabilityRollup } from '../types.js'
+import type { EipProvenance, ForkConfig, Provenance, StabilityRollup } from '../types/index.js'
 
 export const PROVENANCE_AS_OF = '2026-07-20'
 

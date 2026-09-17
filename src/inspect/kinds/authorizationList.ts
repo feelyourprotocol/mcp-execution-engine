@@ -11,7 +11,7 @@ import {
 } from '@ethereumjs/util'
 
 import { normalizeAuthItems } from '../../authorization/normalize.js'
-import type { InspectInput, InspectResult } from '../../types.js'
+import type { InspectInput, InspectResult } from '../../types/index.js'
 import { emptyInspectScalars, pushError } from '../shared.js'
 
 function verifyAuthorizationListItem(item: EOACode7702AuthorizationListBytesItem): void {

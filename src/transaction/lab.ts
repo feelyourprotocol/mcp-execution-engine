@@ -16,7 +16,11 @@ import {
   resolveFork,
 } from '../forks/resolve.js'
 import { mapExecLogs } from '../simulate/logs.js'
-import type { RunBlockTxResult, RunTransactionResult, SimulatePrefundAccount } from '../types.js'
+import type {
+  RunBlockTxResult,
+  RunTransactionResult,
+  SimulatePrefundAccount,
+} from '../types/index.js'
 
 export { LAB_BYTECODE_ADDRESS, LAB_BYTECODE_CALLER, LAB_COINBASE } from './addresses.js'
 

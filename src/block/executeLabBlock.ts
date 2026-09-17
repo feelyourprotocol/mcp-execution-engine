@@ -30,8 +30,8 @@ import {
   LAB_GAS_PRICE,
   putFundedAccount,
 } from '../transaction/lab.js'
-import type { Provenance, RunBlockHeaderSnapshot, RunBlockInput } from '../types.js'
-import { EngineError } from '../types.js'
+import type { Provenance, RunBlockHeaderSnapshot, RunBlockInput } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 
 export interface LabBlockExecution {
   provenance: Provenance

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { generateArtifact } from '../generate/generateArtifact.js'
 import { inspectArtifact } from '../inspect/inspectArtifact.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 import {
   BAL_CONTRACT,
   BAL_RECIPIENT,

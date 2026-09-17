@@ -5,7 +5,7 @@ import { assertResolvableForkId, predecessorFork, resolveForkAlias } from '../fo
 import { buildCommon, resolveNamedFork } from '../forks/registry.js'
 import { buildProvenance } from '../provenance/build.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 
 describe('hardfork lineage', () => {
   it('resolves merge and shapella aliases to canonical ids', () => {

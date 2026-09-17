@@ -6,7 +6,7 @@
  * Callers supply bytecode (typically CALL to 0x100). Catalog describes input layout;
  * it does not ship demo programs.
  */
-import type { EipCapability } from '../../types.js'
+import type { EipCapability } from '../../types/index.js'
 import { P256_INPUT_LAYOUT, P256_VERIFY_ADDRESS } from './input.js'
 
 export const EIP_7951_MODULE: EipCapability = {

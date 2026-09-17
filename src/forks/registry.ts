@@ -1,8 +1,8 @@
 import { Common, Hardfork, Mainnet } from '@ethereumjs/common'
 
 import { EIP_MODULES, getEipModule } from '../modules/index.js'
-import type { EipCapability, EngineCeilings, ForkConfig, NamedFork } from '../types.js'
-import { EngineError } from '../types.js'
+import type { EipCapability, EngineCeilings, ForkConfig, NamedFork } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 import { derivedComparisonForEip, listEipIntroductions } from './introductions.js'
 import {
   BASELINE_FORK_ID,

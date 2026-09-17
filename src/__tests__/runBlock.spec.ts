@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { runBlock } from '../block/runBlock.js'
 import { FIRST_TOUCH_STATE_GAS } from '../modules/eip-8037/input.js'
 import { countEthTransferLogs } from '../simulate/logs.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 import { PLAIN_CALLER, PLAIN_RECIPIENT } from './fixtures/eip7708.js'
 import { EMPTY_RECIPIENT, STATE_GAS_CALLER } from './fixtures/eip8037.js'
 

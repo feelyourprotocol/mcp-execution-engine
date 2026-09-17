@@ -1,5 +1,5 @@
-import type { ForkRole, QueryShape, StabilityRollup } from '../types.js'
-import { EngineError } from '../types.js'
+import type { ForkRole, QueryShape, StabilityRollup } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 
 /**
  * Catalog ids for named forks (Berlin→Glamsterdam).

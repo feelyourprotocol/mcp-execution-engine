@@ -16,7 +16,7 @@ import {
   parseGasLimit,
   parseUint64Field,
 } from '../forks/resolve.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 
 describe('fork registry & resolve', () => {
   it('normalizes fork config with sorted eips', () => {

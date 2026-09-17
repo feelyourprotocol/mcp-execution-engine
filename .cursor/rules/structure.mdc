@@ -5,6 +5,10 @@ alwaysApply: true
 
 # Execution engine structure
 
+## Types
+
+Shared types live in `src/types/` (`protocol.ts` = website siblings; other files match MCP catalog / lab / verbs). Import from `../types/index.js` (barrel). Do not add a root `src/types.ts`.
+
 ## Generic library vs catalog
 
 - **Query shapes** (`simulate`, `transaction`, `block`, `probe`, later `generate`) are the stable API — not per-EIP or per-fork functions

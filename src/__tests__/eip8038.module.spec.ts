@@ -4,7 +4,7 @@ import { NEW_STORAGE_SLOT_STATE_GAS } from '../modules/eip-8037/input.js'
 import { EIP_8038_MODULE } from '../modules/eip-8038/index.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
 import { runTransaction } from '../transaction/runTransaction.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 import {
   ACCESS_GAS_CALLER,
   EXTCODESIZE_AA,

@@ -6,7 +6,7 @@
  * Callers supply a transaction (plain ETH) or bytecode with inner CALLs.
  * Catalog describes when Transfer logs appear; it does not ship demo programs.
  */
-import type { EipCapability } from '../../types.js'
+import type { EipCapability } from '../../types/index.js'
 import {
   TRANSACTION_LAYOUT,
   TRANSFER_EVENT_SIGNATURE,

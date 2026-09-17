@@ -16,7 +16,7 @@ import {
 
 import { ENGINE_CEILINGS } from '../../forks/registry.js'
 import { parseGasLimit } from '../../forks/resolve.js'
-import type { InspectInput, InspectResult } from '../../types.js'
+import type { InspectInput, InspectResult } from '../../types/index.js'
 import { normalizeHexArtifact, parseExpectedHash32, pushError } from '../shared.js'
 
 function isBalJson(value: unknown): value is BALJSONBlockAccessList {
