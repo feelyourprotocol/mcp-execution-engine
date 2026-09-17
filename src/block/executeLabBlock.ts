@@ -30,8 +30,8 @@ import {
   LAB_GAS_PRICE,
   putFundedAccount,
 } from '../transaction/lab.js'
-import type { Provenance, RunBlockHeaderSnapshot, RunBlockInput } from '../types.js'
-import { EngineError } from '../types.js'
+import type { Provenance, RunBlockHeaderSnapshot, RunBlockInput } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 
 export interface LabBlockExecution {
   provenance: Provenance
@@ -64,7 +64,7 @@ export async function executeLabBlock(input: RunBlockInput): Promise<LabBlockExe
 
   if (slotNumber !== undefined && !common.isActivatedEIP(7843)) {
     throw new EngineError(
-      'slotNumber requires a fork that activates EIP-7843 (Amsterdam)',
+      'slotNumber requires a fork that activates EIP-7843 (Glamsterdam)',
       'slot_not_available',
     )
   }

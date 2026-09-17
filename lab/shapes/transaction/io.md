@@ -10,7 +10,7 @@
 | `data` | No | Calldata hex |
 | `code` | No | Runtime bytecode installed at `to` before the tx |
 | `accounts` | No | Extra prefund accounts |
-| `fork` | No | `{ baseHardfork, eips[] }` — default Amsterdam |
+| `fork` | No | `{ baseHardfork, eips[] }` — default Glamsterdam |
 | `gasLimit` | No | Tx gas limit (default `1000000`). Pass `21000` for the wallet-era limit. |
 
 Example:
@@ -20,7 +20,7 @@ Example:
   "from": "0x00000000000000000000000000000000000000ee",
   "to": "0x00000000000000000000000000000000000000aa",
   "value": "1",
-  "fork": { "baseHardfork": "amsterdam" }
+  "fork": { "baseHardfork": "glamsterdam" }
 }
 ```
 
@@ -31,8 +31,8 @@ Example:
 | `success` | Tx completed without revert / intrinsic failure |
 | `gasUsed` | Paid tx gas (intrinsic + execution − refund) |
 | `gasUsedScope` | Always `transaction` |
-| `txRegularGas` | Amsterdam only — regular-gas total |
-| `txStateGas` | Amsterdam only — state-gas total |
+| `txRegularGas` | Glamsterdam only — regular-gas total |
+| `txStateGas` | Glamsterdam only — state-gas total |
 | `returnValue` | Hex return data |
 | `error` | Failure message, else `null` |
 | `logs` / `decodedLogs` | Receipt logs (EIP-7708 decorations when present) |

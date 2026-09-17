@@ -1,20 +1,22 @@
 import { Common, Hardfork, Mainnet } from '@ethereumjs/common'
 
 import { EIP_MODULES, getEipModule } from '../modules/index.js'
-import type { EipCapability, EngineCeilings, ForkConfig, NamedFork } from '../types.js'
-import { EngineError } from '../types.js'
+import type { EipCapability, EngineCeilings, ForkConfig, NamedFork } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 import { derivedComparisonForEip, listEipIntroductions } from './introductions.js'
 import {
   BASELINE_FORK_ID,
+  DEFAULT_PREVIEW_FORK_ID,
   defaultForkShapes,
   FORK_LINEAGE,
+  lineageElId,
   lineageForkIds,
   predecessorFork,
   resolveForkAlias,
   successorFork,
 } from './lineage.js'
 
-export { BASELINE_FORK_ID }
+export { BASELINE_FORK_ID, DEFAULT_PREVIEW_FORK_ID }
 
 export const ENGINE_VERSION = '0.1.0'
 
@@ -106,7 +108,7 @@ function resolveBaseHardfork(id: string): string {
 
 export function normalizeForkConfig(input?: ForkConfig): ForkConfig {
   if (!input) {
-    return { baseHardfork: 'amsterdam', eips: [] }
+    return { baseHardfork: DEFAULT_PREVIEW_FORK_ID, eips: [] }
   }
 
   return {
@@ -132,7 +134,8 @@ export function resolveNamedFork(id: string): ForkConfig {
 }
 
 export function hardforkToEnum(baseHardfork: string): Hardfork {
-  switch (baseHardfork) {
+  const elId = lineageElId(baseHardfork)
+  switch (elId) {
     case 'berlin':
       return Hardfork.Berlin
     case 'london':
@@ -212,9 +215,9 @@ export function describeCapabilities() {
       },
       {
         id: 'authorization-list',
-        label: 'EIP-7702 authorization list',
+        label: 'Set-code authorization list',
         summary:
-          'One or more signed authorization JSON objects. Recovers authority address and signing digest per item — not full tx execution.',
+          'One or more signed authorization JSON objects (Pectra+ type-4 txs). Recovers authority address and signing digest per item — not full tx execution.',
       },
       {
         id: 'typed-transaction',

@@ -55,21 +55,21 @@
     {
       "id": "simulate/01-push1-stop",
       "shape": "simulate",
-      "title": "PUSH1 STOP on Amsterdam",
+      "title": "PUSH1 STOP on Glamsterdam",
       "input": "shapes/simulate/examples/01-push1-stop/input.json",
       "notes": "shapes/simulate/examples/01-push1-stop/notes.md"
     },
     {
       "id": "simulate/02-dupn-amsterdam",
       "shape": "simulate",
-      "title": "EIP-8024 DUPN stack demo on Amsterdam",
+      "title": "EIP-8024 DUPN stack demo on Glamsterdam",
       "input": "shapes/simulate/examples/02-dupn-amsterdam/input.json",
       "notes": "shapes/simulate/examples/02-dupn-amsterdam/notes.md"
     },
     {
       "id": "transaction/01-first-touch",
       "shape": "transaction",
-      "title": "First-touch 1 wei transfer on Amsterdam",
+      "title": "First-touch 1 wei transfer on Glamsterdam",
       "input": "shapes/transaction/examples/01-first-touch/input.json",
       "notes": "shapes/transaction/examples/01-first-touch/notes.md"
     },
@@ -83,7 +83,7 @@
     {
       "id": "block/02-slot-header",
       "shape": "block",
-      "title": "Amsterdam header slot 42 via SLOTNUM",
+      "title": "Glamsterdam header slot 42 via SLOTNUM",
       "input": "shapes/block/examples/02-slot-header/input.json",
       "notes": "shapes/block/examples/02-slot-header/notes.md"
     },

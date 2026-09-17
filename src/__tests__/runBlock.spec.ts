@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { runBlock } from '../block/runBlock.js'
 import { FIRST_TOUCH_STATE_GAS } from '../modules/eip-8037/input.js'
 import { countEthTransferLogs } from '../simulate/logs.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 import { PLAIN_CALLER, PLAIN_RECIPIENT } from './fixtures/eip7708.js'
 import { EMPTY_RECIPIENT, STATE_GAS_CALLER } from './fixtures/eip8037.js'
 
@@ -15,10 +15,10 @@ const SLOTNUM_RETURN_BYTECODE = '0x4b60005260206000f3'
 const SLOT_CONTRACT = '0x000000000000000000000000000000000000004b'
 
 describe('runBlock', () => {
-  it('runs a first-touch transfer on Amsterdam and snapshots header gas', async () => {
+  it('runs a first-touch transfer on Glamsterdam and snapshots header gas', async () => {
     const result = await runBlock({
       transactions: [{ from: STATE_GAS_CALLER, to: EMPTY_RECIPIENT, value: '1' }],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
@@ -38,7 +38,7 @@ describe('runBlock', () => {
         { from: PLAIN_CALLER, to: PLAIN_RECIPIENT, value: '1' },
         { from: PLAIN_CALLER, to: SECOND_RECIPIENT, value: '1' },
       ],
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(result.success).toBe(true)
@@ -48,17 +48,17 @@ describe('runBlock', () => {
     expect(countEthTransferLogs(result.transactions[0]?.decodedLogs ?? [])).toBe(0)
   })
 
-  it('emits a decoded EIP-7708 Transfer log on Amsterdam', async () => {
+  it('emits a decoded EIP-7708 Transfer log on Glamsterdam', async () => {
     const result = await runBlock({
       transactions: [{ from: PLAIN_CALLER, to: PLAIN_RECIPIENT, value: '1' }],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
     expect(countEthTransferLogs(result.transactions[0]?.decodedLogs ?? [])).toBe(1)
   })
 
-  it('pushes the header slot through SLOTNUM on Amsterdam', async () => {
+  it('pushes the header slot through SLOTNUM on Glamsterdam', async () => {
     const result = await runBlock({
       transactions: [
         {
@@ -68,7 +68,7 @@ describe('runBlock', () => {
         },
       ],
       header: { slotNumber: '42' },
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
@@ -76,12 +76,12 @@ describe('runBlock', () => {
     expect(BigInt(result.transactions[0]?.returnValue ?? '0x')).toBe(42n)
   })
 
-  it('rejects slotNumber on Osaka', async () => {
+  it('rejects slotNumber on Fusaka', async () => {
     await expect(
       runBlock({
         transactions: [{ from: PLAIN_CALLER, to: PLAIN_RECIPIENT, value: '1' }],
         header: { slotNumber: '42' },
-        fork: { baseHardfork: 'osaka' },
+        fork: { baseHardfork: 'fusaka' },
       }),
     ).rejects.toThrow(/EIP-7843/)
   })
@@ -90,7 +90,7 @@ describe('runBlock', () => {
     const result = await runBlock({
       transactions: [{ from: PLAIN_CALLER, to: PLAIN_RECIPIENT, value: '1' }],
       header: { number: '99', timestamp: '1704067200' },
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(result.header.number).toBe('99')
@@ -116,7 +116,7 @@ describe('runBlock', () => {
       runBlock({
         transactions: [{ from: PLAIN_CALLER, to: PLAIN_RECIPIENT, value: '1' }],
         header: { slotNumber: 'nope' },
-        fork: { baseHardfork: 'amsterdam' },
+        fork: { baseHardfork: 'glamsterdam' },
       }),
     ).rejects.toThrow(/whole number/)
   })
@@ -131,7 +131,7 @@ describe('runBlock', () => {
           gasLimit: '21000',
         },
       ],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(false)

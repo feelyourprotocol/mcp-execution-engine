@@ -6,7 +6,7 @@
 
 - Discover **what the engine supports** before calling simulate.
 - Inspect named **fork capabilities**, registered **runnable** EIP modules, query shapes, opcodes, encoding, ceilings.
-- Agents use this to decide whether a **hardfork** (Amsterdam, Osaka, Prague) or an EIP is available and what limits apply. A fork run does not require naming an EIP.
+- Agents use this to decide whether a **hardfork** (Glamsterdam, Fusaka, Pectra) or an EIP is available and what limits apply. A fork run does not require naming an EIP.
 
 ## What you send
 

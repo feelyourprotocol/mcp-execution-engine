@@ -1,6 +1,6 @@
 import type { InterpreterStep } from '@ethereumjs/evm'
 
-import type { StepTrace } from '../types.js'
+import type { StepTrace } from '../types/index.js'
 
 export function stepToTrace(step: InterpreterStep): StepTrace {
   const gasCost = step.opcode.dynamicFee ?? BigInt(step.opcode.fee)

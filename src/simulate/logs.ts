@@ -6,7 +6,7 @@ import {
 } from '@ethereumjs/evm'
 import { bytesToHex, hexToBytes, type PrefixedHexString } from '@ethereumjs/util'
 
-import type { SimulateDecodedLog, SimulateLogDecoration, SimulateRawLog } from '../types.js'
+import type { SimulateDecodedLog, SimulateLogDecoration, SimulateRawLog } from '../types/index.js'
 
 export function logToRaw(log: Log): SimulateRawLog {
   const [address, topics, data] = log

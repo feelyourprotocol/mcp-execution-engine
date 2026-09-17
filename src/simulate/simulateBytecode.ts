@@ -13,8 +13,8 @@ import {
   LAB_BYTECODE_CALLER,
   putFundedAccount,
 } from '../transaction/lab.js'
-import type { SimulateBytecodeInput, SimulateBytecodeResult, StepTrace } from '../types.js'
-import { EngineError } from '../types.js'
+import type { SimulateBytecodeInput, SimulateBytecodeResult, StepTrace } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 import { mapExecLogs } from './logs.js'
 import { stepToTrace } from './trace.js'
 

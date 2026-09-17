@@ -16,14 +16,14 @@ A **single** paid transfer still belongs on [transaction](../transaction/about.m
 
 ## What you get back
 
-`gasUsed` is the **header** field after execution (`gasUsedScope: block`). Paid tx gas, 8037 dimensions, and 7708 logs live on `transactions[]`. `header.slotNumber` is present when you set a slot on Amsterdam.
+`gasUsed` is the **header** field after execution (`gasUsedScope: block`). Paid tx gas, 8037 dimensions, and 7708 logs live on `transactions[]`. `header.slotNumber` is present when you set a slot on Glamsterdam.
 
 ## Examples
 
 | ID | What it demonstrates |
 | --- | --- |
-| `block/01-first-touch` | One 1 wei transfer on Amsterdam (same as the transaction example, as a block) |
-| `block/02-slot-header` | Amsterdam header slot `42`; a contract returns `SLOTNUM` |
+| `block/01-first-touch` | One 1 wei transfer on Glamsterdam (same as the transaction example, as a block) |
+| `block/02-slot-header` | Glamsterdam header slot `42`; a contract returns `SLOTNUM` |
 
 ```bash
 npm run lab -- run block/01-first-touch

@@ -7,8 +7,8 @@ import {
 
 import { executeLabBlock } from '../block/executeLabBlock.js'
 import { LAB_BLOCK_GAS_LIMIT } from '../transaction/lab.js'
-import type { GenerateInput, GenerateResult } from '../types.js'
-import { EngineError } from '../types.js'
+import type { GenerateInput, GenerateResult } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 
 const DEFAULT_ARTIFACT_KIND = 'block-access-list' as const
 
@@ -33,7 +33,7 @@ export async function generateArtifact(input: GenerateInput): Promise<GenerateRe
 
   if (!common.isActivatedEIP(7928)) {
     throw new EngineError(
-      'Block access lists require a fork that activates EIP-7928 (Amsterdam)',
+      'Block access lists require a fork that activates EIP-7928 (Glamsterdam)',
       'bal_not_available',
     )
   }

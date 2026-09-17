@@ -5,7 +5,7 @@
 | Field | Required | Description |
 | --- | --- | --- |
 | `bytecode` | Yes | Hex-encoded EVM bytecode (`0x` prefix optional) |
-| `fork` | No | `{ baseHardfork, eips[] }` — defaults to Amsterdam if omitted |
+| `fork` | No | `{ baseHardfork, eips[] }` — defaults to Glamsterdam if omitted |
 | `gasLimit` | No | Execution gas limit as decimal string (default `1000000`) |
 | `trace` | No | When `true`, include stack-only execution steps |
 | `accounts` | No | Extra accounts to prefund (code/balance/storage) before the message-call. Existing-slot SSTORE: seed storage on `0x00000000000000000000000000000000000000b1`. |
@@ -15,7 +15,7 @@ Example:
 ```json
 {
   "bytecode": "0x600100",
-  "fork": { "baseHardfork": "amsterdam", "eips": [] },
+  "fork": { "baseHardfork": "glamsterdam", "eips": [] },
   "trace": true
 }
 ```
@@ -27,7 +27,7 @@ Example:
 | `success` | Execution completed without revert |
 | `gasUsed` | Call-frame gas consumed (decimal string). Does **not** include the 21,000 tx intrinsic. |
 | `gasUsedScope` | Always `call-frame` (VM message-call). |
-| `stateGasSpilled` | Present when non-zero (Amsterdam new-slot SSTORE). |
+| `stateGasSpilled` | Present when non-zero (Glamsterdam new-slot SSTORE). |
 | `returnValue` | Hex return data |
 | `finalStack` | Stack items after execution (hex strings, bottom → top) |
 | `error` | Error message if execution failed, else `null` |
@@ -48,7 +48,7 @@ Example (abbreviated):
   "error": null,
   "provenance": {
     "engineVersion": "0.1.0",
-    "forkConfig": { "baseHardfork": "amsterdam", "eips": [] }
+    "forkConfig": { "baseHardfork": "glamsterdam", "eips": [] }
   }
 }
 ```

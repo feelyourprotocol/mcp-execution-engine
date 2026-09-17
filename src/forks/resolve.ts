@@ -6,8 +6,8 @@ import {
   type PrefixedHexString,
 } from '@ethereumjs/util'
 
-import type { ForkConfig } from '../types.js'
-import { EngineError } from '../types.js'
+import type { ForkConfig } from '../types/index.js'
+import { EngineError } from '../types/index.js'
 import { buildCommon, ENGINE_CEILINGS, normalizeForkConfig } from './registry.js'
 
 export interface ResolvedFork {

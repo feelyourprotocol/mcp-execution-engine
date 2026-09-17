@@ -8,7 +8,7 @@ Derive structured protocol artifacts from a lab block run — same transaction/h
 
 - Tool: **`generate`**
 - Engine: **`generateArtifact()`**
-- Default kind: **`block-access-list`** (Amsterdam / EIP-7928)
+- Default kind: **`block-access-list`** (Glamsterdam / EIP-7928)
 
 ## Honesty
 

@@ -29,6 +29,7 @@ alwaysApply: true
 - Website owns **interactive examples**; MCP owns **general execution** of **caller-supplied** programs
 - Do **not** replay exploration widget bytecode in the engine catalog
 - A module is runnable only if a shipped verb’s **actual result fields** show the EIP effect (bytecode: gas / return / stack / opcode trace / logs / optional stateGasSpilled; transaction: paid gas / receipt logs / 8037 dimensions; block: per-tx receipts + header snapshot — not BAL JSON). Otherwise the twin is a Planned catalogue page
+- Landing on mainnet does **not** drop the twin. Fork `role` may rotate; advertised modules stay on the fork that introduced them until an explicit cleanup.
 
 ## Adding exploration does not auto-add MCP module
 

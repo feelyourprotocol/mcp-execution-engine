@@ -9,12 +9,12 @@ import { EMPTY_RECIPIENT, FUNDED_RECIPIENT, STATE_GAS_CALLER } from './fixtures/
 const SIMPLE_TRANSFER_INTRINSIC = 21_000n
 
 describe('runTransaction', () => {
-  it('charges 21000 for a simple value transfer on Osaka', async () => {
+  it('charges 21000 for a simple value transfer on Fusaka', async () => {
     const result = await runTransaction({
       from: PLAIN_CALLER,
       to: PLAIN_RECIPIENT,
       value: '1',
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(result.success).toBe(true)
@@ -24,12 +24,12 @@ describe('runTransaction', () => {
     expect(result.error).toBeNull()
   })
 
-  it('includes first-touch state gas in paid gas on Amsterdam', async () => {
+  it('includes first-touch state gas in paid gas on Glamsterdam', async () => {
     const result = await runTransaction({
       from: STATE_GAS_CALLER,
       to: EMPTY_RECIPIENT,
       value: '1',
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
@@ -38,20 +38,20 @@ describe('runTransaction', () => {
     expect(result.txRegularGas).toBe(SIMPLE_TRANSFER_INTRINSIC.toString())
   })
 
-  it('fails Amsterdam first-touch at gasLimit 21000 and succeeds on Osaka', async () => {
+  it('fails Glamsterdam first-touch at gasLimit 21000 and succeeds on Fusaka', async () => {
     const amsterdam = await runTransaction({
       from: STATE_GAS_CALLER,
       to: EMPTY_RECIPIENT,
       value: '1',
       gasLimit: '21000',
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const osaka = await runTransaction({
       from: STATE_GAS_CALLER,
       to: EMPTY_RECIPIENT,
       value: '1',
       gasLimit: '21000',
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(amsterdam.success).toBe(false)
@@ -66,14 +66,14 @@ describe('runTransaction', () => {
       to: FUNDED_RECIPIENT,
       value: '1',
       accounts: [{ address: FUNDED_RECIPIENT, balance: '1000000000000000000' }],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const osaka = await runTransaction({
       from: STATE_GAS_CALLER,
       to: FUNDED_RECIPIENT,
       value: '1',
       accounts: [{ address: FUNDED_RECIPIENT, balance: '1000000000000000000' }],
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(amsterdam.success).toBe(true)
@@ -82,12 +82,12 @@ describe('runTransaction', () => {
     expect(amsterdam.txStateGas === undefined || amsterdam.txStateGas === '0').toBe(true)
   })
 
-  it('emits a decoded EIP-7708 Transfer log on Amsterdam', async () => {
+  it('emits a decoded EIP-7708 Transfer log on Glamsterdam', async () => {
     const result = await runTransaction({
       from: PLAIN_CALLER,
       to: PLAIN_RECIPIENT,
       value: '1',
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)

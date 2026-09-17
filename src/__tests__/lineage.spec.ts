@@ -5,16 +5,21 @@ import { assertResolvableForkId, predecessorFork, resolveForkAlias } from '../fo
 import { buildCommon, resolveNamedFork } from '../forks/registry.js'
 import { buildProvenance } from '../provenance/build.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 
 describe('hardfork lineage', () => {
   it('resolves merge and shapella aliases to canonical ids', () => {
     expect(resolveForkAlias('merge')).toBe('paris')
     expect(resolveForkAlias('the-merge')).toBe('paris')
-    expect(resolveForkAlias('shapella')).toBe('shanghai')
-    expect(resolveForkAlias('dencun')).toBe('cancun')
-    expect(resolveForkAlias('pectra')).toBe('prague')
-    expect(resolveForkAlias('fusaka')).toBe('osaka')
+    expect(resolveForkAlias('shapella')).toBe('shapella')
+    expect(resolveForkAlias('shanghai')).toBe('shapella')
+    expect(resolveForkAlias('dencun')).toBe('dencun')
+    expect(resolveForkAlias('cancun')).toBe('dencun')
+    expect(resolveForkAlias('pectra')).toBe('pectra')
+    expect(resolveForkAlias('prague')).toBe('pectra')
+    expect(resolveForkAlias('fusaka')).toBe('fusaka')
+    expect(resolveForkAlias('osaka')).toBe('fusaka')
+    expect(resolveForkAlias('amsterdam')).toBe('glamsterdam')
   })
 
   it('rejects blob-parameter-only and difficulty-bomb delay fork ids', () => {
@@ -26,12 +31,15 @@ describe('hardfork lineage', () => {
     expect(() => buildCommon({ baseHardfork: 'arrowGlacier', eips: [] })).toThrow(/not allowed/)
   })
 
-  it('chains predecessor links Berlin through Amsterdam', () => {
+  it('chains predecessor links Berlin through Glamsterdam', () => {
     expect(predecessorFork('london')).toBe('berlin')
     expect(predecessorFork('paris')).toBe('london')
+    expect(predecessorFork('shapella')).toBe('paris')
     expect(predecessorFork('shanghai')).toBe('paris')
-    expect(predecessorFork('osaka')).toBe('prague')
-    expect(predecessorFork('amsterdam')).toBe('osaka')
+    expect(predecessorFork('fusaka')).toBe('pectra')
+    expect(predecessorFork('osaka')).toBe('pectra')
+    expect(predecessorFork('glamsterdam')).toBe('fusaka')
+    expect(predecessorFork('amsterdam')).toBe('fusaka')
     expect(predecessorFork('berlin')).toBeUndefined()
   })
 
@@ -42,15 +50,15 @@ describe('hardfork lineage', () => {
 
   it('resolves named historical forks for generic runs', () => {
     expect(resolveNamedFork('merge')).toEqual({ baseHardfork: 'paris', eips: [] })
-    expect(resolveNamedFork('shapella')).toEqual({ baseHardfork: 'shanghai', eips: [] })
+    expect(resolveNamedFork('shapella')).toEqual({ baseHardfork: 'shapella', eips: [] })
     expect(() => buildCommon({ baseHardfork: 'paris', eips: [] })).not.toThrow()
   })
 
-  it('PUSH0 succeeds on Shanghai and fails on Paris', async () => {
+  it('PUSH0 succeeds on Shapella and fails on Paris', async () => {
     const bytecode = '5f00'
     const shanghai = await simulateBytecode({
       bytecode,
-      fork: { baseHardfork: 'shanghai', eips: [] },
+      fork: { baseHardfork: 'shapella', eips: [] },
     })
     expect(shanghai.success).toBe(true)
 
@@ -61,10 +69,10 @@ describe('hardfork lineage', () => {
     expect(paris.success).toBe(false)
   })
 
-  it('maps PUSH0 keyword to Shanghai introduction', () => {
+  it('maps PUSH0 keyword to Shapella introduction', () => {
     const intro = introductionForKeyword('push0')
     expect(intro?.eip).toBe(3855)
-    expect(intro?.introducedAt).toBe('shanghai')
+    expect(intro?.introducedAt).toBe('shapella')
     expect(predecessorFork(intro!.introducedAt)).toBe('paris')
   })
 
@@ -77,8 +85,8 @@ describe('hardfork lineage', () => {
     expect(provenance.perEip).toBeUndefined()
   })
 
-  it('provenance on generic Shanghai run has Paris as predecessor', () => {
-    const provenance = buildProvenance('0.1.0', { baseHardfork: 'shanghai', eips: [] })
+  it('provenance on generic Shapella run has Paris as predecessor', () => {
+    const provenance = buildProvenance('0.1.0', { baseHardfork: 'shapella', eips: [] })
     expect(provenance.predecessorForkId).toBe('paris')
   })
 })

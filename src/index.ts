@@ -91,5 +91,5 @@ export type {
   SimulateRawLog,
   StabilityRollup,
   StepTrace,
-} from './types.js'
-export { EngineError } from './types.js'
+} from './types/index.js'
+export { EngineError } from './types/index.js'

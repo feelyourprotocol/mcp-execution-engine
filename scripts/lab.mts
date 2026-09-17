@@ -20,8 +20,8 @@ import { runBlock } from '../src/block/runBlock.js'
 import { describeCapabilities } from '../src/forks/registry.js'
 import { simulateBytecode } from '../src/simulate/simulateBytecode.js'
 import { runTransaction } from '../src/transaction/runTransaction.js'
-import type { RunBlockInput, RunTransactionInput, SimulateBytecodeInput } from '../src/types.js'
-import { EngineError } from '../src/types.js'
+import type { RunBlockInput, RunTransactionInput, SimulateBytecodeInput } from '../src/types/index.js'
+import { EngineError } from '../src/types/index.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const LAB_ROOT = join(__dirname, '..', 'lab')

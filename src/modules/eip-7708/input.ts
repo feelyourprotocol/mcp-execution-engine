@@ -14,4 +14,4 @@ export const TRANSACTION_LAYOUT =
   'run_transaction: { from, to, value (wei string), data?, code?, accounts? }. Prefunds from. Optional code installs runtime at to (contract-wallet). Receipt logs / decodedLogs carry Transfer decorations.'
 
 export const VALUE_BEARING_CALL_NOTE =
-  'Nonzero value on a successful tx or inner CALL/CREATE emits a system-address Transfer log on Amsterdam. Zero value and reverted value moves stay silent.'
+  'Nonzero value on a successful tx or inner CALL/CREATE emits a system-address Transfer log on Glamsterdam. Zero value and reverted value moves stay silent.'

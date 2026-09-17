@@ -12,7 +12,7 @@ Intent-driven verbs that frame how agents and integrators think about protocol w
 
 ## Fork model (all shapes)
 
-A fork is a **capability set**: `{ baseHardfork, eips[] }` à la carte. Named forks (e.g. `amsterdam`) are curated shortcuts.
+A fork is a **capability set**: `{ baseHardfork, eips[] }` à la carte. Named forks (e.g. `glamsterdam`) are curated shortcuts.
 
 Every simulate result includes **provenance** — engine version, resolved fork, stability caveat. Always cite it when reporting outcomes.
 

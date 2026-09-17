@@ -18,6 +18,7 @@ Agent → mcp-gateway (tools) → mcp-execution-engine (this repo) → EthereumJ
 
 | Path | Role |
 | --- | --- |
+| `src/types/` | Shared types — `protocol.ts` (website siblings), then catalog / lab / per-verb files |
 | `src/simulate/`, `src/transaction/`, `src/provenance/`, `src/forks/` | Generic library — query shapes; named forks are catalog capabilities |
 | `src/modules/eip-NNNN/` | EIP capability descriptors (catalog only) |
 | `src/modules/index.ts` | Live module list → `describeCapabilities().eips` |

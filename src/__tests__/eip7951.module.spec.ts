@@ -11,14 +11,14 @@ describe('EIP-7951 module', () => {
     expect(EIP_7951_MODULE.runnable).toBe(true)
     expect(EIP_7951_MODULE.changeNature).toBe('new-capability')
     expect(EIP_7951_MODULE.opcodes?.[0]?.opcodeHex).toBe('0x100')
-    expect(EIP_7951_MODULE.relatedForks).toContain('osaka')
+    expect(EIP_7951_MODULE.relatedForks).toContain('fusaka')
   })
 
   it('executes valid P-256 CALL on osaka', async () => {
     const bytecode = callPrecompileHex(0x100, p256ValidInputHex())
     const result = await simulateBytecode({
       bytecode,
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
     expect(result.success).toBe(true)
     expect(result.returnValue.toLowerCase()).toContain(

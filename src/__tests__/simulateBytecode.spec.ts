@@ -4,7 +4,7 @@ import { ENGINE_CEILINGS } from '../forks/registry.js'
 import { NEW_STORAGE_SLOT_STATE_GAS } from '../modules/eip-8037/input.js'
 import { simulateBytecode } from '../simulate/simulateBytecode.js'
 import { LAB_BYTECODE_ADDRESS } from '../transaction/lab.js'
-import { EngineError } from '../types.js'
+import { EngineError } from '../types/index.js'
 import { dupnDemoHex, PUSH1_STOP_HEX } from './fixtures/eip8024.js'
 import {
   EXTCODESIZE_AA,
@@ -15,7 +15,7 @@ import {
 
 describe('simulateBytecode', () => {
   it('is deterministic for identical input', async () => {
-    const input = { bytecode: PUSH1_STOP_HEX, fork: { baseHardfork: 'amsterdam', eips: [] } }
+    const input = { bytecode: PUSH1_STOP_HEX, fork: { baseHardfork: 'glamsterdam', eips: [] } }
     const first = await simulateBytecode(input)
     const second = await simulateBytecode(input)
     expect(first).toEqual(second)
@@ -24,14 +24,14 @@ describe('simulateBytecode', () => {
   it('runs simple PUSH1 STOP on osaka baseline and returns firm provenance', async () => {
     const result = await simulateBytecode({
       bytecode: PUSH1_STOP_HEX,
-      fork: { baseHardfork: 'osaka', eips: [] },
+      fork: { baseHardfork: 'fusaka', eips: [] },
     })
 
     expect(result.success).toBe(true)
     expect(result.error).toBeNull()
     expect(result.gasUsed).toBe('3')
     expect(result.gasUsedScope).toBe('call-frame')
-    expect(result.provenance.forkConfig.baseHardfork).toBe('osaka')
+    expect(result.provenance.forkConfig.baseHardfork).toBe('fusaka')
     expect(result.provenance.stabilityRollup).toBe('firm')
     expect(result.provenance.caveat).toMatch(/mainnet EL baseline/)
     expect(result.provenance.caveat).not.toMatch(/may change before mainnet activation/)
@@ -40,7 +40,7 @@ describe('simulateBytecode', () => {
   it('rejects DUPN bytecode on osaka baseline (invalid opcode)', async () => {
     const result = await simulateBytecode({
       bytecode: dupnDemoHex(),
-      fork: { baseHardfork: 'osaka', eips: [] },
+      fork: { baseHardfork: 'fusaka', eips: [] },
     })
 
     expect(result.success).toBe(false)
@@ -50,7 +50,7 @@ describe('simulateBytecode', () => {
   it('runs simple PUSH1 STOP and returns provenance', async () => {
     const result = await simulateBytecode({
       bytecode: PUSH1_STOP_HEX,
-      fork: { baseHardfork: 'amsterdam', eips: [] },
+      fork: { baseHardfork: 'glamsterdam', eips: [] },
     })
 
     expect(result.success).toBe(true)
@@ -64,7 +64,7 @@ describe('simulateBytecode', () => {
   it('records opcode trace when requested', async () => {
     const result = await simulateBytecode({
       bytecode: PUSH1_STOP_HEX,
-      fork: { baseHardfork: 'amsterdam', eips: [] },
+      fork: { baseHardfork: 'glamsterdam', eips: [] },
       trace: true,
     })
 
@@ -75,7 +75,7 @@ describe('simulateBytecode', () => {
   it('runs DUPN on amsterdam (EIP-8024 bundled in fork)', async () => {
     const result = await simulateBytecode({
       bytecode: dupnDemoHex(),
-      fork: { baseHardfork: 'amsterdam', eips: [] },
+      fork: { baseHardfork: 'glamsterdam', eips: [] },
     })
 
     expect(result.success).toBe(true)
@@ -85,7 +85,7 @@ describe('simulateBytecode', () => {
   it('accepts explicit eips:[8024] on amsterdam', async () => {
     const result = await simulateBytecode({
       bytecode: dupnDemoHex(),
-      fork: { baseHardfork: 'amsterdam', eips: [8024] },
+      fork: { baseHardfork: 'glamsterdam', eips: [8024] },
     })
 
     expect(result.success).toBe(true)
@@ -94,7 +94,7 @@ describe('simulateBytecode', () => {
   it('rejects bytecode above size ceiling', async () => {
     const huge = '0x' + '00'.repeat(ENGINE_CEILINGS.maxBytecodeBytes + 1)
     await expect(
-      simulateBytecode({ bytecode: huge, fork: { baseHardfork: 'amsterdam' } }),
+      simulateBytecode({ bytecode: huge, fork: { baseHardfork: 'glamsterdam' } }),
     ).rejects.toThrow(EngineError)
   })
 
@@ -105,24 +105,24 @@ describe('simulateBytecode', () => {
   it('persists SSTORE so a later SLOAD in the same program sees the write', async () => {
     const result = await simulateBytecode({
       bytecode: SSTORE_THEN_SLOAD_SLOT3,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
     expect(result.finalStack.at(-1)).toBe('0x7')
   })
 
-  it('charges existing-slot SSTORE program gas on Amsterdam vs Osaka', async () => {
+  it('charges existing-slot SSTORE program gas on Glamsterdam vs Fusaka', async () => {
     const storage = [{ address: LAB_BYTECODE_ADDRESS, storage: [{ slot: '0x03', value: '0x01' }] }]
     const osaka = await simulateBytecode({
       bytecode: SSTORE_SLOT3_VALUE7,
       accounts: storage,
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
     const amsterdam = await simulateBytecode({
       bytecode: SSTORE_SLOT3_VALUE7,
       accounts: storage,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(osaka.success).toBe(true)
@@ -133,14 +133,14 @@ describe('simulateBytecode', () => {
     expect(amsterdam.stateGasSpilled).toBeUndefined()
   })
 
-  it('reports new-slot state gas spill on Amsterdam SSTORE', async () => {
+  it('reports new-slot state gas spill on Glamsterdam SSTORE', async () => {
     const osaka = await simulateBytecode({
       bytecode: SSTORE_SLOT3_VALUE7,
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
     const amsterdam = await simulateBytecode({
       bytecode: SSTORE_SLOT3_VALUE7,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(osaka.success).toBe(true)
@@ -154,7 +154,7 @@ describe('simulateBytecode', () => {
     const result = await simulateBytecode({
       bytecode: EXTCODESIZE_AA,
       accounts: [{ address: '0x00000000000000000000000000000000000000aa', code: '0x600100' }],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
@@ -171,7 +171,7 @@ describe('simulateBytecode', () => {
           storage: [{ slot: '0x03', value: '0x01' }],
         },
       ],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
@@ -181,7 +181,7 @@ describe('simulateBytecode', () => {
   it('fails SSTORE with a short stack', async () => {
     const result = await simulateBytecode({
       bytecode: SSTORE_UNDERFLOW,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(false)
