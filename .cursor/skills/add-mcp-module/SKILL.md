@@ -47,7 +47,7 @@ Copy the closest **module**, not the closest **website folder**. Helpers: `opcod
 1. Read website `CANONICAL` + exploration **carry to MCP** + briefing prompts.
 2. **Honest verb check** (intent 4). Then branch on `docsStatus`:
    - **`runnable`** — shipped verb can show the effect → engine module + page.
-   - **`planned-module`** — page + coverage/sidebar only; **no** `runnable: false` row in `EIP_MODULES`.
+   - **`planned-module`** — page + coverage (+ matching fork page) only; **no** `runnable: false` row in `EIP_MODULES`.
 3. Human MCP page must exist or ship now. Flesh out a phase-2 stub.
 
 ## Exception gates
@@ -90,7 +90,7 @@ Do **not** use a side-trip to start the comic, add session memory, or skip the r
 5. Runtime fields: `runnable: true`, `shapes`, opcodes or input encoding.
 6. Register in `src/modules/index.ts`.
 7. Tests in `src/__tests__/` — CALL/exec fixtures you construct; **not** website widget bytecode. Happy path **and** beyond-edge (junk encoding, out of range, “too big”).
-8. Catalogue page + `use/coverage.md` + sidebar (`.vitepress/config.ts`) + `llms.txt` if the index changed.
+8. Catalogue page + `use/coverage.md` + the matching `use/forks/<id>.md` twins list + `llms.txt` if the index changed. Do **not** add the EIP to the VitePress sidebar.
 
 ## Catalogue page (every live twin)
 
@@ -154,7 +154,7 @@ The human will paste these into a **fresh** agent chat with Feel Your Protocol M
 **Honest verb:** shipped result fields that show the effect — or why planned
 **Engine module:** path or none
 **Catalogue page:** `website/mcp-docs/use/eips/eip-NNNN.md`
-**Also updated:** coverage / sidebar / llms — yes/no
+**Also updated:** coverage / fork page / llms — yes/no
 
 **Canonical:** copied from website `CANONICAL`; conflicts (none | resolved toward website)
 **Tests:** `npm run test:ci` — N specs (happy + beyond-edge), pass/fail
