@@ -5,11 +5,11 @@
 | Field | Required | Description |
 | --- | --- | --- |
 | `transactions` | Yes | 1–8 impersonated txs (`from`, `to`, optional `value` / `data` / `code` / `gasLimit`) |
-| `header.slotNumber` | No | Beacon slot (decimal). Amsterdam / EIP-7843 only |
+| `header.slotNumber` | No | Beacon slot (decimal). Glamsterdam / EIP-7843 only |
 | `header.number` | No | Block number (decimal). Default `1` |
 | `header.timestamp` | No | Unix timestamp (decimal). Default `1` |
 | `accounts` | No | Extra prefund accounts |
-| `fork` | No | `{ baseHardfork, eips[] }` — default Amsterdam |
+| `fork` | No | `{ baseHardfork, eips[] }` — default Glamsterdam |
 
 Example:
 
@@ -22,7 +22,7 @@ Example:
       "value": "1"
     }
   ],
-  "fork": { "baseHardfork": "amsterdam" }
+  "fork": { "baseHardfork": "glamsterdam" }
 }
 ```
 

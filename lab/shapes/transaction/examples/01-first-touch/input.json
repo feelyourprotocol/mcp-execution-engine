@@ -2,5 +2,5 @@
   "from": "0x00000000000000000000000000000000000000ee",
   "to": "0x00000000000000000000000000000000000000aa",
   "value": "1",
-  "fork": { "baseHardfork": "amsterdam" }
+  "fork": { "baseHardfork": "glamsterdam" }
 }

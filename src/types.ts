@@ -25,11 +25,17 @@ export type ChangeNature =
 
 export type StabilityRollup = 'experimental' | 'emerging' | 'stabilizing' | 'firm'
 
-/** Named fork role in the Berlin→Amsterdam lineage. */
+/** Named fork role in the Berlin→Glamsterdam lineage. */
 export type ForkRole = 'historical' | 'current' | 'preview'
 
 /** À-la-carte or named fork capability set. */
 export interface ForkConfig {
+  /**
+   * Catalog fork id (combined upgrade name from Shapella on: shapella, dencun,
+   * pectra, fusaka, glamsterdam). EL city names (shanghai, osaka, amsterdam, …)
+   * and `mainnet-el` are aliases — `normalizeForkConfig` maps them to the catalog id.
+   * EthereumJS Common uses lineage `elId`.
+   */
   baseHardfork: string
   eips?: number[]
 }
@@ -37,8 +43,8 @@ export interface ForkConfig {
 /**
  * Catalog entry for one named hardfork. First-class next to EIP modules:
  * callers can run bytecode / a tx / a lab block under the fork without
- * naming an EIP. `relatedEips` are advertised runnable modules, not a
- * complete EthereumJS bundle list.
+ * naming an EIP. `id` is the combined upgrade name from Shapella on.
+ * `relatedEips` are advertised runnable modules, not a complete EthereumJS bundle list.
  */
 export interface NamedFork {
   id: string
@@ -47,14 +53,14 @@ export interface NamedFork {
   stabilityRollup?: StabilityRollup
   /** Baseline (mainnet today) vs preview (upcoming fork). */
   role?: ForkRole
-  /** Alternate names agents may use (e.g. glamsterdam → amsterdam). */
+  /** EL city names and role aliases (e.g. amsterdam → glamsterdam, mainnet-el → fusaka). */
   aliases?: string[]
   /** One-line capability: what callers can do on this fork. */
   summary: string
   keywords: string[]
   /** Query shapes that work for a generic run on this fork. */
   shapes: QueryShape[]
-  /** Position in the Berlin→Amsterdam lineage (0 = Berlin). */
+  /** Position in the Berlin→Glamsterdam lineage (0 = Berlin). */
   order: number
   /** Previous lineage fork, if any. */
   predecessorId?: string
@@ -83,7 +89,6 @@ export interface EipIntroduction {
 export interface EipProvenance {
   eip: number
   status?: string
-  forkInclusion?: string
   implMaturity?: string
   testMaturity?: string
   specAnchor?: string
@@ -183,7 +188,7 @@ export interface SimulateBytecodeResult {
   gasUsedScope: 'call-frame'
   /**
    * EIP-8037 state gas spilled into this frame's regular gas.
-   * Present when non-zero (typically Amsterdam new-slot SSTORE).
+   * Present when non-zero (typically Glamsterdam new-slot SSTORE).
    * Program write cost ≈ `gasUsed` − `stateGasSpilled`.
    */
   stateGasSpilled?: string
@@ -214,7 +219,7 @@ export interface RunTransactionInput {
   fork?: ForkConfig
   /** Transaction gas limit as a decimal string. Default 1000000. */
   gasLimit?: string
-  /** Signed EIP-7702 authorization JSON items — builds a type-4 tx on Prague+. */
+  /** Signed EIP-7702 authorization JSON items — builds a type-4 tx on Pectra+. */
   authorizationList?: EOACode7702AuthorizationListItem[]
 }
 
@@ -223,9 +228,9 @@ export interface RunTransactionResult {
   /** Paid transaction gas (`totalGasSpent`: intrinsic + execution − refund, with floor). */
   gasUsed: string
   gasUsedScope: 'transaction'
-  /** EIP-8037 regular-gas total. Present on Amsterdam; omitted on Osaka. */
+  /** EIP-8037 regular-gas total. Present on Glamsterdam; omitted on Fusaka. */
   txRegularGas?: string
-  /** EIP-8037 state-gas total. Present on Amsterdam; omitted on Osaka. */
+  /** EIP-8037 state-gas total. Present on Glamsterdam; omitted on Fusaka. */
   txStateGas?: string
   returnValue: string
   error: string | null
@@ -251,7 +256,7 @@ export interface RunBlockTransactionInput {
 }
 
 export interface RunBlockHeaderInput {
-  /** Beacon slot (EIP-7843). Decimal string. Amsterdam only. */
+  /** Beacon slot (EIP-7843). Decimal string. Glamsterdam only. */
   slotNumber?: string
   /** Block number. Decimal string. Default 1. */
   number?: string
@@ -392,7 +397,6 @@ export interface EipCapability {
   /** Optional baseline vs preview fork pair when comparing against mainnet. */
   comparison?: EipComparison
   status?: string
-  forkInclusion?: string
   implMaturity?: string
   testMaturity?: string
   specAnchor?: string
@@ -412,7 +416,7 @@ export interface CapabilityDescription {
   namedForks: NamedFork[]
   /** When each catalogued EIP activated (compare with predecessor of introducedAt). */
   eipIntroductions: EipIntroduction[]
-  /** Current mainnet EL baseline for fork comparisons (Osaka). */
+  /** Current mainnet EL baseline for fork comparisons (Fusaka). */
   baselineForkId: string
   eips: EipCapability[]
   allowedBaseHardforks: string[]

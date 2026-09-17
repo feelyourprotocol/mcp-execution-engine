@@ -18,11 +18,11 @@ describe('EIP-7883 module', () => {
     const bytecode = callPrecompileHex(0x05, modexpSimpleInputHex())
     const prague = await simulateBytecode({
       bytecode,
-      fork: { baseHardfork: 'prague' },
+      fork: { baseHardfork: 'pectra' },
     })
     const osaka = await simulateBytecode({
       bytecode,
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
     expect(prague.success).toBe(true)
     expect(osaka.success).toBe(true)

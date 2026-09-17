@@ -1,5 +1,5 @@
 /**
- * EIP-7708 module — ETH transfer logs on Amsterdam.
+ * EIP-7708 module — ETH transfer logs on Glamsterdam.
  *
  * canonicalSource: website/src/explorations/eip-7708/canonical.ts
  *
@@ -18,7 +18,7 @@ export const EIP_7708_MODULE: EipCapability = {
   eip: 7708,
   name: 'ETH transfers emit a log',
   summary:
-    'Amsterdam emits synthetic ERC-20-style Transfer logs from the system address on nonzero ETH moves. Run a value-bearing transaction (run_transaction) — compare logs on osaka vs amsterdam.',
+    'Glamsterdam emits synthetic ERC-20-style Transfer logs from the system address on nonzero ETH moves. Run a value-bearing transaction (run_transaction) — compare logs on fusaka vs glamsterdam.',
   changeNature: 'new-capability',
   runnable: true,
   shapes: ['transaction', 'simulate'],
@@ -30,7 +30,7 @@ export const EIP_7708_MODULE: EipCapability = {
     'receipt logs',
     'EIP-7708',
   ],
-  relatedForks: ['amsterdam', 'glamsterdam'],
+  relatedForks: ['glamsterdam'],
   opcodes: [
     {
       name: 'EIP-7708 Transfer log',
@@ -45,7 +45,6 @@ export const EIP_7708_MODULE: EipCapability = {
     },
   ],
   status: 'Review',
-  forkInclusion: 'Scheduled (Amsterdam)',
   implMaturity: 'Implemented in EthereumJS (engine module)',
   testMaturity: 'execution-specs eip7708_eth_transfer_logs',
   specAnchor: 'EIP-7708',

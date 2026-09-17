@@ -6,15 +6,17 @@ import { EngineError } from '../types.js'
 import { derivedComparisonForEip, listEipIntroductions } from './introductions.js'
 import {
   BASELINE_FORK_ID,
+  DEFAULT_PREVIEW_FORK_ID,
   defaultForkShapes,
   FORK_LINEAGE,
+  lineageElId,
   lineageForkIds,
   predecessorFork,
   resolveForkAlias,
   successorFork,
 } from './lineage.js'
 
-export { BASELINE_FORK_ID }
+export { BASELINE_FORK_ID, DEFAULT_PREVIEW_FORK_ID }
 
 export const ENGINE_VERSION = '0.1.0'
 
@@ -106,7 +108,7 @@ function resolveBaseHardfork(id: string): string {
 
 export function normalizeForkConfig(input?: ForkConfig): ForkConfig {
   if (!input) {
-    return { baseHardfork: 'amsterdam', eips: [] }
+    return { baseHardfork: DEFAULT_PREVIEW_FORK_ID, eips: [] }
   }
 
   return {
@@ -132,7 +134,8 @@ export function resolveNamedFork(id: string): ForkConfig {
 }
 
 export function hardforkToEnum(baseHardfork: string): Hardfork {
-  switch (baseHardfork) {
+  const elId = lineageElId(baseHardfork)
+  switch (elId) {
     case 'berlin':
       return Hardfork.Berlin
     case 'london':

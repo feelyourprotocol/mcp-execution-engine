@@ -25,12 +25,12 @@ describe('EIP-7708 module', () => {
     )
   })
 
-  it('emits a decoded Transfer log for a plain value transaction on Amsterdam', async () => {
+  it('emits a decoded Transfer log for a plain value transaction on Glamsterdam', async () => {
     const result = await runTransaction({
       from: PLAIN_CALLER,
       to: PLAIN_RECIPIENT,
       value: '1',
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
@@ -46,49 +46,49 @@ describe('EIP-7708 module', () => {
     )
   })
 
-  it('has no EIP-7708 Transfer logs on Osaka for the same transaction', async () => {
+  it('has no EIP-7708 Transfer logs on Fusaka for the same transaction', async () => {
     const result = await runTransaction({
       from: PLAIN_CALLER,
       to: PLAIN_RECIPIENT,
       value: '1',
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(result.success).toBe(true)
     expect(countEthTransferLogs(result.decodedLogs ?? [])).toBe(0)
   })
 
-  it('stays silent for zero-value transaction on Amsterdam', async () => {
+  it('stays silent for zero-value transaction on Glamsterdam', async () => {
     const result = await runTransaction({
       from: PLAIN_CALLER,
       to: PLAIN_RECIPIENT,
       value: '0',
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
     expect(countEthTransferLogs(result.decodedLogs ?? [])).toBe(0)
   })
 
-  it('logs contract-wallet style CALL transfer on Amsterdam', async () => {
+  it('logs contract-wallet style CALL transfer on Glamsterdam', async () => {
     const result = await runTransaction({
       from: PLAIN_CALLER,
       to: WALLET_ADDRESS,
       code: walletForwardBytecodeHex(),
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
     expect(countEthTransferLogs(result.decodedLogs ?? [])).toBe(1)
   })
 
-  it('stays silent when an inner value CALL reverts on Amsterdam', async () => {
+  it('stays silent when an inner value CALL reverts on Glamsterdam', async () => {
     const result = await runTransaction({
       from: PLAIN_CALLER,
       to: WALLET_ADDRESS,
       code: revertedValueCallBytecodeHex(),
       accounts: [{ address: REVERT_CALLEE, code: REVERT_BYTECODE }],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)

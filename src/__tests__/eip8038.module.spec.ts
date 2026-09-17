@@ -25,14 +25,14 @@ describe('EIP-8038 module', () => {
     expect(EIP_8038_MODULE).not.toHaveProperty('scenarios')
   })
 
-  it('keeps cold SLOAD at 2103 on Osaka and Amsterdam', async () => {
+  it('keeps cold SLOAD at 2103 on Fusaka and Glamsterdam', async () => {
     const osaka = await simulateBytecode({
       bytecode: SLOAD_SLOT3,
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
     const amsterdam = await simulateBytecode({
       bytecode: SLOAD_SLOT3,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(osaka.success).toBe(true)
@@ -41,14 +41,14 @@ describe('EIP-8038 module', () => {
     expect(amsterdam.gasUsed).toBe('2103')
   })
 
-  it('charges extra EXTCODESIZE gas on Amsterdam', async () => {
+  it('charges extra EXTCODESIZE gas on Glamsterdam', async () => {
     const osaka = await simulateBytecode({
       bytecode: EXTCODESIZE_AA,
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
     const amsterdam = await simulateBytecode({
       bytecode: EXTCODESIZE_AA,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(osaka.success).toBe(true)
@@ -57,21 +57,21 @@ describe('EIP-8038 module', () => {
     expect(amsterdam.gasUsed).toBe('3103')
   })
 
-  it('jumps existing-slot SSTORE write cost on Amsterdam vs Osaka', async () => {
+  it('jumps existing-slot SSTORE write cost on Glamsterdam vs Fusaka', async () => {
     const storage = [{ slot: '0x03', value: '0x01' }]
     const amsterdam = await runTransaction({
       from: ACCESS_GAS_CALLER,
       to: SSTORE_CONTRACT,
       code: SSTORE_SLOT3_VALUE7,
       accounts: [{ address: SSTORE_CONTRACT, storage }],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const osaka = await runTransaction({
       from: ACCESS_GAS_CALLER,
       to: SSTORE_CONTRACT,
       code: SSTORE_SLOT3_VALUE7,
       accounts: [{ address: SSTORE_CONTRACT, storage }],
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(amsterdam.success).toBe(true)
@@ -81,18 +81,18 @@ describe('EIP-8038 module', () => {
     expect(BigInt(osaka.gasUsed)).toBeLessThan(43_106n)
   })
 
-  it('charges new-slot state gas on Amsterdam SSTORE', async () => {
+  it('charges new-slot state gas on Glamsterdam SSTORE', async () => {
     const amsterdam = await runTransaction({
       from: ACCESS_GAS_CALLER,
       to: SSTORE_CONTRACT,
       code: SSTORE_SLOT3_VALUE7,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const osaka = await runTransaction({
       from: ACCESS_GAS_CALLER,
       to: SSTORE_CONTRACT,
       code: SSTORE_SLOT3_VALUE7,
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(amsterdam.success).toBe(true)
@@ -107,13 +107,13 @@ describe('EIP-8038 module', () => {
       to: SSTORE_CONTRACT,
       code: SSTORE_SLOT3_VALUE7,
       accounts: [{ address: SSTORE_CONTRACT, storage: [{ slot: '0x03', value: '0x01' }] }],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const created = await runTransaction({
       from: ACCESS_GAS_CALLER,
       to: SSTORE_CONTRACT,
       code: SSTORE_SLOT3_VALUE7,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(existing.success).toBe(true)
@@ -135,7 +135,7 @@ describe('EIP-8038 module', () => {
             storage: [{ slot: `0x${'11'.repeat(33)}`, value: '0x01' }],
           },
         ],
-        fork: { baseHardfork: 'amsterdam' },
+        fork: { baseHardfork: 'glamsterdam' },
       }),
     ).rejects.toBeInstanceOf(EngineError)
   })
@@ -145,7 +145,7 @@ describe('EIP-8038 module', () => {
       from: ACCESS_GAS_CALLER,
       to: SSTORE_CONTRACT,
       code: SSTORE_UNDERFLOW,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(false)

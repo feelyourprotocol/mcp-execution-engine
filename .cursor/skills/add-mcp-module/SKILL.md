@@ -21,7 +21,7 @@ MCP is the **lab**, not a second widget. Same **core question** as the explorati
 1. **Ask in their words** — play, understand, or check *their* data. Catalogue prompts come from the briefing (“what they would ask”), not from widget preset hex.
 2. **Generic verbs only** — `describe_capabilities` + `run_bytecode` + `run_transaction` + `run_block` today; `generate` when it ships. Never `run_eip_NNNN`.
 3. **BYOS / constructible** — catalog exposes encoding facts (opcodes, precompile ABI, immediates) so an agent can *build* a request, including prestate (accounts, code, storage). No demo programs in the module.
-4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today. Bytecode (`SimulateBytecodeResult`): success, call-frame `gasUsed`, stack, optional trace/logs (and optional `stateGasSpilled` on Amsterdam). Transaction (`RunTransactionResult`): paid `gasUsed`, optional `txRegularGas` / `txStateGas`, receipt logs. Block (`RunBlockResult`): per-tx receipts + header snapshot (`slotNumber`, `number`, `timestamp`). If the core question needs BAL JSON we do not return yet → **`planned-module`**. Wallet gasLimit and paid-tx questions use **`run_transaction`**, not `run_bytecode`. Opcode / program-gas questions (including SSTORE write cost) use **`run_bytecode`**. Multi-tx / header-slot questions use **`run_block`**.
+4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today. Bytecode (`SimulateBytecodeResult`): success, call-frame `gasUsed`, stack, optional trace/logs (and optional `stateGasSpilled` on Glamsterdam). Transaction (`RunTransactionResult`): paid `gasUsed`, optional `txRegularGas` / `txStateGas`, receipt logs. Block (`RunBlockResult`): per-tx receipts + header snapshot (`slotNumber`, `number`, `timestamp`). If the core question needs BAL JSON we do not return yet → **`planned-module`**. Wallet gasLimit and paid-tx questions use **`run_transaction`**, not `run_bytecode`. Opcode / program-gas questions (including SSTORE write cost) use **`run_bytecode`**. Multi-tx / header-slot questions use **`run_block`**.
 5. **Superset, not clone** — exploration is a curated slice; MCP runs arbitrary caller programs under a fork. Do not replay widget examples in the catalog or as the only tests.
 6. **Compare when it teaches** — repricing / on-vs-off capability: `comparison` forks and “run twice.” New-capability with no meaningful baseline: valid vs invalid (see 7951), not a fake gas delta.
 7. **Twin page always** — every **live** exploration gets `use/eips/eip-NNNN.md` (Runnable or Planned). Engine module only when (4) holds.
@@ -36,7 +36,7 @@ Match `CANONICAL.question.changeNature` + `mcp.shapes`. Closest **engine** sibli
 | Precompile repricing | `eip-7883/` | CALL address + input layout + comparison forks | gas baseline vs preview; bound rejection |
 | Precompile new-capability | `eip-7951/` | CALL address + input layout | valid return vs invalid — not a fork gas compare |
 | New structure (BAL, …) | **generate** + optional **inspect** | runnable module (see `eip-7928.md`) | MCP curriculum tests |
-| Header slot / multi-tx receipts | `run_block` | header snapshot + per-tx receipts | slot / N txs / Osaka vs Amsterdam |
+| Header slot / multi-tx receipts | `run_block` | header snapshot + per-tx receipts | slot / N txs / Fusaka vs Glamsterdam |
 | Limit / economic / exec-model | `run_transaction` if the unit is a tx (gasLimit, receipt, `txStateGas`); `run_bytecode` if opcodes / program gas | encoding + fork notes | hit the limit / fee path; beyond-edge |
 | Needs BAL JSON | **planned-module** until **generate** ships | page says what is observable today | do not list in `EIP_MODULES` until honest |
 
@@ -138,7 +138,7 @@ The human will paste these into a **fresh** agent chat with Feel Your Protocol M
 - Later prompts should force the **verb** and the **observation** the report claimed (`gasUsed`, logs, return value, …).
 - Include **expected tell** (what “pass” looks like) next to each prompt — for the human, not for the agent under test to be spoon-fed if they only paste the quoted prompt.
 - For `planned-module`, 1 prompt is enough (catalog/docs honesty: Planned, not a fake run).
-- Do **not** paste widget demo hex. Addresses/values may be generic (`1 wei`, empty account, Osaka vs Amsterdam).
+- Do **not** paste widget demo hex. Addresses/values may be generic (`1 wei`, empty account, Fusaka vs Glamsterdam).
 - **MCP-only prefix** (same line on every prompt, or once above the list): the tester’s workspace often already contains this repo, so the model will otherwise read our source instead of the server. Prefix:
 
   > Answer using only the installed Feel Your Protocol MCP server. Do not use workspace files, git history, or other background knowledge.

@@ -16,10 +16,10 @@ export const NEW_STORAGE_SLOT_BYTES = 64n
 export const NEW_STORAGE_SLOT_STATE_GAS = NEW_STORAGE_SLOT_BYTES * COST_PER_STATE_BYTE
 
 export const TRANSACTION_LAYOUT =
-  'run_transaction: { from, to, value (wei string), data?, code?, accounts?, gasLimit? }. Prefunds from. Empty `to` (no code, no prior balance) + nonzero value is a first-touch. Prefund `to` via accounts[] to collapse account-creation gas. gasUsed is paid tx gas (intrinsic + execution). On Amsterdam also txRegularGas / txStateGas.'
+  'run_transaction: { from, to, value (wei string), data?, code?, accounts?, gasLimit? }. Prefunds from. Empty `to` (no code, no prior balance) + nonzero value is a first-touch. Prefund `to` via accounts[] to collapse account-creation gas. gasUsed is paid tx gas (intrinsic + execution). On Glamsterdam also txRegularGas / txStateGas.'
 
 export const FIRST_TOUCH_NOTE =
-  'Nonzero value to an empty account charges 120 × 1530 = 183600 state gas on Amsterdam. A simple transfer is gasUsed ≈ 204600 vs Osaka 21000. Pass gasLimit "21000" to see Amsterdam fail (intrinsic / state gas).'
+  'Nonzero value to an empty account charges 120 × 1530 = 183600 state gas on Glamsterdam. A simple transfer is gasUsed ≈ 204600 vs Fusaka 21000. Pass gasLimit "21000" to see Glamsterdam fail (intrinsic / state gas).'
 
 export const NEW_SLOT_NOTE =
-  'SSTORE into an empty slot charges 64 × 1530 = 97920 state gas on Amsterdam. On run_bytecode that is stateGasSpilled (gasUsed includes the spill). On run_transaction it is txStateGas. Compare osaka vs amsterdam rather than assuming the paid-tx delta equals 97920.'
+  'SSTORE into an empty slot charges 64 × 1530 = 97920 state gas on Glamsterdam. On run_bytecode that is stateGasSpilled (gasUsed includes the spill). On run_transaction it is txStateGas. Compare fusaka vs glamsterdam rather than assuming the paid-tx delta equals 97920.'

@@ -34,7 +34,7 @@
       "properties": {
         "slotNumber": {
           "type": "string",
-          "description": "Beacon slot (decimal). Amsterdam / EIP-7843 only."
+          "description": "Beacon slot (decimal). Glamsterdam / EIP-7843 only."
         },
         "number": { "type": "string", "description": "Block number (decimal). Default 1." },
         "timestamp": { "type": "string", "description": "Unix timestamp (decimal). Default 1." }

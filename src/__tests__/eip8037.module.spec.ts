@@ -23,18 +23,18 @@ describe('EIP-8037 module', () => {
     expect(EIP_8037_MODULE.opcodes?.map((op) => op.opcodeHex).sort()).toEqual(['0x55', '0xf1'])
   })
 
-  it('charges first-touch state gas on Amsterdam for a value-bearing transaction', async () => {
+  it('charges first-touch state gas on Glamsterdam for a value-bearing transaction', async () => {
     const amsterdam = await runTransaction({
       from: STATE_GAS_CALLER,
       to: EMPTY_RECIPIENT,
       value: '1',
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const osaka = await runTransaction({
       from: STATE_GAS_CALLER,
       to: EMPTY_RECIPIENT,
       value: '1',
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(amsterdam.success).toBe(true)
@@ -44,20 +44,20 @@ describe('EIP-8037 module', () => {
     expect(amsterdam.txStateGas).toBe(FIRST_TOUCH_STATE_GAS.toString())
   })
 
-  it('fails first-touch on Amsterdam at gasLimit 21000 and succeeds on Osaka', async () => {
+  it('fails first-touch on Glamsterdam at gasLimit 21000 and succeeds on Fusaka', async () => {
     const amsterdam = await runTransaction({
       from: STATE_GAS_CALLER,
       to: EMPTY_RECIPIENT,
       value: '1',
       gasLimit: '21000',
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const osaka = await runTransaction({
       from: STATE_GAS_CALLER,
       to: EMPTY_RECIPIENT,
       value: '1',
       gasLimit: '21000',
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(amsterdam.success).toBe(false)
@@ -71,14 +71,14 @@ describe('EIP-8037 module', () => {
       to: FUNDED_RECIPIENT,
       value: '1',
       accounts: [{ address: FUNDED_RECIPIENT, balance: '1000000000000000000' }],
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const osaka = await runTransaction({
       from: STATE_GAS_CALLER,
       to: FUNDED_RECIPIENT,
       value: '1',
       accounts: [{ address: FUNDED_RECIPIENT, balance: '1000000000000000000' }],
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(amsterdam.success).toBe(true)
@@ -91,13 +91,13 @@ describe('EIP-8037 module', () => {
       from: STATE_GAS_CALLER,
       to: EMPTY_RECIPIENT,
       value: '0',
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const osaka = await runTransaction({
       from: STATE_GAS_CALLER,
       to: EMPTY_RECIPIENT,
       value: '0',
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(amsterdam.success).toBe(true)
@@ -106,18 +106,18 @@ describe('EIP-8037 module', () => {
     expect(amsterdam.txStateGas === undefined || amsterdam.txStateGas === '0').toBe(true)
   })
 
-  it('charges new-slot state gas on Amsterdam SSTORE via transaction', async () => {
+  it('charges new-slot state gas on Glamsterdam SSTORE via transaction', async () => {
     const amsterdam = await runTransaction({
       from: STATE_GAS_CALLER,
       to: SSTORE_CONTRACT,
       code: SSTORE_NEW_SLOT_BYTECODE,
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     const osaka = await runTransaction({
       from: STATE_GAS_CALLER,
       to: SSTORE_CONTRACT,
       code: SSTORE_NEW_SLOT_BYTECODE,
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(amsterdam.success).toBe(true)

@@ -9,24 +9,24 @@ import {
 } from './opcodes.js'
 
 /**
- * EIP-8024 module — Amsterdam executes DUPN, SWAPN, EXCHANGE.
+ * EIP-8024 module — Glamsterdam executes DUPN, SWAPN, EXCHANGE.
  *
  * Callers supply bytecode. This catalog describes the opcodes and encoding so
  * agents can construct programs; it does not ship demo programs.
  *
- * Amsterdam in EthereumJS v10 already bundles this EIP, so `eips: [8024]` is
+ * Glamsterdam in EthereumJS v10 already bundles this EIP, so `eips: [8024]` is
  * accepted but is not a pre/post toggle.
  */
 export const EIP_8024_MODULE: EipCapability = {
   eip: 8024,
   name: 'Backward compatible SWAPN, DUPN, EXCHANGE',
   summary:
-    'Amsterdam EVM executes DUPN, SWAPN, and EXCHANGE. Supply any bytecode; this server does not ship demo programs.',
+    'Glamsterdam EVM executes DUPN, SWAPN, and EXCHANGE. Supply any bytecode; this server does not ship demo programs.',
   changeNature: 'new-capability',
   runnable: true,
   shapes: ['simulate'],
   keywords: ['DUPN', 'SWAPN', 'EXCHANGE', 'stack opcodes', 'stack too deep', 'eip-8024'],
-  relatedForks: ['amsterdam', 'glamsterdam'],
+  relatedForks: ['glamsterdam'],
   opcodes: [
     {
       name: 'DUPN',
@@ -66,10 +66,9 @@ export const EIP_8024_MODULE: EipCapability = {
     },
   ],
   status: 'Review',
-  forkInclusion: 'Scheduled',
   implMaturity: 'Implemented in EthereumJS (engine module)',
   testMaturity: 'Opcode execution tests',
   specAnchor: 'EIP-8024',
   notes:
-    'Amsterdam already bundles EIP-8024 in EthereumJS v10. Passing eips:[8024] is accepted but does not disable the opcodes. Use named fork osaka (baseline) vs amsterdam (preview) to compare behavior.',
+    'Glamsterdam already bundles EIP-8024 in EthereumJS v10. Passing eips:[8024] is accepted but does not disable the opcodes. Use named fork fusaka (baseline) vs glamsterdam (preview) to compare behavior.',
 }

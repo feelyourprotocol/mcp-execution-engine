@@ -13,7 +13,7 @@ describe('inspectArtifact', () => {
 
   it('reports hash mismatch', async () => {
     const generated = await generateArtifact({
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
       transactions: [{ from: BAL_SENDER, to: BAL_RECIPIENT, value: '1' }],
       accounts: [BAL_SENDER_PREFUND],
     })

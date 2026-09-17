@@ -25,7 +25,7 @@ export function inspectTypedTransaction(input: InspectInput): InspectResult {
   const details: Record<string, unknown> = {}
 
   try {
-    const { common } = resolveFork(input.fork ?? { baseHardfork: 'prague' })
+    const { common } = resolveFork(input.fork ?? { baseHardfork: 'pectra' })
     const bytes = hexToBytes(normalizeHexArtifact(input.artifact))
     const tx = createTxFromRLP(bytes, { common })
     wellFormed = true

@@ -13,10 +13,10 @@ import {
 } from './fixtures/eip7928.js'
 
 describe('generateArtifact', () => {
-  it('rejects Osaka (EIP-7928 not active)', async () => {
+  it('rejects Fusaka (EIP-7928 not active)', async () => {
     await expect(
       generateArtifact({
-        fork: { baseHardfork: 'osaka' },
+        fork: { baseHardfork: 'fusaka' },
         transactions: [{ from: BAL_SENDER, to: BAL_RECIPIENT, value: '1' }],
         accounts: [BAL_SENDER_PREFUND],
       }),
@@ -25,7 +25,7 @@ describe('generateArtifact', () => {
 
   it('plain transfer includes balance and nonce changes', async () => {
     const result = await generateArtifact({
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
       transactions: [{ from: BAL_SENDER, to: BAL_RECIPIENT, value: '1' }],
       accounts: [BAL_SENDER_PREFUND],
     })
@@ -51,7 +51,7 @@ describe('generateArtifact', () => {
 
   it('records storageChanges on SSTORE', async () => {
     const result = await generateArtifact({
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
       transactions: [
         {
           from: BAL_SENDER,
@@ -72,7 +72,7 @@ describe('generateArtifact', () => {
 
   it('records storageReads but not storageChanges when SSTORE reverts', async () => {
     const result = await generateArtifact({
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
       transactions: [
         {
           from: BAL_SENDER,
@@ -94,7 +94,7 @@ describe('generateArtifact', () => {
 
   it('tags blockAccessIndex across two transactions', async () => {
     const result = await generateArtifact({
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
       transactions: [
         { from: BAL_SENDER, to: BAL_RECIPIENT, value: '1' },
         { from: BAL_SENDER, to: BAL_RECIPIENT, value: '2' },
@@ -116,7 +116,7 @@ describe('generateArtifact', () => {
 
   it('installs contract bytecode via tx code field', async () => {
     const result = await generateArtifact({
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
       transactions: [
         {
           from: BAL_SENDER,

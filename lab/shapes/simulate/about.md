@@ -24,7 +24,7 @@ Success/failure, **call-frame** `gasUsed` (always tagged `gasUsedScope: call-fra
 | ID | What it demonstrates |
 | --- | --- |
 | `simulate/01-push1-stop` | Minimal bytecode, trace, provenance |
-| `simulate/02-dupn-amsterdam` | EIP-8024 DUPN on Amsterdam (8024 bundled in fork) |
+| `simulate/02-dupn-amsterdam` | EIP-8024 DUPN on Glamsterdam (8024 bundled in fork) |
 
 ```bash
 npm run lab -- run simulate/01-push1-stop

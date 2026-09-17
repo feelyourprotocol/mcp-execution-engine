@@ -33,7 +33,7 @@ export async function generateArtifact(input: GenerateInput): Promise<GenerateRe
 
   if (!common.isActivatedEIP(7928)) {
     throw new EngineError(
-      'Block access lists require a fork that activates EIP-7928 (Amsterdam)',
+      'Block access lists require a fork that activates EIP-7928 (Glamsterdam)',
       'bal_not_available',
     )
   }

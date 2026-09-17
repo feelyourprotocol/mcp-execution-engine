@@ -64,7 +64,7 @@ export async function executeLabBlock(input: RunBlockInput): Promise<LabBlockExe
 
   if (slotNumber !== undefined && !common.isActivatedEIP(7843)) {
     throw new EngineError(
-      'slotNumber requires a fork that activates EIP-7843 (Amsterdam)',
+      'slotNumber requires a fork that activates EIP-7843 (Glamsterdam)',
       'slot_not_available',
     )
   }

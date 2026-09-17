@@ -38,7 +38,7 @@ describe('inspectArtifact kinds', () => {
   })
 
   it('typed-transaction decodes legacy RLP', async () => {
-    const common = buildCommon({ baseHardfork: 'prague', eips: [] })
+    const common = buildCommon({ baseHardfork: 'pectra', eips: [] })
     const signed = createLegacyTx(
       {
         nonce: 0n,
@@ -94,7 +94,7 @@ describe('inspectArtifact kinds', () => {
 
   it('block-access-list still works via default kind', async () => {
     const generated = await generateArtifact({
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
       transactions: [{ from: BAL_SENDER, to: BAL_RECIPIENT, value: '1' }],
       accounts: [BAL_SENDER_PREFUND],
     })

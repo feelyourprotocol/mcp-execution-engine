@@ -18,17 +18,17 @@ describe('EIP-7702 module', () => {
     expect(EIP_7702_MODULE.changeNature).toBe('new-exec-model')
     expect(EIP_7702_MODULE.shapes).toEqual(['transaction', 'inspect'])
     expect(derivedComparisonForEip(7702)).toEqual({
-      baselineForkId: 'cancun',
-      previewForkId: 'prague',
+      baselineForkId: 'dencun',
+      previewForkId: 'pectra',
     })
   })
 
-  it('runs delegate bytecode through an authority EOA on Prague', async () => {
+  it('runs delegate bytecode through an authority EOA on Pectra', async () => {
     const auth = signedDelegationAuthorization()
     const result = await runTransaction({
       from: SPONSOR_ADDRESS,
       to: AUTHORITY_ADDRESS,
-      fork: { baseHardfork: 'prague' },
+      fork: { baseHardfork: 'pectra' },
       authorizationList: [auth],
       accounts: [
         { address: DELEGATE_ADDRESS, code: DELEGATE_RETURN_BYTECODE },
@@ -40,13 +40,13 @@ describe('EIP-7702 module', () => {
     expect(result.returnValue.toLowerCase()).toContain('42')
   })
 
-  it('rejects authorizationList when EIP-7702 is inactive (Cancun)', async () => {
+  it('rejects authorizationList when EIP-7702 is inactive (Dencun)', async () => {
     const auth = signedDelegationAuthorization()
     await expect(
       runTransaction({
         from: SPONSOR_ADDRESS,
         to: AUTHORITY_ADDRESS,
-        fork: { baseHardfork: 'cancun' },
+        fork: { baseHardfork: 'dencun' },
         authorizationList: [auth],
         accounts: [{ address: DELEGATE_ADDRESS, code: DELEGATE_RETURN_BYTECODE }],
       }),

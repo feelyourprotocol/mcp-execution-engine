@@ -31,7 +31,7 @@ describe('EIP-7843 module', () => {
     expect(EIP_7843_MODULE).not.toHaveProperty('questions')
   })
 
-  it('returns the chosen header slot from run_block on Amsterdam', async () => {
+  it('returns the chosen header slot from run_block on Glamsterdam', async () => {
     const result = await runBlock({
       transactions: [
         {
@@ -41,7 +41,7 @@ describe('EIP-7843 module', () => {
         },
       ],
       header: { slotNumber: '99' },
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
@@ -59,7 +59,7 @@ describe('EIP-7843 module', () => {
         },
       ],
       header: { slotNumber: '12345678' },
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
@@ -75,14 +75,14 @@ describe('EIP-7843 module', () => {
           code: slotnumReturnHex(),
         },
       ],
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
 
     expect(result.success).toBe(false)
     expect(result.error).toMatch(/invalid/i)
   })
 
-  it('rejects header.slotNumber on Osaka', async () => {
+  it('rejects header.slotNumber on Fusaka', async () => {
     await expect(
       runBlock({
         transactions: [
@@ -93,7 +93,7 @@ describe('EIP-7843 module', () => {
           },
         ],
         header: { slotNumber: '99' },
-        fork: { baseHardfork: 'osaka' },
+        fork: { baseHardfork: 'fusaka' },
       }),
     ).rejects.toThrow(/EIP-7843/)
   })
@@ -101,7 +101,7 @@ describe('EIP-7843 module', () => {
   it('run_bytecode mock header is slot 0 — chosen slot needs run_block', async () => {
     const result = await simulateBytecode({
       bytecode: slotnumStopHex(),
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(true)
@@ -118,7 +118,7 @@ describe('EIP-7843 module', () => {
         },
       ],
       header: { slotNumber: UINT64_MAX.toString() },
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     expect(max.success).toBe(true)
     expect(BigInt(max.transactions[0]?.returnValue ?? '0x')).toBe(UINT64_MAX)
@@ -133,7 +133,7 @@ describe('EIP-7843 module', () => {
           },
         ],
         header: { slotNumber: (UINT64_MAX + 1n).toString() },
-        fork: { baseHardfork: 'amsterdam' },
+        fork: { baseHardfork: 'glamsterdam' },
       }),
     ).rejects.toThrow(EngineError)
   })
@@ -148,7 +148,7 @@ describe('EIP-7843 module', () => {
         },
       ],
       header: { slotNumber: '7' },
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
 
     expect(result.success).toBe(false)

@@ -1,5 +1,5 @@
 /**
- * EIP-7951 module — secp256r1 precompile on Osaka.
+ * EIP-7951 module — secp256r1 precompile on Fusaka.
  *
  * canonicalSource: website/src/explorations/eip-7951/canonical.ts
  *
@@ -13,12 +13,12 @@ export const EIP_7951_MODULE: EipCapability = {
   eip: 7951,
   name: 'secp256r1 precompile support',
   summary:
-    'Osaka EVM verifies P-256 signatures at precompile 0x100. Supply CALL bytecode with hash, r, s, pubX, pubY — valid returns 0x01.',
+    'Fusaka EVM verifies P-256 signatures at precompile 0x100. Supply CALL bytecode with hash, r, s, pubX, pubY — valid returns 0x01.',
   changeNature: 'new-capability',
   runnable: true,
   shapes: ['simulate'],
   keywords: ['secp256r1', 'P-256', 'passkey', 'precompile 0x100', 'WebAuthn'],
-  relatedForks: ['osaka'],
+  relatedForks: ['fusaka'],
   opcodes: [
     {
       name: 'P256VERIFY',
@@ -32,7 +32,6 @@ export const EIP_7951_MODULE: EipCapability = {
     },
   ],
   status: 'Final',
-  forkInclusion: 'Fusaka (Osaka on mainnet)',
   implMaturity: 'Implemented in EthereumJS (engine module)',
   testMaturity: 'Precompile verification vectors',
   specAnchor: 'EIP-7951',

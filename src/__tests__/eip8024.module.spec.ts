@@ -17,11 +17,11 @@ import {
 } from './fixtures/eip8024.js'
 
 describe('EIP-8024 module', () => {
-  it('describes Amsterdam opcode support without demo programs', () => {
+  it('describes Glamsterdam opcode support without demo programs', () => {
     expect(EIP_8024_MODULE.eip).toBe(8024)
     expect(EIP_8024_MODULE.runnable).toBe(true)
     expect(EIP_8024_MODULE.shapes).toEqual(['simulate'])
-    expect(EIP_8024_MODULE.summary).toMatch(/Amsterdam/)
+    expect(EIP_8024_MODULE.summary).toMatch(/Glamsterdam/)
     expect(EIP_8024_MODULE.opcodes?.map((entry) => entry.name)).toEqual([
       'DUPN',
       'SWAPN',
@@ -41,30 +41,30 @@ describe('EIP-8024 module', () => {
     expect(encodeExchangeImmediate(1, 2)).toBe(0x8e)
   })
 
-  it('executes caller-supplied 8024 bytecode on Amsterdam', async () => {
+  it('executes caller-supplied 8024 bytecode on Glamsterdam', async () => {
     const dupn = await simulateBytecode({
       bytecode: dupnDemoHex(),
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     expect(dupn.success).toBe(true)
     expect(dupn.finalStack.slice(-3)).toEqual(['0x10', '0x11', '0x1'])
 
     const swapn = await simulateBytecode({
       bytecode: swapnDemoHex(),
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     expect(swapn.success).toBe(true)
 
     const exchange = await simulateBytecode({
       bytecode: exchangeDemoHex(),
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     expect(exchange.success).toBe(true)
     expect(new Set(exchange.finalStack)).toEqual(new Set(['0x1', '0x2', '0x3', '0x4']))
 
     const invalid = await simulateBytecode({
       bytecode: invalidDupnDemoHex(),
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     expect(invalid.success).toBe(false)
     expect(invalid.error).toMatch(/stack/i)
@@ -73,14 +73,14 @@ describe('EIP-8024 module', () => {
   it('rejects 8024 opcodes on osaka baseline for comparison', async () => {
     const baseline = await simulateBytecode({
       bytecode: dupnDemoHex(),
-      fork: { baseHardfork: 'osaka' },
+      fork: { baseHardfork: 'fusaka' },
     })
     expect(baseline.success).toBe(false)
     expect(baseline.error).toMatch(/invalid/i)
 
     const preview = await simulateBytecode({
       bytecode: dupnDemoHex(),
-      fork: { baseHardfork: 'amsterdam' },
+      fork: { baseHardfork: 'glamsterdam' },
     })
     expect(preview.success).toBe(true)
   })

@@ -1,5 +1,5 @@
 {
   "bytecode": "0x600100",
-  "fork": { "baseHardfork": "amsterdam", "eips": [] },
+  "fork": { "baseHardfork": "glamsterdam", "eips": [] },
   "trace": true
 }
