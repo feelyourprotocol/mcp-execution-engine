@@ -37,7 +37,7 @@ export interface NamedFork {
   successorId?: string
   /** Protocol EIPs activated at this fork (facts — see also eipIntroductions). */
   activatedEips: number[]
-  /** Runnable catalog EIP numbers advertised on this fork. */
+  /** Runnable catalog EIP numbers advertised as twins introduced at this fork. */
   relatedEips: number[]
   /** Exploration twins that are Planned (not in the live EIP catalog). */
   plannedEips?: number[]

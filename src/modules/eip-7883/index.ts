@@ -1,5 +1,5 @@
 /**
- * EIP-7883 module — ModExp gas repricing on Fusaka (Fusaka).
+ * EIP-7883 module — ModExp gas repricing on Fusaka.
  *
  * canonicalSource: website/src/explorations/eip-7883/canonical.ts
  *

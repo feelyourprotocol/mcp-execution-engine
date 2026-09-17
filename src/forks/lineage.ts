@@ -154,7 +154,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     activatedEips: [7594, 7823, 7825, 7883, 7892, 7939, 7951, 7918],
     keywords: ['fusaka', 'osaka', 'mainnet', 'mainnet-el', 'current mainnet'],
     summary:
-      'Run under Fusaka (EL alias osaka, role alias mainnet-el) — current mainnet EL baseline. ModExp repricing and secp256r1 precompile activate here. Compare with predecessor Pectra for fork deltas.',
+      'Run under Fusaka (EL alias osaka, role alias mainnet-el) — current mainnet EL. First-class for advertised twins (ModExp, secp256r1) and as the compare baseline vs Glamsterdam. Compare with predecessor Pectra for fork deltas.',
   },
   {
     id: 'glamsterdam',

@@ -31,7 +31,11 @@ export type ChangeNature =
 
 export type StabilityRollup = 'experimental' | 'emerging' | 'stabilizing' | 'firm'
 
-/** Named fork role in the Berlin→Glamsterdam lineage. */
+/**
+ * Named fork role in the Berlin→Glamsterdam lineage.
+ * Roles rotate as mainnet moves; advertised EIP twins stay on the fork
+ * that introduced them until an explicit cleanup — not when they activate.
+ */
 export type ForkRole = 'historical' | 'current' | 'preview'
 
 /** À-la-carte or named fork capability set. */

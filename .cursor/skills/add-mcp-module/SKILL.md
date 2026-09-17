@@ -24,7 +24,7 @@ MCP is the **lab**, not a second widget. Same **core question** as the explorati
 4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today. Bytecode (`SimulateBytecodeResult`): success, call-frame `gasUsed`, stack, optional trace/logs (and optional `stateGasSpilled` on Glamsterdam). Transaction (`RunTransactionResult`): paid `gasUsed`, optional `txRegularGas` / `txStateGas`, receipt logs. Block (`RunBlockResult`): per-tx receipts + header snapshot (`slotNumber`, `number`, `timestamp`). If the core question needs BAL JSON we do not return yet → **`planned-module`**. Wallet gasLimit and paid-tx questions use **`run_transaction`**, not `run_bytecode`. Opcode / program-gas questions (including SSTORE write cost) use **`run_bytecode`**. Multi-tx / header-slot questions use **`run_block`**.
 5. **Superset, not clone** — exploration is a curated slice; MCP runs arbitrary caller programs under a fork. Do not replay widget examples in the catalog or as the only tests.
 6. **Compare when it teaches** — repricing / on-vs-off capability: `comparison` forks and “run twice.” New-capability with no meaningful baseline: valid vs invalid (see 7951), not a fake gas delta.
-7. **Twin page always** — every **live** exploration gets `use/eips/eip-NNNN.md` (Runnable or Planned). Engine module only when (4) holds.
+7. **Twin page always** — every **live** exploration gets `use/eips/eip-NNNN.md` (Runnable or Planned). Engine module only when (4) holds. Do **not** drop the module or page when `introducedAt` becomes `current` or later `historical`. `sunset` is for no honest verb (or a later explicit cleanup).
 
 ## Pattern (do not assume opcodes)
 
@@ -33,7 +33,7 @@ Match `CANONICAL.question.changeNature` + `mcp.shapes`. Closest **engine** sibli
 | Job | Reference module | Catalog exposes | Tests prove |
 | --- | --- | --- | --- |
 | New opcodes | `src/modules/eip-8024/` | opcode + immediate encoding | valid exec + invalid encoding / depth |
-| Precompile repricing | `eip-7883/` | CALL address + input layout + comparison forks | gas baseline vs preview; bound rejection |
+| Precompile repricing | `eip-7883/` | CALL address + input layout + comparison forks | gas predecessor vs introducedAt; bound rejection |
 | Precompile new-capability | `eip-7951/` | CALL address + input layout | valid return vs invalid — not a fork gas compare |
 | New structure (BAL, …) | **generate** + optional **inspect** | runnable module (see `eip-7928.md`) | MCP curriculum tests |
 | Header slot / multi-tx receipts | `run_block` | header snapshot + per-tx receipts | slot / N txs / Fusaka vs Glamsterdam |

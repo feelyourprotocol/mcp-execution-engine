@@ -261,7 +261,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   {
     eip: 7883,
     name: 'ModExp gas cost increase',
-    summary: 'ModExp (0x05) gas formula repricing on Fusaka (Fusaka).',
+    summary: 'ModExp (0x05) gas formula repricing on Fusaka.',
     keywords: ['modexp', '7883', 'repricing'],
     introducedAt: 'fusaka',
     observableShapes: ['simulate'],
