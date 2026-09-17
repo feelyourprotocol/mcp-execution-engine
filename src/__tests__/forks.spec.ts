@@ -137,8 +137,8 @@ describe('fork registry & resolve', () => {
     expect(
       caps.eipIntroductions.some((row) => row.eip === 3855 && row.introducedAt === 'shapella'),
     ).toBe(true)
-    expect(caps.eips).toHaveLength(9)
-    expect(caps.eips.some((e) => e.eip === 7702 && e.shapes.includes('transaction'))).toBe(true)
+    expect(caps.eips).toHaveLength(8)
+    expect(caps.eips.some((e) => e.eip === 7702)).toBe(false)
     expect(caps.eips.some((e) => e.eip === 7928 && e.shapes.includes('generate'))).toBe(true)
     const e8024 = caps.eips.find((e) => e.eip === 8024)
     expect(e8024?.comparison?.baselineForkId).toBe('fusaka')
@@ -151,9 +151,9 @@ describe('fork registry & resolve', () => {
 
   it('treats named forks as catalog capabilities and derives advertised EIPs', () => {
     const pectra = getNamedFork('pectra')
-    expect(pectra?.relatedEips).toEqual([7702])
+    expect(pectra?.relatedEips).toEqual([])
     expect(getNamedFork('amsterdam')?.id).toBe('glamsterdam')
-    expect(advertisedEipsForFork('pectra')).toEqual([7702])
+    expect(advertisedEipsForFork('pectra')).toEqual([])
     expect(advertisedEipsForFork('fusaka', ['osaka', 'mainnet-el'])).toEqual(
       getNamedFork('fusaka')?.relatedEips,
     )

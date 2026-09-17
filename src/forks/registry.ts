@@ -215,9 +215,9 @@ export function describeCapabilities() {
       },
       {
         id: 'authorization-list',
-        label: 'EIP-7702 authorization list',
+        label: 'Set-code authorization list',
         summary:
-          'One or more signed authorization JSON objects. Recovers authority address and signing digest per item — not full tx execution.',
+          'One or more signed authorization JSON objects (Pectra+ type-4 txs). Recovers authority address and signing digest per item — not full tx execution.',
       },
       {
         id: 'typed-transaction',
