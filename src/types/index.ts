@@ -46,5 +46,6 @@ export type {
   QueryShape,
   StabilityRollup,
 } from './protocol.js'
+export { GLAMSTERDAM_DEVNET_TEST_RELEASE_URL } from './protocol.js'
 export type { SimulateBytecodeInput, SimulateBytecodeResult } from './simulate.js'
 export type { RunTransactionInput, RunTransactionResult } from './transaction.js'

@@ -45,9 +45,9 @@ function buildPerEipProvenance(config: ForkConfig): EipProvenance[] | undefined 
     return {
       eip,
       status: capability?.status,
-      implMaturity: capability?.implMaturity,
-      testMaturity: capability?.testMaturity,
-      specAnchor: capability?.specAnchor,
+      specUrl: capability?.specUrl,
+      specDate: capability?.specDate,
+      testReleaseUrl: capability?.testReleaseUrl,
     }
   })
 }

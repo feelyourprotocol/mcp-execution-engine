@@ -32,9 +32,7 @@ export const EIP_7883_MODULE: EipCapability = {
     },
   ],
   status: 'Final',
-  implMaturity: 'Implemented in EthereumJS (engine module)',
-  testMaturity: 'Precompile gas tests',
-  specAnchor: 'EIP-7883',
+  specUrl: 'https://eips.ethereum.org/EIPS/eip-7883',
   notes:
     'Run the same ModExp CALL on predecessor (pectra) then fusaka to diff gasUsed. Oversized inputs may fail on Fusaka per EIP-7823.',
 }

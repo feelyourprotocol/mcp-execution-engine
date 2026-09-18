@@ -7,6 +7,7 @@
  * The catalog exposes boundary facts; it does not ship demo programs.
  */
 import type { EipCapability } from '../../types/index.js'
+import { GLAMSTERDAM_DEVNET_TEST_RELEASE_URL } from '../../types/index.js'
 
 export const EIP_7954_MODULE: EipCapability = {
   eip: 7954,
@@ -25,10 +26,11 @@ export const EIP_7954_MODULE: EipCapability = {
     'EIP-3860',
   ],
   relatedForks: ['glamsterdam'],
-  status: 'Review',
-  implMaturity: 'Implemented in EthereumJS (Glamsterdam, experimental)',
-  testMaturity: 'execution-specs Glamsterdam development fixtures',
-  specAnchor: 'EIP-7954',
+  status: 'Draft',
+  specUrl:
+    'https://github.com/ethereum/EIPs/blob/1dc9bc870f864d7ad1095fc73ba8ca098d02c732/EIPS/eip-7954.md',
+  specDate: '2026-05-21',
+  testReleaseUrl: GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
   notes:
     'run_transaction treats omitted to as contract creation and returns createdAddress plus deployedCodeSize on success. Runtime code limits are 24,576 bytes on Fusaka and 65,536 on Glamsterdam; initcode limits are 49,152 and 131,072 bytes. Glamsterdam EIP-8037 state gas needs about 37.8M tx gas to deploy 24,577 runtime bytes and about 100.5M for 65,536 bytes; the lab transaction ceiling is 110M. Fusaka still applies the EIP-7825 16,777,216 tx gas cap.',
 }

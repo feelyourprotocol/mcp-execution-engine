@@ -1,4 +1,5 @@
 import type { EipCapability } from '../../types/index.js'
+import { GLAMSTERDAM_DEVNET_TEST_RELEASE_URL } from '../../types/index.js'
 import {
   DUPN,
   DUPN_SWAPN_MAX_DEPTH,
@@ -66,9 +67,10 @@ export const EIP_8024_MODULE: EipCapability = {
     },
   ],
   status: 'Review',
-  implMaturity: 'Implemented in EthereumJS (engine module)',
-  testMaturity: 'Opcode execution tests',
-  specAnchor: 'EIP-8024',
+  specUrl:
+    'https://github.com/ethereum/EIPs/blob/34b49095ca5f7343045da279f04e7ecd1e451393/EIPS/eip-8024.md',
+  specDate: '2026-06-10',
+  testReleaseUrl: GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
   notes:
     'Glamsterdam already bundles EIP-8024 in EthereumJS v10. Passing eips:[8024] is accepted but does not disable the opcodes. Use named fork fusaka (baseline) vs glamsterdam (preview) to compare behavior.',
 }
