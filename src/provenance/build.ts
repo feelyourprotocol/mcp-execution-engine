@@ -61,6 +61,29 @@ function forkDisplayName(config: ForkConfig): string {
   return named?.label ?? config.baseHardfork
 }
 
+/** Compact human note for named `eips[]` only — not generic advertised-module runs. */
+function formatOneEipSpecNote(eip: number): string {
+  const capability = getEipCapability(eip)
+  const head = capability?.status ? `EIP-${eip} ${capability.status}` : `EIP-${eip}`
+  const rest: string[] = []
+  if (capability?.specDate) {
+    rest.push(capability.specDate)
+  } else {
+    rest.push('live EIP page')
+  }
+  if (capability?.testReleaseName) {
+    rest.push(capability.testReleaseName)
+  }
+  return [head, ...rest].join(', ')
+}
+
+function formatExplicitSpecClause(eips: number[]): string {
+  if (eips.length === 0) {
+    return ''
+  }
+  return ` Spec: ${eips.map(formatOneEipSpecNote).join('; ')}.`
+}
+
 function buildCaveat(engineVersion: string, config: ForkConfig, rollup?: StabilityRollup): string {
   const explicit = [...(config.eips ?? [])]
   const advertised = advertisedEipsForForkConfig(config)
@@ -70,6 +93,7 @@ function buildCaveat(engineVersion: string, config: ForkConfig, rollup?: Stabili
       : advertised.length > 0
         ? ` (advertised modules: ${advertised.join(', ')})`
         : ''
+  const specClause = explicit.length > 0 ? formatExplicitSpecClause(explicit) : ''
   const rollupNote = rollup ? ` Stability: ${rollup}.` : ''
   const named = getNamedFork(config.baseHardfork)
   let activationNote: string
@@ -85,7 +109,7 @@ function buildCaveat(engineVersion: string, config: ForkConfig, rollup?: Stabili
   }
   return (
     `Result from mcp-execution-engine v${engineVersion} simulating ${forkDisplayName(config)}${eipList}.` +
-    `${rollupNote}${activationNote}`
+    `${specClause}${rollupNote}${activationNote}`
   )
 }
 
