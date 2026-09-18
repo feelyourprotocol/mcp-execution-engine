@@ -1,8 +1,9 @@
 /**
  * Protocol vocabulary shared with the explorations website.
  *
- * Matching names (no shared npm package). Add new shared fields here and in
- * website `canonicalTypes.ts` / `TIMELINE.ts` together.
+ * Matching names (no shared npm package). Data homes:
+ * website `.cursor/rules/eip-canonical-data.mdc`. Add new shared fields here
+ * and in website `canonicalTypes.ts` / `TIMELINE.ts` together.
  *
  * | Engine | Website sibling |
  * | --- | --- |

@@ -10,9 +10,9 @@ description: >-
 
 Executable playbook for **`mcp-execution-engine`** + human page in **`website/mcp-docs/use/eips/`**. Phase 3 of the website [round-trip](https://github.com/feelyourprotocol/website/blob/main/.cursor/skills/round-trip-protocol-change/SKILL.md).
 
-**Read first:** website `src/explorations/eip-NNNN/canonical.ts` — **source of truth**. On conflict, website `CANONICAL` wins. Fold in briefing prompts and **carry to MCP** hints from the exploration report.
+**Read first:** website `src/explorations/eip-NNNN/canonical.ts` — twin source of truth ([eip-canonical-data.mdc](https://github.com/feelyourprotocol/website/blob/main/.cursor/rules/eip-canonical-data.mdc)). On twin-metadata conflict, website `CANONICAL` wins. Fold in briefing prompts and **carry to MCP** hints from the exploration report. MCP findings go back into `canonical.ts` first, then replicas.
 
-Concepts: [website-relation.mdc](../rules/website-relation.mdc), [structure.mdc](../rules/structure.mdc), [design-principles](https://github.com/feelyourprotocol/website/blob/main/mcp-docs/internals/design-principles.md).
+Concepts: [eip-canonical-data.mdc](https://github.com/feelyourprotocol/website/blob/main/.cursor/rules/eip-canonical-data.mdc), [website-relation.mdc](../rules/website-relation.mdc), [structure.mdc](../rules/structure.mdc), [design-principles](https://github.com/feelyourprotocol/website/blob/main/mcp-docs/internals/design-principles.md).
 
 ## What users want (intents)
 
