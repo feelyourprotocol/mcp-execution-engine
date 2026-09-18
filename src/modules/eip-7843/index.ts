@@ -11,7 +11,10 @@
  * (slot 0) — a chosen slot requires run_block.
  */
 import type { EipCapability } from '../../types/index.js'
-import { GLAMSTERDAM_DEVNET_TEST_RELEASE_URL } from '../../types/index.js'
+import {
+  GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
+  GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
+} from '../../types/index.js'
 import { SLOTNUM, SLOTNUM_GAS } from './opcodes.js'
 
 export const EIP_7843_MODULE: EipCapability = {
@@ -42,6 +45,7 @@ export const EIP_7843_MODULE: EipCapability = {
     'https://github.com/ethereum/EIPs/blob/c3bfd4ba41cf0fcbfe8c404f33ba89f5174971e0/EIPS/eip-7843.md',
   specDate: '2026-01-20',
   testReleaseUrl: GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
+  testReleaseName: GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
   notes:
     'Glamsterdam already bundles EIP-7843 in EthereumJS v10. Passing eips:[7843] is accepted but does not disable the opcode. Use named fork fusaka (baseline) vs glamsterdam (preview). Observe returnValue / header.slotNumber from run_block — not run_bytecode stack.',
 }

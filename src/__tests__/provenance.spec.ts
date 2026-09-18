@@ -24,6 +24,7 @@ describe('provenance', () => {
     )
     expect(provenance.perEip?.[0]?.specDate).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     expect(provenance.perEip?.[0]?.testReleaseUrl).toContain('tests-glamsterdam-devnet@v8.1.0')
+    expect(provenance.perEip?.[0]?.testReleaseName).toBe('tests-glamsterdam-devnet@v8.1.0')
     expect(provenance.caveat).toMatch(
       /advertised modules: 7708, 7843, 7928, 7954, 8024, 8037, 8038/,
     )

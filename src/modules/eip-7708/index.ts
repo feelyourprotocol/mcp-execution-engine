@@ -7,7 +7,10 @@
  * Catalog describes when Transfer logs appear; it does not ship demo programs.
  */
 import type { EipCapability } from '../../types/index.js'
-import { GLAMSTERDAM_DEVNET_TEST_RELEASE_URL } from '../../types/index.js'
+import {
+  GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
+  GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
+} from '../../types/index.js'
 import {
   TRANSACTION_LAYOUT,
   TRANSFER_EVENT_SIGNATURE,
@@ -50,6 +53,7 @@ export const EIP_7708_MODULE: EipCapability = {
     'https://github.com/ethereum/EIPs/blob/f7230c46a743313957d8f38a159bda934cc735b2/EIPS/eip-7708.md',
   specDate: '2026-07-10',
   testReleaseUrl: GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
+  testReleaseName: GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
   notes:
     'Use returned logs and decodedLogs from run_transaction — do not infer Transfer events from opcode traces alone. Inner CALL programs may use run_bytecode.',
 }

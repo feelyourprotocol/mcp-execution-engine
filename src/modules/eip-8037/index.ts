@@ -7,7 +7,10 @@
  * describes when extra gasUsed appears; it does not ship demo programs.
  */
 import type { EipCapability } from '../../types/index.js'
-import { GLAMSTERDAM_DEVNET_TEST_RELEASE_URL } from '../../types/index.js'
+import {
+  GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
+  GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
+} from '../../types/index.js'
 import { FIRST_TOUCH_NOTE, NEW_SLOT_NOTE, TRANSACTION_LAYOUT } from './input.js'
 
 export const EIP_8037_MODULE: EipCapability = {
@@ -56,6 +59,7 @@ export const EIP_8037_MODULE: EipCapability = {
     'https://github.com/ethereum/EIPs/blob/5a8c80897aeb0952322cd0dfff767c541002b8c3/EIPS/eip-8037.md',
   specDate: '2026-07-31',
   testReleaseUrl: GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
+  testReleaseName: GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
   notes:
     'Use run_transaction for wallet gasLimit questions. gasUsed is paid tx gas. Glamsterdam also returns txRegularGas / txStateGas. A gasLimit of 21000 OOGs Glamsterdam first-touch. SSTORE programs may use run_bytecode.',
 }

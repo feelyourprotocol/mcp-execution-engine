@@ -8,7 +8,10 @@
  * mainnet block replay.
  */
 import type { EipCapability } from '../../types/index.js'
-import { GLAMSTERDAM_DEVNET_TEST_RELEASE_URL } from '../../types/index.js'
+import {
+  GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
+  GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
+} from '../../types/index.js'
 
 export const EIP_7928_MODULE: EipCapability = {
   eip: 7928,
@@ -25,6 +28,7 @@ export const EIP_7928_MODULE: EipCapability = {
     'https://github.com/ethereum/EIPs/blob/6c666b8d646df8ea6dcef9638de7b48e3c45ab96/EIPS/eip-7928.md',
   specDate: '2026-07-09',
   testReleaseUrl: GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
+  testReleaseName: GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
   notes:
     'Isolated lab only — cannot verify the BAL of a mainnet block without archive parent state. generate runs the same VM path as run_block with generate:true and returns the list; inspect wraps @ethereumjs/util validators (not consensus replay).',
 }

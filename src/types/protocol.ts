@@ -12,7 +12,7 @@
  * | `ForkRole` | `TIMELINE` role |
  * | `ForkConfig.baseHardfork` | `taxonomy.timeline` (catalog fork id) |
  * | `EipComparison` | `mcp.comparison` |
- * | `EipProvenance` | `ProtocolChangeIdentity` (`status`, `specUrl`, `specDate`, `testReleaseUrl`) |
+ * | `EipProvenance` | `ProtocolChangeIdentity` (`status`, `specUrl`, `specDate`, `testReleaseUrl`, `testReleaseName`) |
  *
  * Website still owns `ProtocolChangeCanonical` (identity, question, tags,
  * `docsStatus`). `EipOpcode` has no website twin yet (encoding facts).
@@ -67,9 +67,13 @@ export interface EipProvenance {
   specDate?: string
   /** execution-specs test release this snapshot was aligned with. */
   testReleaseUrl?: string
+  /** Release tag used as the human link label (same tag as in `testReleaseUrl`). */
+  testReleaseName?: string
 }
 
 /** EST tag EthereumJS Glamsterdam preview currently aligns with. Refresh with website update-ethereumjs. */
+export const GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME = 'tests-glamsterdam-devnet@v8.1.0'
+
 export const GLAMSTERDAM_DEVNET_TEST_RELEASE_URL =
   'https://github.com/ethereum/execution-specs/releases/tag/tests-glamsterdam-devnet@v8.1.0'
 
