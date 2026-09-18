@@ -10,9 +10,9 @@ description: >-
 
 Executable playbook for **`mcp-execution-engine`** + human page in **`website/mcp-docs/use/eips/`**. Phase 3 of the website [round-trip](https://github.com/feelyourprotocol/website/blob/main/.cursor/skills/round-trip-protocol-change/SKILL.md).
 
-**Read first:** website `src/explorations/eip-NNNN/canonical.ts` — **source of truth**. On conflict, website `CANONICAL` wins. Fold in briefing prompts and **carry to MCP** hints from the exploration report.
+**Read first:** website `src/explorations/eip-NNNN/canonical.ts` — twin source of truth ([eip-canonical-data.mdc](https://github.com/feelyourprotocol/website/blob/main/.cursor/rules/eip-canonical-data.mdc)). On twin-metadata conflict, website `CANONICAL` wins. Fold in briefing prompts and **carry to MCP** hints from the exploration report. MCP findings go back into `canonical.ts` first, then replicas.
 
-Concepts: [website-relation.mdc](../rules/website-relation.mdc), [structure.mdc](../rules/structure.mdc), [design-principles](https://github.com/feelyourprotocol/website/blob/main/mcp-docs/internals/design-principles.md).
+Concepts: [eip-canonical-data.mdc](https://github.com/feelyourprotocol/website/blob/main/.cursor/rules/eip-canonical-data.mdc), [website-relation.mdc](../rules/website-relation.mdc), [structure.mdc](../rules/structure.mdc), [design-principles](https://github.com/feelyourprotocol/website/blob/main/mcp-docs/internals/design-principles.md).
 
 ## What users want (intents)
 
@@ -86,7 +86,7 @@ Do **not** use a side-trip to start the comic, add session memory, or skip the r
 1. `src/modules/eip-NNNN/index.ts` — descriptor only.
 2. Optional helpers for **constructible** encoding.
 3. Comment: `canonicalSource: 'website/src/explorations/eip-NNNN/canonical.ts'`.
-4. Copy from `CANONICAL`: `coreQuestion` → `summary` (capability voice), `changeNature`, maturity, keywords, comparison.
+4. Copy from `CANONICAL`: `coreQuestion` → `summary` (capability voice), `changeNature`, `identity.status` / `specUrl` / `specDate` / `testReleaseUrl` / `testReleaseName`, keywords, comparison. Do not re-resolve pins from a local `ethereum/EIPs` checkout.
 5. Runtime fields: `runnable: true`, `shapes`, opcodes or input encoding.
 6. Register in `src/modules/index.ts`.
 7. Tests in `src/__tests__/` — CALL/exec fixtures you construct; **not** website widget bytecode. Happy path **and** beyond-edge (junk encoding, out of range, “too big”).

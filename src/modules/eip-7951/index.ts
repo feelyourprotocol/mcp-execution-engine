@@ -32,9 +32,7 @@ export const EIP_7951_MODULE: EipCapability = {
     },
   ],
   status: 'Final',
-  implMaturity: 'Implemented in EthereumJS (engine module)',
-  testMaturity: 'Precompile verification vectors',
-  specAnchor: 'EIP-7951',
+  specUrl: 'https://eips.ethereum.org/EIPS/eip-7951',
   notes:
     'Live on Fusaka (mainnet). Focus on valid vs invalid return data — not a Pectra gas compare. Invoke via CALL to 0x100; no dedicated precompile input tool.',
 }

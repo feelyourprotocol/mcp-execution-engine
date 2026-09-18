@@ -2,7 +2,7 @@
 
 Tool-agnostic entrypoint for coding agents working in **`mcp-execution-engine`**.
 
-**Read this file first.** Then load [`.cursor/rules/`](.cursor/rules/) — `structure.mdc`, `website-relation.mdc`, `git.mdc` (defers to the website git rule).
+**Read this file first.** Then load [`.cursor/rules/`](.cursor/rules/) — `structure.mdc`, `website-relation.mdc` (data map is sibling [website `eip-canonical-data.mdc`](https://github.com/feelyourprotocol/website/blob/main/.cursor/rules/eip-canonical-data.mdc)), `git.mdc` (defers to the website git rule).
 
 Human MCP user docs live in the website repo: [mcp-docs/use/](https://github.com/feelyourprotocol/website/tree/main/mcp-docs/use) → [mcp-docs.feelyourprotocol.org](https://mcp-docs.feelyourprotocol.org/use/introduction.html). Do not duplicate human inspiration pages here.
 

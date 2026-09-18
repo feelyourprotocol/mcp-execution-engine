@@ -71,8 +71,8 @@ export interface EngineCeilings {
  * `describeCapabilities()`. Describes what became possible, not demo programs.
  *
  * Several fields replicate website `CANONICAL` (`changeNature`, `shapes`,
- * `keywords`, `comparison`, maturity). Lab-only extras: `runnable`, `opcodes`,
- * `relatedForks`.
+ * `keywords`, `comparison`, `status`, `specUrl`, `specDate`, `testReleaseUrl`,
+ * `testReleaseName`). Lab-only extras: `runnable`, `opcodes`, `relatedForks`.
  */
 export interface EipCapability {
   eip: number
@@ -88,9 +88,10 @@ export interface EipCapability {
   /** Optional baseline vs preview fork pair when comparing against mainnet. */
   comparison?: EipComparison
   status?: string
-  implMaturity?: string
-  testMaturity?: string
-  specAnchor?: string
+  specUrl?: string
+  specDate?: string
+  testReleaseUrl?: string
+  testReleaseName?: string
   notes?: string
 }
 
