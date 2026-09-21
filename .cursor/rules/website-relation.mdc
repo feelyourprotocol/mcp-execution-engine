@@ -5,6 +5,17 @@ alwaysApply: true
 
 # Website relation (explorations vs MCP)
 
+## Data homes
+
+Canonical twin metadata, taxonomies, when to update, how to retrieve: sibling [`../website/.cursor/rules/eip-canonical-data.mdc`](../website/.cursor/rules/eip-canonical-data.mdc). Do **not** fork a second copy of that map here.
+
+Engine-only:
+
+- Do **not** import from `website/src/explorations/`
+- Encoding / opcodes live in `src/modules/eip-NNNN/`
+- Demo bytecode belongs in `src/__tests__/fixtures/`, not module descriptors
+- Live catalog is `describeCapabilities()` — unimplemented EIPs stay off `EIP_MODULES`
+
 ## One capability, four presentations
 
 | Layer | Role |
@@ -13,13 +24,6 @@ alwaysApply: true
 | MCP docs `use/eips/eip-NNNN` | Human inspiration — same problem set, prompts, Connect |
 | MCP docs `use/forks/<id>` | Human catalogue for a **named hardfork** (generic run; no EIP required) |
 | Engine module + generic tools | Runtime — execute **caller-supplied** bytecode or transactions |
-
-## Canonical source of truth
-
-- **Schema:** `website/src/explorations/canonicalTypes.ts`
-- **Instance:** `website/src/explorations/eip-NNNN/canonical.ts` → `CANONICAL`
-- Replicate into engine `EipCapability` and mcp-docs prose. **Website wins** on conflict.
-- Do **not** import from `website/src/explorations/` into this repo.
 
 ## Twin, not clone — no orphan explorations
 

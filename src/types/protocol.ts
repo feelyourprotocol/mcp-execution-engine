@@ -1,8 +1,9 @@
 /**
  * Protocol vocabulary shared with the explorations website.
  *
- * Matching names (no shared npm package). Add new shared fields here and in
- * website `canonicalTypes.ts` / `TIMELINE.ts` together.
+ * Matching names (no shared npm package). Data homes:
+ * website `.cursor/rules/eip-canonical-data.mdc`. Add new shared fields here
+ * and in website `canonicalTypes.ts` / `TIMELINE.ts` together.
  *
  * | Engine | Website sibling |
  * | --- | --- |
@@ -11,7 +12,7 @@
  * | `ForkRole` | `TIMELINE` role |
  * | `ForkConfig.baseHardfork` | `taxonomy.timeline` (catalog fork id) |
  * | `EipComparison` | `mcp.comparison` |
- * | `EipProvenance` | `ProtocolChangeMaturity` |
+ * | `EipProvenance` | `ProtocolChangeIdentity` (`status`, `specUrl`, `specDate`, `testReleaseUrl`, `testReleaseName`) |
  *
  * Website still owns `ProtocolChangeCanonical` (identity, question, tags,
  * `docsStatus`). `EipOpcode` has no website twin yet (encoding facts).
@@ -60,10 +61,21 @@ export interface EipComparison {
 export interface EipProvenance {
   eip: number
   status?: string
-  implMaturity?: string
-  testMaturity?: string
-  specAnchor?: string
+  /** Commit-pinned GitHub blob URL of the EIP markdown this module implements. */
+  specUrl?: string
+  /** UTC calendar date (`YYYY-MM-DD`) of the GitHub commit in `specUrl`. */
+  specDate?: string
+  /** execution-specs test release this snapshot was aligned with. */
+  testReleaseUrl?: string
+  /** Release tag used as the human link label (same tag as in `testReleaseUrl`). */
+  testReleaseName?: string
 }
+
+/** EST tag EthereumJS Glamsterdam preview currently aligns with. Refresh with website update-ethereumjs. */
+export const GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME = 'tests-glamsterdam-devnet@v8.1.0'
+
+export const GLAMSTERDAM_DEVNET_TEST_RELEASE_URL =
+  'https://github.com/ethereum/execution-specs/releases/tag/tests-glamsterdam-devnet@v8.1.0'
 
 export interface EipOpcodeImmediate {
   /** Spec formula so agents can construct bytecode (not a demo program). */
