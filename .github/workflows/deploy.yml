@@ -70,9 +70,9 @@ jobs:
           STAGE="$(mktemp -d)"
           cp package.json package-lock.json "$STAGE/"
           cp -a dist node_modules "$STAGE/"
-          rsync -az --delete --exclude .deploy-stamp --chmod=D755,F644 "$STAGE/" "deploy@${MCP_SSH_HOST}:./"
+          rsync -az --delete --exclude .deploy-stamp --chmod=D755,F644 "$STAGE/" "ubuntu@${MCP_SSH_HOST}:./"
           date -u +%Y-%m-%dT%H:%M:%SZ > "$STAGE/.deploy-stamp"
-          rsync -az --chmod=F644 "$STAGE/.deploy-stamp" "deploy@${MCP_SSH_HOST}:./.deploy-stamp"
+          rsync -az --chmod=F644 "$STAGE/.deploy-stamp" "ubuntu@${MCP_SSH_HOST}:./.deploy-stamp"
 
       - name: Wait for /healthz
         run: |
