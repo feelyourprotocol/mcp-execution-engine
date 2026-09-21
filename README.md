@@ -67,3 +67,8 @@ CI: `.github/workflows/ci.yml`
 ## License
 
 MIT
+
+## Lab host
+
+Merges to `main` run [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) (rsync production `dist/` + `node_modules` to the AWS lab). Ops and SSH cutover: private `server-config` `aws/hosts/mcp-lab/SETUP-CD.md`.
+
