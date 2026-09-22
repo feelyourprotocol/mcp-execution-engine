@@ -14,7 +14,7 @@ Nothing — `describeCapabilities()` takes no input.
 
 ## What you get back
 
-A registry snapshot: engine version, ceilings, named fork capabilities (summary, related EIPs, shapes), runnable EIP modules (opcodes + encoding), allowed base hardforks.
+A registry snapshot: engine version, ceilings, `queryShapes` (shape id → MCP tool), named fork capabilities (summary, related EIPs, **`tools`**), runnable EIP modules (opcodes + encoding + **`tools`**), allowed base hardforks.
 
 ## Examples
 

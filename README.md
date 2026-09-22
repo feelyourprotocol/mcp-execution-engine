@@ -25,8 +25,8 @@ Website explorations are the **browser twin**; this engine is the **headless lab
 | **simulate** | `simulateBytecode()` | `run_bytecode` | Shipped |
 | **transaction** | `runTransaction()` | `run_transaction` | Shipped |
 | **probe** | `describeCapabilities()` | `describe_capabilities` | Shipped |
-| **generate** | `generateArtifact()` | `generate` | Shipped (BAL / EIP-7928) |
-| **inspect** | `inspectArtifact()` | `inspect` | Shipped (BAL / EIP-7928) |
+| **generate** | `generateArtifact()` | `generate_artifact` | Shipped (BAL / EIP-7928) |
+| **inspect** | `inspectArtifact()` | `inspect_artifact` | Shipped (BAL / EIP-7928) |
 
 An **endpoint** is the agent-facing MCP tool on a transport (stdio / `https://mcp.feelyourprotocol.org/mcp`) — not a function in this repo. See [`lab/endpoints/README.md`](./lab/endpoints/README.md).
 

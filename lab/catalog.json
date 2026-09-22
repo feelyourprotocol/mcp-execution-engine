@@ -38,7 +38,7 @@
       "id": "generate",
       "status": "shipped",
       "engineFn": "generateArtifact",
-      "mcpTool": "generate",
+      "mcpTool": "generate_artifact",
       "transport": { "stdio": "live", "http": "planned-step-5" },
       "summary": "Derive structured artifacts from a lab block (block-access-list / EIP-7928 first)."
     },
@@ -46,7 +46,7 @@
       "id": "inspect",
       "status": "shipped",
       "engineFn": "inspectArtifact",
-      "mcpTool": "inspect",
+      "mcpTool": "inspect_artifact",
       "transport": { "stdio": "live", "http": "planned-step-5" },
       "summary": "Judge caller-supplied structures (BAL JSON or RLP) without chain state."
     }

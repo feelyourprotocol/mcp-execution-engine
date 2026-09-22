@@ -10,7 +10,8 @@ An **endpoint** is the **agent-facing surface**: an MCP tool reachable over a **
 | transaction | `runTransaction()` | `run_transaction` | stdio / HTTP |
 | block | `runBlock()` | `run_block` | stdio / HTTP |
 | probe | `describeCapabilities()` | `describe_capabilities` | stdio / HTTP |
-| generate | `generateBal()` | (planned) | (Step 6+) |
+| generate | `generateArtifact()` | `generate_artifact` | stdio / HTTP |
+| inspect | `inspectArtifact()` | `inspect_artifact` | stdio / HTTP |
 
 ## Where each layer lives
 
@@ -29,10 +30,10 @@ Lab examples call **engine functions directly** with JSON payloads shaped like f
 
 ## Rollout (from build plan)
 
-1. ~~**Step 3**~~ — Gateway stdio — `describe_capabilities`, `run_bytecode`, `run_transaction`, `run_block`
+1. ~~**Step 3**~~ — Gateway stdio — `describe_capabilities`, `run_bytecode`, `run_transaction`, `run_block`, `generate_artifact`, `inspect_artifact`
 2. **Step 4** — AWS EC2 bootstrap + health endpoint at `mcp.feelyourprotocol.org`
 3. **Step 5** — HTTP MCP transport at `/mcp`
-4. **Step 6+** — Generate shape, observability, x402, …
+4. **Step 6+** — Observability, x402, …
 
 Connection docs (when live): [MCP docs — Connect](https://mcp-docs.feelyourprotocol.org/use/connect.html)
 

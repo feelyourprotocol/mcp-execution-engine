@@ -11,8 +11,8 @@ Shared types live in `src/types/` (`protocol.ts` = website siblings; other files
 
 ## Generic library vs catalog
 
-- **Query shapes** (`simulate`, `transaction`, `block`, `probe`, later `generate`) are the stable API — not per-EIP or per-fork functions
-- **Named forks** (`namedForks` in `describeCapabilities()`) are first-class capabilities: summary, keywords, shapes, advertised `relatedEips`. Callers can run under Glamsterdam / Fusaka / Pectra without naming an EIP
+- **Query shapes** (`simulate`, `transaction`, `block`, `probe`, `generate`, `inspect`) are the internal catalog ids — not per-EIP or per-fork functions. Live `describeCapabilities()` maps them to MCP tool names via `queryShapes[]` (`id` → `mcpTool`). Probe rows on `eips[]` / `namedForks[]` / `eipIntroductions[]` emit **`tools`** (MCP names), never `shapes`.
+- **Named forks** (`namedForks` in `describeCapabilities()`) are first-class capabilities: summary, keywords, advertised `relatedEips`, and **`tools`** (MCP names). Callers can run under Glamsterdam / Fusaka / Pectra without naming an EIP
 - **EIP modules** (`src/modules/eip-NNNN/`) describe what became possible: `summary`, `opcodes`, encoding, `keywords`, `runnable`
 - Only `runnable: true` modules belong in `EIP_MODULES` / `describeCapabilities().eips`
 
@@ -33,7 +33,7 @@ Shared types live in `src/types/` (`protocol.ts` = website siblings; other files
 
 ## Gateway boundary
 
-This repo has **no MCP transport**. Tool names and Zod schemas live in `mcp-gateway`. Engine exports library functions and types only.
+This repo has **no MCP transport**. Zod schemas and `registerTool` live in `mcp-gateway`. Advertised MCP names (`run_bytecode`, `generate_artifact`, …) live in engine `QUERY_SHAPE_CATALOG` so the probe can name the tools agents actually call.
 
 ## When editing
 

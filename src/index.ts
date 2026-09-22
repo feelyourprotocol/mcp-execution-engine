@@ -54,8 +54,10 @@ export type {
   CapabilityDescription,
   ChangeNature,
   EipCapability,
+  EipCapabilityProbe,
   EipComparison,
   EipIntroduction,
+  EipIntroductionProbe,
   EipOpcode,
   EipOpcodeImmediate,
   EipProvenance,
@@ -69,9 +71,13 @@ export type {
   InspectInput,
   InspectKindDescriptor,
   InspectResult,
+  McpToolName,
   NamedFork,
+  NamedForkProbe,
   Provenance,
   QueryShape,
+  QueryShapeCatalogEntry,
+  QueryShapeDescriptor,
   RunBlockHeaderInput,
   RunBlockHeaderSnapshot,
   RunBlockInput,
@@ -92,4 +98,10 @@ export type {
   StabilityRollup,
   StepTrace,
 } from './types/index.js'
-export { EngineError } from './types/index.js'
+export {
+  EngineError,
+  mcpToolForShape,
+  mcpToolsForShapes,
+  QUERY_SHAPE_CATALOG,
+  queryShapeDescriptors,
+} from './types/index.js'

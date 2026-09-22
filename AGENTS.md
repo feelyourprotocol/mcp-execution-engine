@@ -32,10 +32,12 @@ Agent → mcp-gateway (tools) → mcp-execution-engine (this repo) → EthereumJ
 | --- | --- | --- |
 | probe | `describeCapabilities()` | `describe_capabilities` |
 | simulate | `simulateBytecode()` | `run_bytecode` |
-
 | transaction | `runTransaction()` | `run_transaction` |
 | block | `runBlock()` | `run_block` |
-| generate | (planned) | (planned) |
+| generate | `generateArtifact()` | `generate_artifact` |
+| inspect | `inspectArtifact()` | `inspect_artifact` |
+
+Join table: `QUERY_SHAPE_CATALOG` in `src/types/queryShapes.ts`. Live probe: `queryShapes[]` plus `tools` on EIP/fork/introduction rows (not `shapes`).
 
 `simulateBytecode` is a VM message-call (`createVM` plus `runCall`) with call-frame gas. Do not use detached `runCode`.
 
