@@ -8,6 +8,7 @@ import type {
   QueryShape,
   StabilityRollup,
 } from './protocol.js'
+import type { McpToolName, QueryShapeDescriptor } from './queryShapes.js'
 
 /**
  * Catalog entry for one named hardfork. First-class next to EIP modules:
@@ -95,6 +96,17 @@ export interface EipCapability {
   notes?: string
 }
 
+/** Live probe row — MCP tool names, not internal shape ids. */
+export type NamedForkProbe = Omit<NamedFork, 'shapes'> & { tools: McpToolName[] }
+
+/** Live probe row — MCP tool names, not internal shape ids. */
+export type EipCapabilityProbe = Omit<EipCapability, 'shapes'> & { tools: McpToolName[] }
+
+/** Live probe row — MCP tool names, not internal `observableShapes`. */
+export type EipIntroductionProbe = Omit<EipIntroduction, 'observableShapes'> & {
+  observableTools?: McpToolName[]
+}
+
 export interface CapabilityDescription {
   engineVersion: string
   ceilings: {
@@ -105,14 +117,16 @@ export interface CapabilityDescription {
     maxTraceSteps: number
     maxTxsPerBlock: number
   }
+  /** Shape id → MCP tool dictionary. Agents pick `mcpTool`; they do not call `id`. */
+  queryShapes: QueryShapeDescriptor[]
   /** Named hardforks as catalog capabilities (lineage, activated EIPs, related twins). */
-  namedForks: NamedFork[]
+  namedForks: NamedForkProbe[]
   /** When each catalogued EIP activated (compare with predecessor of introducedAt). */
-  eipIntroductions: EipIntroduction[]
+  eipIntroductions: EipIntroductionProbe[]
   /** Current mainnet EL baseline for fork comparisons (Fusaka). */
   baselineForkId: string
-  eips: EipCapability[]
+  eips: EipCapabilityProbe[]
   allowedBaseHardforks: string[]
-  /** Kinds accepted by the generic `inspect` verb (structure + hash, no chain state). */
+  /** Kinds accepted by `inspect_artifact` (structure + hash, no chain state). */
   inspectKinds: InspectKindDescriptor[]
 }

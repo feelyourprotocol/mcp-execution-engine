@@ -1,8 +1,18 @@
 import { Common, Hardfork, Mainnet } from '@ethereumjs/common'
 
 import { EIP_MODULES, getEipModule } from '../modules/index.js'
-import type { EipCapability, EngineCeilings, ForkConfig, NamedFork } from '../types/index.js'
-import { EngineError } from '../types/index.js'
+import type {
+  CapabilityDescription,
+  EipCapability,
+  EipCapabilityProbe,
+  EipIntroduction,
+  EipIntroductionProbe,
+  EngineCeilings,
+  ForkConfig,
+  NamedFork,
+  NamedForkProbe,
+} from '../types/index.js'
+import { EngineError, mcpToolsForShapes, queryShapeDescriptors } from '../types/index.js'
 import { derivedComparisonForEip, listEipIntroductions } from './introductions.js'
 import {
   BASELINE_FORK_ID,
@@ -192,7 +202,25 @@ export function assertForkAllowed(config: ForkConfig): void {
   }
 }
 
-export function describeCapabilities() {
+function toNamedForkProbe(fork: NamedFork): NamedForkProbe {
+  const { shapes, ...rest } = fork
+  return { ...rest, tools: mcpToolsForShapes(shapes) }
+}
+
+function toEipCapabilityProbe(capability: EipCapability): EipCapabilityProbe {
+  const { shapes, ...rest } = capability
+  return { ...rest, tools: mcpToolsForShapes(shapes) }
+}
+
+function toEipIntroductionProbe(row: EipIntroduction): EipIntroductionProbe {
+  const { observableShapes, ...rest } = row
+  if (observableShapes === undefined) {
+    return rest
+  }
+  return { ...rest, observableTools: mcpToolsForShapes(observableShapes) }
+}
+
+export function describeCapabilities(): CapabilityDescription {
   return {
     engineVersion: ENGINE_VERSION,
     ceilings: {
@@ -203,10 +231,11 @@ export function describeCapabilities() {
       maxTraceSteps: ENGINE_CEILINGS.maxTraceSteps,
       maxTxsPerBlock: ENGINE_CEILINGS.maxTxsPerBlock,
     },
-    namedForks: NAMED_FORKS,
-    eipIntroductions: listEipIntroductions(),
+    queryShapes: queryShapeDescriptors(),
+    namedForks: NAMED_FORKS.map(toNamedForkProbe),
+    eipIntroductions: listEipIntroductions().map(toEipIntroductionProbe),
     baselineForkId: BASELINE_FORK_ID,
-    eips: enrichEipCapabilities(),
+    eips: enrichEipCapabilities().map(toEipCapabilityProbe),
     allowedBaseHardforks: [...ALLOWED_BASE_HARDFORKS],
     inspectKinds: [
       {

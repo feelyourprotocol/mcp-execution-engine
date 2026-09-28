@@ -332,7 +332,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     eip: 7928,
     name: 'Block-level access lists',
     summary:
-      'Block access lists — derive BAL JSON via generate; inspect caller-supplied BAL without chain state.',
+      'Block access lists — derive BAL JSON via generate_artifact; inspect_artifact on caller-supplied BAL without chain state.',
     keywords: ['7928', 'bal', 'access list'],
     introducedAt: 'glamsterdam',
     observableShapes: ['generate', 'inspect'],

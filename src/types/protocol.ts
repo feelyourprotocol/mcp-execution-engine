@@ -18,7 +18,7 @@
  * `docsStatus`). `EipOpcode` has no website twin yet (encoding facts).
  */
 
-/** Query shapes the MCP surface exposes (generic verbs). */
+/** Internal catalog ids for a class of lab work. Live probe maps these to MCP tool names via `queryShapes`. */
 export type QueryShape = 'simulate' | 'transaction' | 'block' | 'generate' | 'inspect' | 'probe'
 
 /** Nature of a protocol change — drives which query shapes apply. */

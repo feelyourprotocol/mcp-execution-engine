@@ -9,7 +9,7 @@
 - EIP-8037 two-dimensional gas (`txRegularGas` / `txStateGas` on Glamsterdam)
 - EIP-7708 Transfer logs on **tx value** (receipt logs)
 
-Opcode / stack / precompile programs stay on [simulate](../simulate/about.md) (`run_bytecode`). Block access lists stay on planned **generate**.
+Opcode / stack / precompile programs stay on [simulate](../simulate/about.md) (`run_bytecode`). Block access lists stay on **generate_artifact**.
 
 ## What you send
 

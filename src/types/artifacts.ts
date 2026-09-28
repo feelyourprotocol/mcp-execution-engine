@@ -2,10 +2,10 @@ import type { RunBlockHeaderSnapshot, RunBlockInput } from './block.js'
 import type { Provenance } from './lab.js'
 import type { ForkConfig } from './protocol.js'
 
-/** Structured artifacts the `generate` verb can derive from a lab block run. */
+/** Structured artifacts the `generate` shape / `generate_artifact` tool can derive from a lab block run. */
 export type GenerateArtifactKind = 'block-access-list'
 
-/** Caller-supplied structures the `inspect` verb can judge (layers A–C). */
+/** Caller-supplied structures the `inspect` shape / `inspect_artifact` tool can judge (layers A–C). */
 export type InspectArtifactKind =
   | 'block-access-list'
   | 'authorization-list'

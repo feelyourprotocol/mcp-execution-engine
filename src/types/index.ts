@@ -19,9 +19,12 @@ export type {
 export type {
   CapabilityDescription,
   EipCapability,
+  EipCapabilityProbe,
   EipIntroduction,
+  EipIntroductionProbe,
   EngineCeilings,
   NamedFork,
+  NamedForkProbe,
 } from './catalog.js'
 export { EngineError } from './errors.js'
 export type {
@@ -50,5 +53,12 @@ export {
   GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
   GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
 } from './protocol.js'
+export type { McpToolName, QueryShapeCatalogEntry, QueryShapeDescriptor } from './queryShapes.js'
+export {
+  mcpToolForShape,
+  mcpToolsForShapes,
+  QUERY_SHAPE_CATALOG,
+  queryShapeDescriptors,
+} from './queryShapes.js'
 export type { SimulateBytecodeInput, SimulateBytecodeResult } from './simulate.js'
 export type { RunTransactionInput, RunTransactionResult } from './transaction.js'

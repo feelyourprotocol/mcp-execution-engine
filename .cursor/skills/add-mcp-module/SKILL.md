@@ -19,7 +19,7 @@ Concepts: [eip-canonical-data.mdc](https://github.com/feelyourprotocol/website/b
 MCP is the **lab**, not a second widget. Same **core question** as the exploration; the caller brings **their** bytecode / inputs. These intents must hold for any EIP nature — do not cargo-cult EIP-8024.
 
 1. **Ask in their words** — play, understand, or check *their* data. Catalogue prompts come from the briefing (“what they would ask”), not from widget preset hex.
-2. **Generic verbs only** — `describe_capabilities` + `run_bytecode` + `run_transaction` + `run_block` today; `generate` when it ships. Never `run_eip_NNNN`.
+2. **Generic verbs only** — `describe_capabilities` + `run_bytecode` + `run_transaction` + `run_block` + `generate_artifact` + `inspect_artifact`. Never `run_eip_NNNN`.
 3. **BYOS / constructible** — catalog exposes encoding facts (opcodes, precompile ABI, immediates) so an agent can *build* a request, including prestate (accounts, code, storage). No demo programs in the module.
 4. **Honest observation** — a module is `runnable` only if a **shipped** verb can show the EIP’s effect in the result the engine actually returns today. Bytecode (`SimulateBytecodeResult`): success, call-frame `gasUsed`, stack, optional trace/logs (and optional `stateGasSpilled` on Glamsterdam). Transaction (`RunTransactionResult`): paid `gasUsed`, optional `txRegularGas` / `txStateGas`, receipt logs. Block (`RunBlockResult`): per-tx receipts + header snapshot (`slotNumber`, `number`, `timestamp`). If the core question needs BAL JSON we do not return yet → **`planned-module`**. Wallet gasLimit and paid-tx questions use **`run_transaction`**, not `run_bytecode`. Opcode / program-gas questions (including SSTORE write cost) use **`run_bytecode`**. Multi-tx / header-slot questions use **`run_block`**.
 5. **Superset, not clone** — exploration is a curated slice; MCP runs arbitrary caller programs under a fork. Do not replay widget examples in the catalog or as the only tests.
@@ -35,10 +35,10 @@ Match `CANONICAL.question.changeNature` + `mcp.shapes`. Closest **engine** sibli
 | New opcodes | `src/modules/eip-8024/` | opcode + immediate encoding | valid exec + invalid encoding / depth |
 | Precompile repricing | `eip-7883/` | CALL address + input layout + comparison forks | gas predecessor vs introducedAt; bound rejection |
 | Precompile new-capability | `eip-7951/` | CALL address + input layout | valid return vs invalid — not a fork gas compare |
-| New structure (BAL, …) | **generate** + optional **inspect** | runnable module (see `eip-7928.md`) | MCP curriculum tests |
+| New structure (BAL, …) | **generate_artifact** + optional **inspect_artifact** | runnable module (see `eip-7928.md`) | MCP curriculum tests |
 | Header slot / multi-tx receipts | `run_block` | header snapshot + per-tx receipts | slot / N txs / Fusaka vs Glamsterdam |
 | Limit / economic / exec-model | `run_transaction` if the unit is a tx (gasLimit, receipt, `txStateGas`); `run_bytecode` if opcodes / program gas | encoding + fork notes | hit the limit / fee path; beyond-edge |
-| Needs BAL JSON | **planned-module** until **generate** ships | page says what is observable today | do not list in `EIP_MODULES` until honest |
+| Needs BAL JSON | **planned-module** until **generate_artifact** can return it | page says what is observable today | do not list in `EIP_MODULES` until honest |
 
 Copy the closest **module**, not the closest **website folder**. Helpers: `opcodes.ts` or `input.ts` — facts, not programs.
 
@@ -87,7 +87,7 @@ Do **not** use a side-trip to start the comic, add session memory, or skip the r
 2. Optional helpers for **constructible** encoding.
 3. Comment: `canonicalSource: 'website/src/explorations/eip-NNNN/canonical.ts'`.
 4. Copy from `CANONICAL`: `coreQuestion` → `summary` (capability voice), `changeNature`, `identity.status` / `specUrl` / `specDate` / `testReleaseUrl` / `testReleaseName`, keywords, comparison. Do not re-resolve pins from a local `ethereum/EIPs` checkout.
-5. Runtime fields: `runnable: true`, `shapes`, opcodes or input encoding.
+5. Runtime fields: `runnable: true`, internal `shapes` (query-shape ids; probe serializes them to `tools` MCP names), opcodes or input encoding.
 6. Register in `src/modules/index.ts`.
 7. Tests in `src/__tests__/` — CALL/exec fixtures you construct; **not** website widget bytecode. Happy path **and** beyond-edge (junk encoding, out of range, “too big”).
 8. Catalogue page + `use/coverage.md` + the matching `use/forks/<id>.md` twins list + `llms.txt` if the index changed. Do **not** add the EIP to the VitePress sidebar.

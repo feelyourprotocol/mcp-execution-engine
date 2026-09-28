@@ -24,7 +24,8 @@ The MCP surface is organized as **intent-driven shapes**, not raw library export
 | **transaction** | `runTransaction()` | `run_transaction` | Shipped |
 | **block** | `runBlock()` | `run_block` | Shipped |
 | **probe** | `describeCapabilities()` | `describe_capabilities` | Shipped |
-| **generate** | `generateBal()` | (planned) | Planned (BAL / Step 6) |
+| **generate** | `generateArtifact()` | `generate_artifact` | Shipped (BAL / EIP-7928) |
+| **inspect** | `inspectArtifact()` | `inspect_artifact` | Shipped (BAL / EIP-7928) |
 
 See [shapes/README.md](./shapes/README.md) for when to use each shape.
 

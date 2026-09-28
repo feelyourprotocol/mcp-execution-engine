@@ -130,6 +130,17 @@ describe('fork registry & resolve', () => {
     expect(glamsterdam?.relatedEips).toEqual([7708, 7843, 7928, 7954, 8024, 8037, 8038])
     expect(glamsterdam?.plannedEips).toBeUndefined()
     expect(glamsterdam?.aliases).toContain('amsterdam')
+    expect(glamsterdam?.tools).toEqual(['run_bytecode', 'run_transaction', 'run_block'])
+    expect('shapes' in (glamsterdam ?? {})).toBe(false)
+    expect(caps.queryShapes.map((row) => row.mcpTool)).toEqual([
+      'describe_capabilities',
+      'run_bytecode',
+      'run_transaction',
+      'run_block',
+      'generate_artifact',
+      'inspect_artifact',
+    ])
+    expect(caps.queryShapes.find((row) => row.id === 'simulate')?.mcpTool).toBe('run_bytecode')
     expect(caps.inspectKinds.some((k) => k.id === 'block-access-list')).toBe(true)
     expect(caps.inspectKinds.some((k) => k.id === 'authorization-list')).toBe(true)
     expect(caps.inspectKinds.some((k) => k.id === 'typed-transaction')).toBe(true)
@@ -139,8 +150,10 @@ describe('fork registry & resolve', () => {
     ).toBe(true)
     expect(caps.eips).toHaveLength(9)
     expect(caps.eips.some((e) => e.eip === 7702)).toBe(false)
-    expect(caps.eips.some((e) => e.eip === 7928 && e.shapes.includes('generate'))).toBe(true)
-    expect(caps.eips.some((e) => e.eip === 7954 && e.shapes.includes('transaction'))).toBe(true)
+    expect(caps.eips.some((e) => e.eip === 7928 && e.tools.includes('generate_artifact'))).toBe(
+      true,
+    )
+    expect(caps.eips.some((e) => e.eip === 7954 && e.tools.includes('run_transaction'))).toBe(true)
     expect(caps.eipIntroductions.find((e) => e.eip === 7954)?.name).toBe(
       'Increase Maximum Contract Size',
     )

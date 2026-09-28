@@ -8,7 +8,7 @@
 - Header fields the EVM can read (`slotNumber`, `number`, `timestamp`)
 - Per-tx receipts plus a header snapshot
 
-A **single** paid transfer still belongs on [transaction](../transaction/about.md) (`run_transaction`). Opcode / stack programs stay on [simulate](../simulate/about.md). Block-level access lists stay on planned **generate**.
+A **single** paid transfer still belongs on [transaction](../transaction/about.md) (`run_transaction`). Opcode / stack programs stay on [simulate](../simulate/about.md). Block-level access lists stay on **generate_artifact**.
 
 ## What you send
 

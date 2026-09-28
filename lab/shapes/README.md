@@ -1,6 +1,6 @@
 # Query shapes
 
-Intent-driven verbs that frame how agents and integrators think about protocol work. The gateway maps MCP tools to these shapes; the engine implements them.
+Intent-driven verbs that frame how agents and integrators think about protocol work. Internal catalog ids (`simulate`, `generate`, …) are **query shapes**; the gateway exposes **MCP tool names**. Live `describe_capabilities` returns `queryShapes[]` (the join) and `tools` on each EIP/fork row.
 
 | Shape | What it answers | Engine entry (v0.1) | Notes |
 | --- | --- | --- | --- |
@@ -8,7 +8,7 @@ Intent-driven verbs that frame how agents and integrators think about protocol w
 | [transaction](./transaction/about.md) | "What does this transaction cost or put in the receipt?" | `runTransaction()` | Paid gas, 8037 dimensions, 7708 tx-value logs |
 | [block](./block/about.md) | "What happens if I run these txs as one lab block?" | `runBlock()` | Header snapshot + per-tx receipts; optional slot |
 | [probe](./probe/about.md) | "What can this server do?" | `describeCapabilities()` | Registry, ceilings, EIP modules |
-| [generate](./generate/README.md) | "Produce structured protocol output (e.g. BAL)" | `generateBal()` — **planned** | Step 6 |
+| [generate](./generate/README.md) | "Produce structured protocol output (e.g. BAL)" | `generateArtifact()` | MCP: `generate_artifact` |
 
 ## Fork model (all shapes)
 
