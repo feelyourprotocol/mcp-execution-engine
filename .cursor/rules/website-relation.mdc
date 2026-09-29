@@ -17,6 +17,8 @@ Engine-only:
 - Live catalog is `describeCapabilities()` — unimplemented EIPs stay off `EIP_MODULES`
 - `coverage: 'supported'` on `eipIntroductions` is a hardfork fact (generic tools already apply it), not a module
 - `coverage: 'consensus'` is a consensus-layer fact. This lab does not execute it. No module.
+- `coverage: 'networking'` is a wire-protocol fact. This lab does not speak it. No module.
+- `coverage: 'informational'` is an analysis or a schedule. This lab does not execute it. No module.
 
 ## One capability, four presentations
 

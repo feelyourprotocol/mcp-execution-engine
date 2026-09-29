@@ -171,7 +171,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     summary:
       'Run under Glamsterdam (EL alias amsterdam) — default preview fork. Upcoming EL bundle; compare with Fusaka for mainnet-today deltas. You do not need to name an EIP.',
     notes:
-      'Runnable twins are relatedEips. Other execution EIPs are eipIntroductions (supported or listed). Consensus-layer EIPs use coverage consensus and are not executed in this lab.',
+      'Runnable twins are relatedEips. Other execution EIPs are eipIntroductions (supported or listed). Consensus, networking, and informational EIPs use those coverages and are not executed in this lab.',
   },
 ]
 

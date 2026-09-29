@@ -449,6 +449,68 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     introducedAt: 'glamsterdam',
     coverage: 'consensus',
   },
+  {
+    eip: 7975,
+    name: 'eth/70 - partial block receipt lists',
+    summary:
+      'Paginated block receipt lists on the eth wire protocol. Networking. This lab does not speak it.',
+    keywords: ['7975', 'eth/70', 'receipts'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 8070,
+    name: 'eth/72 - Sparse Blobpool',
+    summary:
+      'Custody-aligned sampling in the execution-layer blob pool. Networking. This lab does not speak it.',
+    keywords: ['8070', 'eth/72', 'blob pool'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 8136,
+    name: 'Cell-level deltas for data column broadcast',
+    summary:
+      'Peers exchange only unseen data-column cells. Networking. This lab does not speak it.',
+    keywords: ['8136', 'data column', 'cells'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 8159,
+    name: 'eth/71 - Block Access List Exchange',
+    summary: 'Peers request and serve block access lists. Networking. This lab does not speak it.',
+    keywords: ['8159', 'eth/71', 'block access list'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 8189,
+    name: 'snap/2 - BAL-Based State Healing',
+    summary:
+      'Snap sync heals state from block access lists. Networking. This lab does not speak it.',
+    keywords: ['8189', 'snap', 'state healing'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 7904,
+    name: 'Compute Gas Cost Analysis',
+    summary:
+      'Empirical note that compute gas does not need a repricing. Informational. This lab does not execute it.',
+    keywords: ['7904', 'gas cost', 'analysis'],
+    introducedAt: 'glamsterdam',
+    coverage: 'informational',
+  },
+  {
+    eip: 8261,
+    name: 'Gas Limit Schedule',
+    summary:
+      'Optional consensus-client gas-limit schedule. Informational. This lab does not execute it.',
+    keywords: ['8261', 'gas limit', 'schedule'],
+    introducedAt: 'glamsterdam',
+    coverage: 'informational',
+  },
 ]
 
 export function listEipIntroductions(): EipIntroduction[] {

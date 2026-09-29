@@ -229,9 +229,10 @@ export function assertForkAllowed(config: ForkConfig): void {
       continue
     }
     const intro = introductionForEip(eip)
-    if (intro?.coverage === 'consensus') {
+    const outOfLab = outOfLabKind(intro?.coverage)
+    if (outOfLab !== undefined) {
       throw new EngineError(
-        `EIP ${eip} is a consensus-layer change. This lab does not execute it.`,
+        `EIP ${eip} is ${outOfLab}. This lab does not execute it.`,
         'unknown_eip',
       )
     }
@@ -255,14 +256,26 @@ function toEipCapabilityProbe(capability: EipCapability): EipCapabilityProbe {
   return { ...rest, tools: mcpToolsForShapes(shapes) }
 }
 
+function outOfLabKind(
+  coverage: EipIntroduction['coverage'],
+): 'a consensus-layer change' | 'a networking change' | 'an informational EIP' | undefined {
+  switch (coverage) {
+    case 'consensus':
+      return 'a consensus-layer change'
+    case 'networking':
+      return 'a networking change'
+    case 'informational':
+      return 'an informational EIP'
+    default:
+      return undefined
+  }
+}
+
 function coverageForIntroduction(row: EipIntroduction): EipLabCoverage {
   if (getEipModule(row.eip) !== undefined) {
     return 'twin'
   }
-  if (row.coverage === 'supported' || row.coverage === 'consensus') {
-    return row.coverage
-  }
-  return 'listed'
+  return row.coverage ?? 'listed'
 }
 
 function toEipIntroductionProbe(row: EipIntroduction): EipIntroductionProbe {
