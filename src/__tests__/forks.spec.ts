@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
+import { EIP_INTRODUCTIONS, introductionForEip } from '../forks/introductions.js'
+import { FORK_LINEAGE } from '../forks/lineage.js'
 import {
+  absorbBundledSupportedEips,
   advertisedEipsForFork,
   advertisedEipsForForkConfig,
   buildCommon,
@@ -10,12 +13,15 @@ import {
   normalizeForkConfig,
   resolveNamedFork,
 } from '../forks/registry.js'
+import { resolveFork } from '../forks/resolve.js'
 import {
   parseBytecodeHex,
   parseBytes32,
   parseGasLimit,
   parseUint64Field,
 } from '../forks/resolve.js'
+import { EIP_MODULES } from '../modules/index.js'
+import { buildProvenance } from '../provenance/build.js'
 import { EngineError } from '../types/index.js'
 
 describe('fork registry & resolve', () => {
@@ -60,6 +66,41 @@ describe('fork registry & resolve', () => {
 
   it('rejects unregistered eip 99999', () => {
     expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [99999] })).toThrow(EngineError)
+  })
+
+  it('omits bundled supported eip 8246 on glamsterdam', () => {
+    const prepared = absorbBundledSupportedEips({ baseHardfork: 'glamsterdam', eips: [8246, 8024] })
+    expect(prepared.absorbedEips).toEqual([8246])
+    expect(prepared.config.eips).toEqual([8024])
+    expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [8246] })).not.toThrow()
+    const resolved = resolveFork({ baseHardfork: 'amsterdam', eips: [8246] })
+    expect(resolved.config).toEqual({ baseHardfork: 'glamsterdam', eips: [] })
+    expect(resolved.absorbedEips).toEqual([8246])
+    expect(buildProvenance('0.1.0', resolved.config, resolved.absorbedEips).caveat).toMatch(
+      /Bundled EIP\(s\) 8246 omitted from eips/,
+    )
+  })
+
+  it('rejects supported eip 8246 on a fork that does not activate it', () => {
+    expect(() => buildCommon({ baseHardfork: 'fusaka', eips: [8246] })).toThrow(
+      /bundled in glamsterdam/,
+    )
+  })
+
+  it('rejects a consensus eip instead of running it', () => {
+    expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [7732] })).toThrow(
+      /consensus-layer/,
+    )
+    expect(() => buildCommon({ baseHardfork: 'fusaka', eips: [7594] })).toThrow(/consensus-layer/)
+  })
+
+  it('rejects networking and informational eips instead of running them', () => {
+    expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [7975] })).toThrow(
+      /networking change/,
+    )
+    expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [7904] })).toThrow(
+      /informational EIP/,
+    )
   })
 
   it('accepts registered eip 7883 in fork config', () => {
@@ -127,7 +168,7 @@ describe('fork registry & resolve', () => {
     expect(fusaka?.aliases).toContain('osaka')
     expect(fusaka?.relatedEips).toEqual([7883, 7951])
     expect(glamsterdam?.role).toBe('preview')
-    expect(glamsterdam?.relatedEips).toEqual([7708, 7843, 7928, 7954, 8024, 8037, 8038])
+    expect(glamsterdam?.relatedEips).toEqual([2780, 7708, 7843, 7928, 7954, 8024, 8037, 8038])
     expect(glamsterdam?.plannedEips).toBeUndefined()
     expect(glamsterdam?.aliases).toContain('amsterdam')
     expect(glamsterdam?.tools).toEqual(['run_bytecode', 'run_transaction', 'run_block'])
@@ -148,7 +189,7 @@ describe('fork registry & resolve', () => {
     expect(
       caps.eipIntroductions.some((row) => row.eip === 3855 && row.introducedAt === 'shapella'),
     ).toBe(true)
-    expect(caps.eips).toHaveLength(9)
+    expect(caps.eips).toHaveLength(10)
     expect(caps.eips.some((e) => e.eip === 7702)).toBe(false)
     expect(caps.eips.some((e) => e.eip === 7928 && e.tools.includes('generate_artifact'))).toBe(
       true,
@@ -158,6 +199,24 @@ describe('fork registry & resolve', () => {
       'Increase Maximum Contract Size',
     )
     expect(caps.eipIntroductions.find((e) => e.eip === 8246)?.name).toBe('Remove SELFDESTRUCT Burn')
+    expect(caps.eipIntroductions.find((e) => e.eip === 8246)?.coverage).toBe('supported')
+    expect(caps.eipIntroductions.find((e) => e.eip === 8246)?.observableTools).toBeUndefined()
+    expect(caps.eipIntroductions.find((e) => e.eip === 7778)?.name).toBe(
+      'Block gas accounting without refunds',
+    )
+    expect(caps.eipIntroductions.find((e) => e.eip === 7976)?.name).toBe(
+      'Increase calldata floor cost',
+    )
+    expect(caps.eipIntroductions.find((e) => e.eip === 7981)?.name).toBe(
+      'Increase access list cost',
+    )
+    expect(caps.eipIntroductions.find((e) => e.eip === 7997)?.name).toBe(
+      'Deterministic factory contract',
+    )
+    expect(caps.eipIntroductions.find((e) => e.eip === 8282)?.name).toBe(
+      'Builder execution requests',
+    )
+    expect(caps.eips.some((e) => e.eip === 8246)).toBe(false)
     const e8024 = caps.eips.find((e) => e.eip === 8024)
     expect(e8024?.comparison?.baselineForkId).toBe('fusaka')
     expect(e8024?.comparison?.previewForkId).toBe('glamsterdam')
@@ -182,10 +241,72 @@ describe('fork registry & resolve', () => {
       getNamedFork('fusaka')?.relatedEips,
     )
     expect(advertisedEipsForForkConfig({ baseHardfork: 'glamsterdam', eips: [] })).toEqual([
-      7708, 7843, 7928, 7954, 8024, 8037, 8038,
+      2780, 7708, 7843, 7928, 7954, 8024, 8037, 8038,
     ])
     expect(advertisedEipsForForkConfig({ baseHardfork: 'glamsterdam', eips: [8024] })).toEqual([
       8024,
     ])
+  })
+
+  it('classifies every activated EIP and keeps supported rows off the module list', () => {
+    const caps = describeCapabilities()
+    for (const fork of FORK_LINEAGE) {
+      for (const eip of fork.activatedEips) {
+        expect(introductionForEip(eip)?.introducedAt, `${fork.id} EIP-${eip}`).toBeTruthy()
+      }
+    }
+    const moduleEips = new Set(EIP_MODULES.map((module) => module.eip))
+    const twinRows = caps.eipIntroductions.filter((row) => moduleEips.has(row.eip))
+    expect(twinRows.length).toBe(EIP_MODULES.length)
+    expect(twinRows.every((row) => row.coverage === 'twin')).toBe(true)
+    const supported = EIP_INTRODUCTIONS.filter((row) => row.coverage === 'supported')
+    expect(supported.map((row) => row.eip)).toEqual([8246])
+    for (const row of supported) {
+      expect(row.observableShapes).toBeUndefined()
+      expect(EIP_MODULES.some((module) => module.eip === row.eip)).toBe(false)
+      expect(caps.eips.some((entry) => entry.eip === row.eip)).toBe(false)
+    }
+    expect(caps.eipIntroductions.find((row) => row.eip === 7708)?.coverage).toBe('twin')
+    expect(caps.eipIntroductions.find((row) => row.eip === 2780)?.coverage).toBe('twin')
+    expect(caps.eipIntroductions.find((row) => row.eip === 7002)?.coverage).toBe('listed')
+    const consensus = EIP_INTRODUCTIONS.filter((row) => row.coverage === 'consensus').map(
+      (row) => row.eip,
+    )
+    expect(consensus).toEqual([3675, 4895, 6110, 7251, 7594, 7688, 7732, 8045, 8061])
+    for (const eip of consensus) {
+      const row = EIP_INTRODUCTIONS.find((entry) => entry.eip === eip)
+      expect(row?.observableShapes).toBeUndefined()
+      expect(EIP_MODULES.some((module) => module.eip === eip)).toBe(false)
+      expect(caps.eips.some((entry) => entry.eip === eip)).toBe(false)
+      expect(caps.eipIntroductions.find((entry) => entry.eip === eip)?.coverage).toBe('consensus')
+      expect(
+        caps.eipIntroductions.find((entry) => entry.eip === eip)?.observableTools,
+      ).toBeUndefined()
+    }
+    const networking = EIP_INTRODUCTIONS.filter((row) => row.coverage === 'networking').map(
+      (row) => row.eip,
+    )
+    expect(networking).toEqual([7975, 8070, 8136, 8159, 8189])
+    const informational = EIP_INTRODUCTIONS.filter((row) => row.coverage === 'informational').map(
+      (row) => row.eip,
+    )
+    expect(informational).toEqual([7904, 8261])
+    for (const eip of [...networking, ...informational]) {
+      const row = EIP_INTRODUCTIONS.find((entry) => entry.eip === eip)
+      expect(row?.observableShapes).toBeUndefined()
+      expect(EIP_MODULES.some((module) => module.eip === eip)).toBe(false)
+      expect(caps.eips.some((entry) => entry.eip === eip)).toBe(false)
+      expect(
+        caps.eipIntroductions.find((entry) => entry.eip === eip)?.observableTools,
+      ).toBeUndefined()
+    }
+    expect(caps.eipIntroductions.find((entry) => entry.eip === 7975)?.coverage).toBe('networking')
+    expect(caps.eipIntroductions.find((entry) => entry.eip === 7904)?.coverage).toBe(
+      'informational',
+    )
+    const glamsterdam = FORK_LINEAGE.find((fork) => fork.id === 'glamsterdam')
+    expect(glamsterdam?.activatedEips).not.toEqual(
+      expect.arrayContaining([7688, 7732, 8045, 8061, 7975, 8070, 8136, 8159, 8189, 7904, 8261]),
+    )
   })
 })

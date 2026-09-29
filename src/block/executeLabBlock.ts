@@ -55,8 +55,8 @@ function validateRunBlockInput(input: RunBlockInput): void {
 export async function executeLabBlock(input: RunBlockInput): Promise<LabBlockExecution> {
   validateRunBlockInput(input)
 
-  const { config, common } = resolveFork(input.fork)
-  const provenance = buildProvenance(ENGINE_VERSION, config)
+  const { config, common, absorbedEips } = resolveFork(input.fork)
+  const provenance = buildProvenance(ENGINE_VERSION, config, absorbedEips)
 
   const number = parseUint64Field(input.header?.number, 'number') ?? LAB_DEFAULT_BLOCK_NUMBER
   const timestamp = parseUint64Field(input.header?.timestamp, 'timestamp') ?? LAB_DEFAULT_TIMESTAMP

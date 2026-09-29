@@ -40,8 +40,8 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
   }
 
   const gasLimit = parseGasLimit(input.gasLimit, ENGINE_CEILINGS.maxTransactionGasLimit)
-  const { config, common } = resolveFork(input.fork)
-  const provenance = buildProvenance(ENGINE_VERSION, config)
+  const { config, common, absorbedEips } = resolveFork(input.fork)
+  const provenance = buildProvenance(ENGINE_VERSION, config, absorbedEips)
 
   if (input.authorizationList !== undefined && input.to === undefined) {
     throw new EngineError('authorizationList requires to', 'invalid_input')

@@ -80,6 +80,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
       'The Merge — consensus moves to proof-of-stake. Not replayable in this isolated EL lab.',
     keywords: ['merge', 'pos', 'proof of stake'],
     introducedAt: 'paris',
+    coverage: 'consensus',
   },
   {
     eip: 4399,
@@ -121,6 +122,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
       'Execution-layer withdrawal operations from the beacon chain — not modeled in this lab.',
     keywords: ['withdrawals', 'staking'],
     introducedAt: 'shapella',
+    coverage: 'consensus',
   },
   {
     eip: 1153,
@@ -190,6 +192,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     summary: 'On-chain validator deposit requests — consensus layer, not isolated EL bytecode lab.',
     keywords: ['deposits', 'validator'],
     introducedAt: 'pectra',
+    coverage: 'consensus',
   },
   {
     eip: 7002,
@@ -204,6 +207,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     summary: 'Consensus staking parameter — not an EL opcode change in this lab.',
     keywords: ['staking', '7251'],
     introducedAt: 'pectra',
+    coverage: 'consensus',
   },
   {
     eip: 7623,
@@ -241,6 +245,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     summary: 'PeerDAS data availability — consensus / blob path, not isolated EL bytecode.',
     keywords: ['peerdas', '7594'],
     introducedAt: 'fusaka',
+    coverage: 'consensus',
   },
   {
     eip: 7823,
@@ -298,9 +303,10 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   },
   {
     eip: 2780,
-    name: 'Reduce intrinsic transaction gas',
-    summary: 'Lower intrinsic tx gas on Glamsterdam (experimental in client).',
-    keywords: ['intrinsic gas', '2780'],
+    name: 'Resource-based intrinsic transaction gas',
+    summary:
+      'Decomposes the flat intrinsic cost into primitives. A value transfer to an existing account stays 21,000 execution gas.',
+    keywords: ['intrinsic gas', '2780', 'tx base cost'],
     introducedAt: 'glamsterdam',
     observableShapes: ['transaction'],
   },
@@ -322,11 +328,11 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   },
   {
     eip: 7778,
-    name: 'Deterministic factory predeploy',
-    summary: 'CREATE2 factory predeploy on Glamsterdam.',
-    keywords: ['7778', 'factory', 'predeploy'],
+    name: 'Block gas accounting without refunds',
+    summary:
+      'Storage refunds still reduce what the sender pays. They do not reduce gas counted toward the block limit.',
+    keywords: ['7778', 'gas refund', 'block gas'],
     introducedAt: 'glamsterdam',
-    observableShapes: ['simulate', 'transaction'],
   },
   {
     eip: 7928,
@@ -348,23 +354,24 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   },
   {
     eip: 7976,
-    name: 'Builder execution requests',
-    summary: 'Builder requests — block builder path, limited in isolated lab.',
-    keywords: ['7976', 'builder'],
+    name: 'Increase calldata floor cost',
+    summary: 'Data-heavy transactions pay 64 gas per calldata byte at the floor.',
+    keywords: ['7976', 'calldata', 'floor'],
     introducedAt: 'glamsterdam',
   },
   {
     eip: 7981,
-    name: 'State creation gas cost increase',
-    summary: 'Related state-creation gas modeling — see also EIP-8037 twin.',
-    keywords: ['7981', 'state gas'],
+    name: 'Increase access list cost',
+    summary: 'Access-list bytes pay the calldata floor rate so they cannot dodge EIP-7976.',
+    keywords: ['7981', 'access list', 'calldata floor'],
     introducedAt: 'glamsterdam',
   },
   {
     eip: 7997,
-    name: 'Block gas limit increase',
-    summary: 'Block gas limit policy on Glamsterdam.',
-    keywords: ['7997', 'block gas'],
+    name: 'Deterministic factory contract',
+    summary:
+      'Well-known CREATE2 factory at a fixed address. Clients do not inject it at the fork boundary.',
+    keywords: ['7997', 'create2', 'factory'],
     introducedAt: 'glamsterdam',
   },
   {
@@ -394,17 +401,115 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   {
     eip: 8246,
     name: 'Remove SELFDESTRUCT Burn',
-    summary: 'SELFDESTRUCT no longer burns the remaining ETH balance on Glamsterdam.',
+    summary: 'Active on Glamsterdam. Run bytecode or a transaction on that fork. Leave eips empty.',
     keywords: ['selfdestruct', 'burn', '8246'],
     introducedAt: 'glamsterdam',
-    observableShapes: ['simulate', 'transaction'],
+    coverage: 'supported',
   },
   {
     eip: 8282,
-    name: 'EIP-8282 (Glamsterdam bundle)',
-    summary: 'Bundled in Glamsterdam client — see execution-specs for behavior.',
-    keywords: ['8282'],
+    name: 'Builder execution requests',
+    summary: 'Builder deposit and exit request contracts on the execution-request bus.',
+    keywords: ['8282', 'builder', 'execution requests'],
     introducedAt: 'glamsterdam',
+  },
+  {
+    eip: 7688,
+    name: 'Forward compatible consensus data structures',
+    summary:
+      'Stable merkle indexes for consensus containers. Consensus-layer. This lab does not execute it.',
+    keywords: ['7688', 'consensus', 'generalized index'],
+    introducedAt: 'glamsterdam',
+    coverage: 'consensus',
+  },
+  {
+    eip: 7732,
+    name: 'Enshrined proposer-builder separation',
+    summary:
+      'Separates beacon-block proposing from execution-payload building. Consensus-layer. This lab does not execute it.',
+    keywords: ['7732', 'epbs', 'proposer builder separation'],
+    introducedAt: 'glamsterdam',
+    coverage: 'consensus',
+  },
+  {
+    eip: 8045,
+    name: 'Exclude slashed validators from proposing',
+    summary:
+      'Slashed validators are skipped as proposers. Consensus-layer. This lab does not execute it.',
+    keywords: ['8045', 'slashing', 'proposer'],
+    introducedAt: 'glamsterdam',
+    coverage: 'consensus',
+  },
+  {
+    eip: 8061,
+    name: 'Increase exit and consolidation churn',
+    summary:
+      'Raises how fast validators can exit or consolidate. Consensus-layer. This lab does not execute it.',
+    keywords: ['8061', 'churn', 'consolidation'],
+    introducedAt: 'glamsterdam',
+    coverage: 'consensus',
+  },
+  {
+    eip: 7975,
+    name: 'eth/70 - partial block receipt lists',
+    summary:
+      'Paginated block receipt lists on the eth wire protocol. Networking. This lab does not speak it.',
+    keywords: ['7975', 'eth/70', 'receipts'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 8070,
+    name: 'eth/72 - Sparse Blobpool',
+    summary:
+      'Custody-aligned sampling in the execution-layer blob pool. Networking. This lab does not speak it.',
+    keywords: ['8070', 'eth/72', 'blob pool'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 8136,
+    name: 'Cell-level deltas for data column broadcast',
+    summary:
+      'Peers exchange only unseen data-column cells. Networking. This lab does not speak it.',
+    keywords: ['8136', 'data column', 'cells'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 8159,
+    name: 'eth/71 - Block Access List Exchange',
+    summary: 'Peers request and serve block access lists. Networking. This lab does not speak it.',
+    keywords: ['8159', 'eth/71', 'block access list'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 8189,
+    name: 'snap/2 - BAL-Based State Healing',
+    summary:
+      'Snap sync heals state from block access lists. Networking. This lab does not speak it.',
+    keywords: ['8189', 'snap', 'state healing'],
+    introducedAt: 'glamsterdam',
+    coverage: 'networking',
+  },
+  {
+    eip: 7904,
+    name: 'Compute Gas Cost Analysis',
+    summary:
+      'Empirical note that compute gas does not need a repricing. Informational. This lab does not execute it.',
+    keywords: ['7904', 'gas cost', 'analysis'],
+    introducedAt: 'glamsterdam',
+    coverage: 'informational',
+  },
+  {
+    eip: 8261,
+    name: 'Gas Limit Schedule',
+    summary:
+      'Optional consensus-client gas-limit schedule. Informational. This lab does not execute it.',
+    keywords: ['8261', 'gas limit', 'schedule'],
+    introducedAt: 'glamsterdam',
+    coverage: 'informational',
   },
 ]
 

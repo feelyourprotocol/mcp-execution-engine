@@ -70,8 +70,8 @@ export async function simulateBytecode(
   validateInput(input)
 
   const gasLimit = parseGasLimit(input.gasLimit)
-  const { config, common } = resolveFork(input.fork)
-  const provenance = buildProvenance(ENGINE_VERSION, config)
+  const { config, common, absorbedEips } = resolveFork(input.fork)
+  const provenance = buildProvenance(ENGINE_VERSION, config, absorbedEips)
 
   const vm = await createVM({ common })
   await applyPrefundAccounts(vm, input.accounts)

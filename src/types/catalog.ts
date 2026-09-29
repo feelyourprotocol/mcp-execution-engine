@@ -45,6 +45,19 @@ export interface NamedFork {
   notes?: string
 }
 
+/**
+ * How an introduction appears on the probe.
+ * `twin` is derived from `EIP_MODULES`. `supported`, `consensus`, `networking`,
+ * and `informational` are hand-set. Everything else is `listed`.
+ */
+export type EipLabCoverage =
+  | 'twin'
+  | 'supported'
+  | 'listed'
+  | 'consensus'
+  | 'networking'
+  | 'informational'
+
 /** When an EIP activated — compact facts for agents (encoding lives in runnable modules). */
 export interface EipIntroduction {
   eip: number
@@ -52,7 +65,15 @@ export interface EipIntroduction {
   summary: string
   keywords: string[]
   introducedAt: string
-  /** Query shapes where a shipped verb can honestly show the effect. */
+  /**
+   * `supported`: the execution hardfork already applies it. No module and no exploration.
+   * `consensus`: consensus-layer only. This lab does not execute it.
+   * `networking`: wire protocol. This lab does not speak it.
+   * `informational`: analysis or a schedule. This lab does not execute it.
+   * Omit for the default `listed`. The probe sets `twin` when the number is a module.
+   */
+  coverage?: 'supported' | 'consensus' | 'networking' | 'informational'
+  /** Query shapes where a shipped verb can honestly show the effect. Omit on `supported`, `consensus`, `networking`, and `informational` rows. */
   observableShapes?: QueryShape[]
 }
 
@@ -102,8 +123,9 @@ export type NamedForkProbe = Omit<NamedFork, 'shapes'> & { tools: McpToolName[] 
 /** Live probe row — MCP tool names, not internal shape ids. */
 export type EipCapabilityProbe = Omit<EipCapability, 'shapes'> & { tools: McpToolName[] }
 
-/** Live probe row — MCP tool names, not internal `observableShapes`. */
-export type EipIntroductionProbe = Omit<EipIntroduction, 'observableShapes'> & {
+/** Live probe row — MCP tool names, not internal `observableShapes`. `coverage` is always set. */
+export type EipIntroductionProbe = Omit<EipIntroduction, 'observableShapes' | 'coverage'> & {
+  coverage: EipLabCoverage
   observableTools?: McpToolName[]
 }
 

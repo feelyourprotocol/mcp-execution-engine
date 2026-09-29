@@ -22,6 +22,7 @@ export type {
   EipCapabilityProbe,
   EipIntroduction,
   EipIntroductionProbe,
+  EipLabCoverage,
   EngineCeilings,
   NamedFork,
   NamedForkProbe,

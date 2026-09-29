@@ -1,4 +1,5 @@
 import type { EipCapability } from '../types/index.js'
+import { EIP_2780_MODULE } from './eip-2780/index.js'
 import { EIP_7708_MODULE } from './eip-7708/index.js'
 import { EIP_7843_MODULE } from './eip-7843/index.js'
 import { EIP_7883_MODULE } from './eip-7883/index.js'
@@ -11,6 +12,7 @@ import { EIP_8038_MODULE } from './eip-8038/index.js'
 
 /** Live EIP modules. Only runnable modules are registered. */
 export const EIP_MODULES: EipCapability[] = [
+  EIP_2780_MODULE,
   EIP_8024_MODULE,
   EIP_7843_MODULE,
   EIP_7928_MODULE,

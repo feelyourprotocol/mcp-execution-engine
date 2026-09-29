@@ -58,6 +58,7 @@ export type {
   EipComparison,
   EipIntroduction,
   EipIntroductionProbe,
+  EipLabCoverage,
   EipOpcode,
   EipOpcodeImmediate,
   EipProvenance,

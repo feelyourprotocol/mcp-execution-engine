@@ -8,11 +8,13 @@ import {
 
 import type { ForkConfig } from '../types/index.js'
 import { EngineError } from '../types/index.js'
-import { buildCommon, ENGINE_CEILINGS, normalizeForkConfig } from './registry.js'
+import { absorbBundledSupportedEips, buildCommon, ENGINE_CEILINGS } from './registry.js'
 
 export interface ResolvedFork {
   config: ForkConfig
   common: ReturnType<typeof buildCommon>
+  /** Supported EIP ids named on a fork that already activates them. */
+  absorbedEips: number[]
 }
 
 export function parseBytecodeHex(bytecode: string): Uint8Array {
@@ -171,7 +173,7 @@ export function prefundCallerAccount(
 }
 
 export function resolveFork(fork?: ForkConfig): ResolvedFork {
-  const config = normalizeForkConfig(fork)
+  const { config, absorbedEips } = absorbBundledSupportedEips(fork)
   const common = buildCommon(config)
-  return { config, common }
+  return { config, common, absorbedEips }
 }

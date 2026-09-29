@@ -7,17 +7,23 @@ import type {
   EipCapabilityProbe,
   EipIntroduction,
   EipIntroductionProbe,
+  EipLabCoverage,
   EngineCeilings,
   ForkConfig,
   NamedFork,
   NamedForkProbe,
 } from '../types/index.js'
 import { EngineError, mcpToolsForShapes, queryShapeDescriptors } from '../types/index.js'
-import { derivedComparisonForEip, listEipIntroductions } from './introductions.js'
+import {
+  derivedComparisonForEip,
+  introductionForEip,
+  listEipIntroductions,
+} from './introductions.js'
 import {
   BASELINE_FORK_ID,
   DEFAULT_PREVIEW_FORK_ID,
   defaultForkShapes,
+  eipActiveOnLineageFork,
   FORK_LINEAGE,
   lineageElId,
   lineageForkIds,
@@ -168,8 +174,34 @@ export function hardforkToEnum(baseHardfork: string): Hardfork {
   }
 }
 
+/**
+ * Drop `supported` EIP ids that this hardfork already activates.
+ * The call runs as a generic fork (or with any remaining module ids).
+ */
+export function absorbBundledSupportedEips(input?: ForkConfig): {
+  config: ForkConfig
+  absorbedEips: number[]
+} {
+  const fork = normalizeForkConfig(input)
+  const kept: number[] = []
+  const absorbedEips: number[] = []
+  for (const eip of fork.eips ?? []) {
+    const intro = introductionForEip(eip)
+    if (
+      intro?.coverage === 'supported' &&
+      getEipModule(eip) === undefined &&
+      eipActiveOnLineageFork(fork.baseHardfork, eip)
+    ) {
+      absorbedEips.push(eip)
+    } else {
+      kept.push(eip)
+    }
+  }
+  return { config: { baseHardfork: fork.baseHardfork, eips: kept }, absorbedEips }
+}
+
 export function buildCommon(config: ForkConfig): Common {
-  const fork = normalizeForkConfig(config)
+  const { config: fork } = absorbBundledSupportedEips(config)
   assertForkAllowed(fork)
 
   const hardfork = hardforkToEnum(fork.baseHardfork)
@@ -193,12 +225,24 @@ export function assertForkAllowed(config: ForkConfig): void {
   }
 
   for (const eip of fork.eips ?? []) {
-    if (getEipModule(eip) === undefined) {
+    if (getEipModule(eip) !== undefined) {
+      continue
+    }
+    const intro = introductionForEip(eip)
+    const outOfLab = outOfLabKind(intro?.coverage)
+    if (outOfLab !== undefined) {
       throw new EngineError(
-        `EIP ${eip} is not registered in the capability registry`,
+        `EIP ${eip} is ${outOfLab}. This lab does not execute it.`,
         'unknown_eip',
       )
     }
+    if (intro?.coverage === 'supported') {
+      throw new EngineError(
+        `EIP ${eip} is bundled in ${intro.introducedAt}. Omit it from eips and run on that fork.`,
+        'unknown_eip',
+      )
+    }
+    throw new EngineError(`EIP ${eip} is not registered in the capability registry`, 'unknown_eip')
   }
 }
 
@@ -212,12 +256,35 @@ function toEipCapabilityProbe(capability: EipCapability): EipCapabilityProbe {
   return { ...rest, tools: mcpToolsForShapes(shapes) }
 }
 
+function outOfLabKind(
+  coverage: EipIntroduction['coverage'],
+): 'a consensus-layer change' | 'a networking change' | 'an informational EIP' | undefined {
+  switch (coverage) {
+    case 'consensus':
+      return 'a consensus-layer change'
+    case 'networking':
+      return 'a networking change'
+    case 'informational':
+      return 'an informational EIP'
+    default:
+      return undefined
+  }
+}
+
+function coverageForIntroduction(row: EipIntroduction): EipLabCoverage {
+  if (getEipModule(row.eip) !== undefined) {
+    return 'twin'
+  }
+  return row.coverage ?? 'listed'
+}
+
 function toEipIntroductionProbe(row: EipIntroduction): EipIntroductionProbe {
   const { observableShapes, ...rest } = row
+  const coverage = coverageForIntroduction(row)
   if (observableShapes === undefined) {
-    return rest
+    return { ...rest, coverage }
   }
-  return { ...rest, observableTools: mcpToolsForShapes(observableShapes) }
+  return { ...rest, coverage, observableTools: mcpToolsForShapes(observableShapes) }
 }
 
 export function describeCapabilities(): CapabilityDescription {
