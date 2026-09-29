@@ -84,7 +84,19 @@ function formatExplicitSpecClause(eips: number[]): string {
   return ` Spec: ${eips.map(formatOneEipSpecNote).join('; ')}.`
 }
 
-function buildCaveat(engineVersion: string, config: ForkConfig, rollup?: StabilityRollup): string {
+function formatAbsorbedNote(eips: number[]): string {
+  if (eips.length === 0) {
+    return ''
+  }
+  return ` Bundled EIP(s) ${eips.join(', ')} omitted from eips; this hardfork already applies them.`
+}
+
+function buildCaveat(
+  engineVersion: string,
+  config: ForkConfig,
+  rollup?: StabilityRollup,
+  absorbedEips: number[] = [],
+): string {
   const explicit = [...(config.eips ?? [])]
   const advertised = advertisedEipsForForkConfig(config)
   const eipList =
@@ -109,11 +121,15 @@ function buildCaveat(engineVersion: string, config: ForkConfig, rollup?: Stabili
   }
   return (
     `Result from mcp-execution-engine v${engineVersion} simulating ${forkDisplayName(config)}${eipList}.` +
-    `${specClause}${rollupNote}${activationNote}`
+    `${specClause}${formatAbsorbedNote(absorbedEips)}${rollupNote}${activationNote}`
   )
 }
 
-export function buildProvenance(engineVersion: string, forkConfig: ForkConfig): Provenance {
+export function buildProvenance(
+  engineVersion: string,
+  forkConfig: ForkConfig,
+  absorbedEips: number[] = [],
+): Provenance {
   const config = { ...forkConfig, eips: [...(forkConfig.eips ?? [])] }
   const stabilityRollup = rollupFromForkConfig(config)
   const pred = predecessorFork(config.baseHardfork)
@@ -124,7 +140,7 @@ export function buildProvenance(engineVersion: string, forkConfig: ForkConfig): 
     predecessorForkId: pred,
     perEip: buildPerEipProvenance(config),
     stabilityRollup,
-    caveat: buildCaveat(engineVersion, config, stabilityRollup),
+    caveat: buildCaveat(engineVersion, config, stabilityRollup, absorbedEips),
     asOf: PROVENANCE_AS_OF,
   }
 }

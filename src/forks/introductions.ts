@@ -298,9 +298,10 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   },
   {
     eip: 2780,
-    name: 'Reduce intrinsic transaction gas',
-    summary: 'Lower intrinsic tx gas on Glamsterdam (experimental in client).',
-    keywords: ['intrinsic gas', '2780'],
+    name: 'Resource-based intrinsic transaction gas',
+    summary:
+      'Decomposes the flat intrinsic cost into primitives. A value transfer to an existing account stays 21,000 execution gas.',
+    keywords: ['intrinsic gas', '2780', 'tx base cost'],
     introducedAt: 'glamsterdam',
     observableShapes: ['transaction'],
   },
@@ -322,11 +323,11 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   },
   {
     eip: 7778,
-    name: 'Deterministic factory predeploy',
-    summary: 'CREATE2 factory predeploy on Glamsterdam.',
-    keywords: ['7778', 'factory', 'predeploy'],
+    name: 'Block gas accounting without refunds',
+    summary:
+      'Storage refunds still reduce what the sender pays. They do not reduce gas counted toward the block limit.',
+    keywords: ['7778', 'gas refund', 'block gas'],
     introducedAt: 'glamsterdam',
-    observableShapes: ['simulate', 'transaction'],
   },
   {
     eip: 7928,
@@ -348,23 +349,24 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   },
   {
     eip: 7976,
-    name: 'Builder execution requests',
-    summary: 'Builder requests — block builder path, limited in isolated lab.',
-    keywords: ['7976', 'builder'],
+    name: 'Increase calldata floor cost',
+    summary: 'Data-heavy transactions pay 64 gas per calldata byte at the floor.',
+    keywords: ['7976', 'calldata', 'floor'],
     introducedAt: 'glamsterdam',
   },
   {
     eip: 7981,
-    name: 'State creation gas cost increase',
-    summary: 'Related state-creation gas modeling — see also EIP-8037 twin.',
-    keywords: ['7981', 'state gas'],
+    name: 'Increase access list cost',
+    summary: 'Access-list bytes pay the calldata floor rate so they cannot dodge EIP-7976.',
+    keywords: ['7981', 'access list', 'calldata floor'],
     introducedAt: 'glamsterdam',
   },
   {
     eip: 7997,
-    name: 'Block gas limit increase',
-    summary: 'Block gas limit policy on Glamsterdam.',
-    keywords: ['7997', 'block gas'],
+    name: 'Deterministic factory contract',
+    summary:
+      'Well-known CREATE2 factory at a fixed address. Clients do not inject it at the fork boundary.',
+    keywords: ['7997', 'create2', 'factory'],
     introducedAt: 'glamsterdam',
   },
   {
@@ -394,16 +396,16 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   {
     eip: 8246,
     name: 'Remove SELFDESTRUCT Burn',
-    summary: 'SELFDESTRUCT no longer burns the remaining ETH balance on Glamsterdam.',
+    summary: 'Active on Glamsterdam. Run bytecode or a transaction on that fork. Leave eips empty.',
     keywords: ['selfdestruct', 'burn', '8246'],
     introducedAt: 'glamsterdam',
-    observableShapes: ['simulate', 'transaction'],
+    coverage: 'supported',
   },
   {
     eip: 8282,
-    name: 'EIP-8282 (Glamsterdam bundle)',
-    summary: 'Bundled in Glamsterdam client — see execution-specs for behavior.',
-    keywords: ['8282'],
+    name: 'Builder execution requests',
+    summary: 'Builder deposit and exit request contracts on the execution-request bus.',
+    keywords: ['8282', 'builder', 'execution requests'],
     introducedAt: 'glamsterdam',
   },
 ]

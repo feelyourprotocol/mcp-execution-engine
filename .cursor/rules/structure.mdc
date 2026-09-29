@@ -15,6 +15,7 @@ Shared types live in `src/types/` (`protocol.ts` = website siblings; other files
 - **Named forks** (`namedForks` in `describeCapabilities()`) are first-class capabilities: summary, keywords, advertised `relatedEips`, and **`tools`** (MCP names). Callers can run under Glamsterdam / Fusaka / Pectra without naming an EIP
 - **EIP modules** (`src/modules/eip-NNNN/`) describe what became possible: `summary`, `opcodes`, encoding, `keywords`, `runnable`
 - Only `runnable: true` modules belong in `EIP_MODULES` / `describeCapabilities().eips`
+- **`eipIntroductions[].coverage`**: `twin` (derived from `EIP_MODULES`), `supported` (hand-set — the hardfork already applies it; no module, no exploration; omit the id from `eips`), `listed` (name and fork only). Do not put `observableShapes` on a `supported` row.
 
 ## Catalog honesty
 

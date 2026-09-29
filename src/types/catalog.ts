@@ -45,6 +45,13 @@ export interface NamedFork {
   notes?: string
 }
 
+/**
+ * How an introduction appears on the probe.
+ * `twin` is derived from `EIP_MODULES`. `supported` is hand-set on the row.
+ * Everything else is `listed`.
+ */
+export type EipLabCoverage = 'twin' | 'supported' | 'listed'
+
 /** When an EIP activated — compact facts for agents (encoding lives in runnable modules). */
 export interface EipIntroduction {
   eip: number
@@ -52,7 +59,12 @@ export interface EipIntroduction {
   summary: string
   keywords: string[]
   introducedAt: string
-  /** Query shapes where a shipped verb can honestly show the effect. */
+  /**
+   * Maintenance EIP the hardfork already applies. No module and no exploration.
+   * Omit for the default `listed`. The probe sets `twin` when the number is a module.
+   */
+  coverage?: 'supported'
+  /** Query shapes where a shipped verb can honestly show the effect. Omit on `supported` rows. */
   observableShapes?: QueryShape[]
 }
 
@@ -102,8 +114,9 @@ export type NamedForkProbe = Omit<NamedFork, 'shapes'> & { tools: McpToolName[] 
 /** Live probe row — MCP tool names, not internal shape ids. */
 export type EipCapabilityProbe = Omit<EipCapability, 'shapes'> & { tools: McpToolName[] }
 
-/** Live probe row — MCP tool names, not internal `observableShapes`. */
-export type EipIntroductionProbe = Omit<EipIntroduction, 'observableShapes'> & {
+/** Live probe row — MCP tool names, not internal `observableShapes`. `coverage` is always set. */
+export type EipIntroductionProbe = Omit<EipIntroduction, 'observableShapes' | 'coverage'> & {
+  coverage: EipLabCoverage
   observableTools?: McpToolName[]
 }
 

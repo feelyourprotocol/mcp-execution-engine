@@ -23,8 +23,8 @@ function emptyBlockResult(
 }
 
 export async function runBlock(input: RunBlockInput): Promise<RunBlockResult> {
-  const { config } = resolveFork(input.fork)
-  const provenance = buildProvenance(ENGINE_VERSION, config)
+  const { config, absorbedEips } = resolveFork(input.fork)
+  const provenance = buildProvenance(ENGINE_VERSION, config, absorbedEips)
 
   try {
     const { provenance: runProvenance, headerSnapshotBase, vmResult } = await executeLabBlock(input)

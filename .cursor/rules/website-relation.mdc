@@ -15,6 +15,7 @@ Engine-only:
 - Encoding / opcodes live in `src/modules/eip-NNNN/`
 - Demo bytecode belongs in `src/__tests__/fixtures/`, not module descriptors
 - Live catalog is `describeCapabilities()` — unimplemented EIPs stay off `EIP_MODULES`
+- `coverage: 'supported'` on `eipIntroductions` is a hardfork fact (generic tools already apply it), not a module
 
 ## One capability, four presentations
 

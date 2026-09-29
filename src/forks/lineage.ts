@@ -221,6 +221,18 @@ export function assertResolvableForkId(id: string): LineageForkId {
   return resolved
 }
 
+/** True when this fork or a predecessor lists the EIP in `activatedEips`. */
+export function eipActiveOnLineageFork(forkId: string, eip: number): boolean {
+  let current = resolveForkAlias(forkId)
+  while (current) {
+    if (getLineageDefinition(current)?.activatedEips.includes(eip)) {
+      return true
+    }
+    current = predecessorFork(current)
+  }
+  return false
+}
+
 export function predecessorFork(id: string): LineageForkId | undefined {
   const canonical = resolveForkAlias(id)
   if (!canonical) {
