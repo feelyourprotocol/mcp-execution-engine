@@ -80,6 +80,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
       'The Merge — consensus moves to proof-of-stake. Not replayable in this isolated EL lab.',
     keywords: ['merge', 'pos', 'proof of stake'],
     introducedAt: 'paris',
+    coverage: 'consensus',
   },
   {
     eip: 4399,
@@ -121,6 +122,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
       'Execution-layer withdrawal operations from the beacon chain — not modeled in this lab.',
     keywords: ['withdrawals', 'staking'],
     introducedAt: 'shapella',
+    coverage: 'consensus',
   },
   {
     eip: 1153,
@@ -190,6 +192,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     summary: 'On-chain validator deposit requests — consensus layer, not isolated EL bytecode lab.',
     keywords: ['deposits', 'validator'],
     introducedAt: 'pectra',
+    coverage: 'consensus',
   },
   {
     eip: 7002,
@@ -204,6 +207,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     summary: 'Consensus staking parameter — not an EL opcode change in this lab.',
     keywords: ['staking', '7251'],
     introducedAt: 'pectra',
+    coverage: 'consensus',
   },
   {
     eip: 7623,
@@ -241,6 +245,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     summary: 'PeerDAS data availability — consensus / blob path, not isolated EL bytecode.',
     keywords: ['peerdas', '7594'],
     introducedAt: 'fusaka',
+    coverage: 'consensus',
   },
   {
     eip: 7823,
@@ -407,6 +412,42 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     summary: 'Builder deposit and exit request contracts on the execution-request bus.',
     keywords: ['8282', 'builder', 'execution requests'],
     introducedAt: 'glamsterdam',
+  },
+  {
+    eip: 7688,
+    name: 'Forward compatible consensus data structures',
+    summary:
+      'Stable merkle indexes for consensus containers. Consensus-layer. This lab does not execute it.',
+    keywords: ['7688', 'consensus', 'generalized index'],
+    introducedAt: 'glamsterdam',
+    coverage: 'consensus',
+  },
+  {
+    eip: 7732,
+    name: 'Enshrined proposer-builder separation',
+    summary:
+      'Separates beacon-block proposing from execution-payload building. Consensus-layer. This lab does not execute it.',
+    keywords: ['7732', 'epbs', 'proposer builder separation'],
+    introducedAt: 'glamsterdam',
+    coverage: 'consensus',
+  },
+  {
+    eip: 8045,
+    name: 'Exclude slashed validators from proposing',
+    summary:
+      'Slashed validators are skipped as proposers. Consensus-layer. This lab does not execute it.',
+    keywords: ['8045', 'slashing', 'proposer'],
+    introducedAt: 'glamsterdam',
+    coverage: 'consensus',
+  },
+  {
+    eip: 8061,
+    name: 'Increase exit and consolidation churn',
+    summary:
+      'Raises how fast validators can exit or consolidate. Consensus-layer. This lab does not execute it.',
+    keywords: ['8061', 'churn', 'consolidation'],
+    introducedAt: 'glamsterdam',
+    coverage: 'consensus',
   },
 ]
 

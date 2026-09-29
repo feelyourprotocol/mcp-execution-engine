@@ -229,6 +229,12 @@ export function assertForkAllowed(config: ForkConfig): void {
       continue
     }
     const intro = introductionForEip(eip)
+    if (intro?.coverage === 'consensus') {
+      throw new EngineError(
+        `EIP ${eip} is a consensus-layer change. This lab does not execute it.`,
+        'unknown_eip',
+      )
+    }
     if (intro?.coverage === 'supported') {
       throw new EngineError(
         `EIP ${eip} is bundled in ${intro.introducedAt}. Omit it from eips and run on that fork.`,
@@ -253,8 +259,8 @@ function coverageForIntroduction(row: EipIntroduction): EipLabCoverage {
   if (getEipModule(row.eip) !== undefined) {
     return 'twin'
   }
-  if (row.coverage === 'supported') {
-    return 'supported'
+  if (row.coverage === 'supported' || row.coverage === 'consensus') {
+    return row.coverage
   }
   return 'listed'
 }

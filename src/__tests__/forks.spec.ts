@@ -87,6 +87,13 @@ describe('fork registry & resolve', () => {
     )
   })
 
+  it('rejects a consensus eip instead of running it', () => {
+    expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [7732] })).toThrow(
+      /consensus-layer/,
+    )
+    expect(() => buildCommon({ baseHardfork: 'fusaka', eips: [7594] })).toThrow(/consensus-layer/)
+  })
+
   it('accepts registered eip 7883 in fork config', () => {
     expect(() => buildCommon({ baseHardfork: 'fusaka', eips: [7883] })).not.toThrow()
   })
@@ -252,5 +259,22 @@ describe('fork registry & resolve', () => {
     }
     expect(caps.eipIntroductions.find((row) => row.eip === 7708)?.coverage).toBe('twin')
     expect(caps.eipIntroductions.find((row) => row.eip === 2780)?.coverage).toBe('listed')
+    expect(caps.eipIntroductions.find((row) => row.eip === 7002)?.coverage).toBe('listed')
+    const consensus = EIP_INTRODUCTIONS.filter((row) => row.coverage === 'consensus').map(
+      (row) => row.eip,
+    )
+    expect(consensus).toEqual([3675, 4895, 6110, 7251, 7594, 7688, 7732, 8045, 8061])
+    for (const eip of consensus) {
+      const row = EIP_INTRODUCTIONS.find((entry) => entry.eip === eip)
+      expect(row?.observableShapes).toBeUndefined()
+      expect(EIP_MODULES.some((module) => module.eip === eip)).toBe(false)
+      expect(caps.eips.some((entry) => entry.eip === eip)).toBe(false)
+      expect(caps.eipIntroductions.find((entry) => entry.eip === eip)?.coverage).toBe('consensus')
+      expect(
+        caps.eipIntroductions.find((entry) => entry.eip === eip)?.observableTools,
+      ).toBeUndefined()
+    }
+    const glamsterdam = FORK_LINEAGE.find((fork) => fork.id === 'glamsterdam')
+    expect(glamsterdam?.activatedEips).not.toEqual(expect.arrayContaining([7688, 7732, 8045, 8061]))
   })
 })

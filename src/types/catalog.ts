@@ -47,10 +47,10 @@ export interface NamedFork {
 
 /**
  * How an introduction appears on the probe.
- * `twin` is derived from `EIP_MODULES`. `supported` is hand-set on the row.
+ * `twin` is derived from `EIP_MODULES`. `supported` and `consensus` are hand-set.
  * Everything else is `listed`.
  */
-export type EipLabCoverage = 'twin' | 'supported' | 'listed'
+export type EipLabCoverage = 'twin' | 'supported' | 'listed' | 'consensus'
 
 /** When an EIP activated — compact facts for agents (encoding lives in runnable modules). */
 export interface EipIntroduction {
@@ -60,11 +60,12 @@ export interface EipIntroduction {
   keywords: string[]
   introducedAt: string
   /**
-   * Maintenance EIP the hardfork already applies. No module and no exploration.
+   * `supported`: the execution hardfork already applies it. No module and no exploration.
+   * `consensus`: consensus-layer only. This lab does not execute it.
    * Omit for the default `listed`. The probe sets `twin` when the number is a module.
    */
-  coverage?: 'supported'
-  /** Query shapes where a shipped verb can honestly show the effect. Omit on `supported` rows. */
+  coverage?: 'supported' | 'consensus'
+  /** Query shapes where a shipped verb can honestly show the effect. Omit on `supported` and `consensus` rows. */
   observableShapes?: QueryShape[]
 }
 
