@@ -2,6 +2,7 @@ import {
   createEOACode7702Tx,
   createLegacyTx,
   type EOACode7702Tx,
+  getEip2780RecipientRegularGas,
   type LegacyTx,
 } from '@ethereumjs/tx'
 import type { EOACode7702AuthorizationListBytes } from '@ethereumjs/util'
@@ -31,6 +32,21 @@ export const LAB_BLOCK_GAS_LIMIT = 30_000_000n
 export const LAB_DEFAULT_BLOCK_NUMBER = 1n
 export const LAB_DEFAULT_TIMESTAMP = 1n
 
+/**
+ * Unsigned lab txs are not self-transfers inside `getIntrinsicGas` (it does not
+ * receive the impersonated sender). Recompute the EIP-2780 extras with `from`
+ * so a self-send is 12,000 and a zero-value call is 15,000.
+ */
+function bindIntrinsicGasToSender(tx: LegacyTx | EOACode7702Tx, from: Address): void {
+  const intrinsic = tx.getIntrinsicGas.bind(tx)
+  tx.getIntrinsicGas = () => {
+    const base = intrinsic()
+    const conservative = getEip2780RecipientRegularGas(tx)
+    const actual = getEip2780RecipientRegularGas(tx, from)
+    return base - conservative + actual
+  }
+}
+
 export function createImpersonatedTx(opts: {
   common: ReturnType<typeof resolveFork>['common']
   from: Address
@@ -52,6 +68,7 @@ export function createImpersonatedTx(opts: {
     { common: opts.common, freeze: false },
   )
   tx.getSenderAddress = () => opts.from
+  bindIntrinsicGasToSender(tx, opts.from)
   return tx
 }
 
@@ -79,6 +96,7 @@ export function createImpersonated7702Tx(opts: {
     { common: opts.common, freeze: false },
   )
   tx.getSenderAddress = () => opts.from
+  bindIntrinsicGasToSender(tx, opts.from)
   return tx
 }
 

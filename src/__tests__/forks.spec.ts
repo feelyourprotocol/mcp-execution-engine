@@ -168,7 +168,7 @@ describe('fork registry & resolve', () => {
     expect(fusaka?.aliases).toContain('osaka')
     expect(fusaka?.relatedEips).toEqual([7883, 7951])
     expect(glamsterdam?.role).toBe('preview')
-    expect(glamsterdam?.relatedEips).toEqual([7708, 7843, 7928, 7954, 8024, 8037, 8038])
+    expect(glamsterdam?.relatedEips).toEqual([2780, 7708, 7843, 7928, 7954, 8024, 8037, 8038])
     expect(glamsterdam?.plannedEips).toBeUndefined()
     expect(glamsterdam?.aliases).toContain('amsterdam')
     expect(glamsterdam?.tools).toEqual(['run_bytecode', 'run_transaction', 'run_block'])
@@ -189,7 +189,7 @@ describe('fork registry & resolve', () => {
     expect(
       caps.eipIntroductions.some((row) => row.eip === 3855 && row.introducedAt === 'shapella'),
     ).toBe(true)
-    expect(caps.eips).toHaveLength(9)
+    expect(caps.eips).toHaveLength(10)
     expect(caps.eips.some((e) => e.eip === 7702)).toBe(false)
     expect(caps.eips.some((e) => e.eip === 7928 && e.tools.includes('generate_artifact'))).toBe(
       true,
@@ -241,7 +241,7 @@ describe('fork registry & resolve', () => {
       getNamedFork('fusaka')?.relatedEips,
     )
     expect(advertisedEipsForForkConfig({ baseHardfork: 'glamsterdam', eips: [] })).toEqual([
-      7708, 7843, 7928, 7954, 8024, 8037, 8038,
+      2780, 7708, 7843, 7928, 7954, 8024, 8037, 8038,
     ])
     expect(advertisedEipsForForkConfig({ baseHardfork: 'glamsterdam', eips: [8024] })).toEqual([
       8024,
@@ -267,7 +267,7 @@ describe('fork registry & resolve', () => {
       expect(caps.eips.some((entry) => entry.eip === row.eip)).toBe(false)
     }
     expect(caps.eipIntroductions.find((row) => row.eip === 7708)?.coverage).toBe('twin')
-    expect(caps.eipIntroductions.find((row) => row.eip === 2780)?.coverage).toBe('listed')
+    expect(caps.eipIntroductions.find((row) => row.eip === 2780)?.coverage).toBe('twin')
     expect(caps.eipIntroductions.find((row) => row.eip === 7002)?.coverage).toBe('listed')
     const consensus = EIP_INTRODUCTIONS.filter((row) => row.coverage === 'consensus').map(
       (row) => row.eip,
