@@ -76,5 +76,5 @@ export const EIP_8024_MODULE: EipCapability = {
   testReleaseUrl: GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
   testReleaseName: GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
   notes:
-    'Glamsterdam already bundles EIP-8024 in EthereumJS v10. Passing eips:[8024] is accepted but does not disable the opcodes. Use named fork fusaka (baseline) vs glamsterdam (preview) to compare behavior.',
+    'Glamsterdam already bundles EIP-8024 in EthereumJS v10. Passing eips:[8024] is accepted but does not disable the opcodes.',
 }

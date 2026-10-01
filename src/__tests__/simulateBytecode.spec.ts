@@ -8,6 +8,7 @@ import { EngineError } from '../types/index.js'
 import { dupnDemoHex, PUSH1_STOP_HEX } from './fixtures/eip8024.js'
 import {
   EXTCODESIZE_AA,
+  SLOAD_SLOT3,
   SSTORE_SLOT3_VALUE7,
   SSTORE_THEN_SLOAD_SLOT3,
   SSTORE_UNDERFLOW,
@@ -148,6 +149,24 @@ describe('simulateBytecode', () => {
     expect(osaka.gasUsed).toBe('22106')
     expect(amsterdam.stateGasSpilled).toBe(NEW_STORAGE_SLOT_STATE_GAS.toString())
     expect(BigInt(amsterdam.gasUsed) - BigInt(amsterdam.stateGasSpilled ?? '0')).toBe(12106n)
+  })
+
+  it('reads SLOAD from storage seeded on zero-balance account', async () => {
+    const result = await simulateBytecode({
+      bytecode: SLOAD_SLOT3,
+      accounts: [
+        {
+          address: LAB_BYTECODE_ADDRESS,
+          balance: '0',
+          nonce: '1',
+          storage: [{ slot: '0x03', value: '0x0a' }],
+        },
+      ],
+      fork: { baseHardfork: 'glamsterdam' },
+    })
+
+    expect(result.success).toBe(true)
+    expect(result.finalStack.at(-1)).toBe('0xa')
   })
 
   it('reads EXTCODESIZE of a contract seeded in the same call', async () => {

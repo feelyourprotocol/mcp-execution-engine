@@ -85,7 +85,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     activatedEips: [1559, 3198, 3529, 3541],
     keywords: ['london', '1559', 'eip-1559', 'base fee', 'fee market', 'basefee opcode'],
     summary:
-      'Run under London. EIP-1559 fee market, BASEFEE opcode (3198), SELFDESTRUCT refund removal (3529), and EIP-3541 initcode prefix rule. Compare with Berlin for pre-1559 paid gas.',
+      'Run under London. EIP-1559 fee market, BASEFEE opcode (3198), SELFDESTRUCT refund removal (3529), and EIP-3541 initcode prefix rule.',
   },
   {
     id: 'paris',
@@ -98,7 +98,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     activatedEips: [3675, 4399],
     keywords: ['paris', 'merge', 'the merge', 'proof of stake', 'pos'],
     summary:
-      'Run caller-supplied bytecode, a transaction, or a lab block under Paris (The Merge). Proof-of-stake transition rules on the EL; alias merge. Isolated lab does not replay consensus — compare with predecessor forks for EL opcode and gas deltas.',
+      'Run caller-supplied bytecode, a transaction, or a lab block under Paris (The Merge). Proof-of-stake transition rules on the EL; alias merge. Isolated lab does not replay consensus.',
     notes:
       'Canonical name for the Merge execution-layer upgrade (EIP-8133). No Shapella-style portmanteau.',
   },
@@ -113,7 +113,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     activatedEips: [3651, 3855, 3860, 4895],
     keywords: ['shapella', 'shanghai', 'push0', 'withdrawals'],
     summary:
-      'Run under Shapella (EL alias shanghai). PUSH0, warm coinbase, initcode metering, and withdrawal operations activate here. Compare with Paris for pre-PUSH0 bytecode.',
+      'Run under Shapella (EL alias shanghai). PUSH0, warm coinbase, initcode metering, and withdrawal operations activate here.',
     notes:
       'Withdrawals (4895) are not fully observable in this isolated EL lab — listed in eipIntroductions for when they appeared.',
   },
@@ -141,7 +141,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     activatedEips: [2537, 2935, 6110, 7002, 7251, 7623, 7685, 7691, 7702],
     keywords: ['pectra', 'prague', '7702', 'account abstraction'],
     summary:
-      'Run under Pectra (EL alias prague). Includes EIP-7702 set-code delegation and other Pectra EL changes. Compare with Dencun for pre-7702 behavior.',
+      'Run under Pectra (EL alias prague). Includes EIP-7702 set-code delegation and other Pectra EL changes.',
   },
   {
     id: 'fusaka',
@@ -154,7 +154,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     activatedEips: [7594, 7823, 7825, 7883, 7892, 7939, 7951, 7918],
     keywords: ['fusaka', 'osaka', 'mainnet', 'mainnet-el', 'current mainnet'],
     summary:
-      'Run under Fusaka (EL alias osaka, role alias mainnet-el) — current mainnet EL. First-class for advertised twins (ModExp, secp256r1) and as the compare baseline vs Glamsterdam. Compare with predecessor Pectra for fork deltas.',
+      'Run under Fusaka (EL alias osaka, role alias mainnet-el) — current mainnet EL. First-class for advertised twins (ModExp repricing, secp256r1 precompile).',
   },
   {
     id: 'glamsterdam',
@@ -169,7 +169,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     ],
     keywords: ['glamsterdam', 'amsterdam', 'preview fork', 'upcoming hardfork'],
     summary:
-      'Run under Glamsterdam (EL alias amsterdam) — default preview fork. Upcoming EL bundle; compare with Fusaka for mainnet-today deltas. You do not need to name an EIP.',
+      'Run under Glamsterdam (EL alias amsterdam) — default preview fork. Upcoming EL bundle with runnable twins (8024, 7708, 8037, and others). You do not need to name an EIP.',
     notes:
       'Runnable twins are relatedEips. Other execution EIPs are eipIntroductions (supported or listed). Consensus, networking, and informational EIPs use those coverages and are not executed in this lab.',
   },

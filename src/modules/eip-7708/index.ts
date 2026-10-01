@@ -22,7 +22,7 @@ export const EIP_7708_MODULE: EipCapability = {
   eip: 7708,
   name: 'ETH transfers emit a log',
   summary:
-    'Glamsterdam emits synthetic ERC-20-style Transfer logs from the system address on nonzero ETH moves. Run a value-bearing transaction (run_transaction) — compare logs on fusaka vs glamsterdam.',
+    'Glamsterdam emits synthetic ERC-20-style Transfer logs from the system address on nonzero ETH moves. Run a value-bearing transaction (run_transaction) and read receipt logs / decodedLogs.',
   changeNature: 'new-capability',
   runnable: true,
   shapes: ['transaction', 'simulate'],

@@ -17,7 +17,7 @@ export const EIP_8037_MODULE: EipCapability = {
   eip: 8037,
   name: 'State creation gas cost increase',
   summary:
-    'Glamsterdam splits gas into execution and state dimensions. Creating a new account or storage slot charges state gas. Run a value-bearing transaction (run_transaction) or SSTORE bytecode; compare fusaka vs glamsterdam. Lead with gasUsed (paid tx gas) and txStateGas on Glamsterdam.',
+    'Glamsterdam splits gas into execution and state dimensions. Creating a new account or storage slot charges state gas. Run a value-bearing transaction (run_transaction) or SSTORE bytecode; read gasUsed (paid tx gas) and txStateGas.',
   changeNature: 'new-exec-model',
   runnable: true,
   shapes: ['transaction', 'simulate'],
