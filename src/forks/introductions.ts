@@ -358,13 +358,16 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     summary: 'Data-heavy transactions pay 64 gas per calldata byte at the floor.',
     keywords: ['7976', 'calldata', 'floor'],
     introducedAt: 'glamsterdam',
+    observableShapes: ['transaction'],
   },
   {
     eip: 7981,
     name: 'Increase access list cost',
-    summary: 'Access-list bytes pay the calldata floor rate so they cannot dodge EIP-7976.',
+    summary:
+      'Active on Glamsterdam. Access-list bytes pay 64 gas each so they cannot dodge the calldata floor. Run a transaction on that fork. Leave eips empty.',
     keywords: ['7981', 'access list', 'calldata floor'],
     introducedAt: 'glamsterdam',
+    coverage: 'supported',
   },
   {
     eip: 7997,
