@@ -28,7 +28,10 @@ export interface SimulatePrefundStorageSlot {
 
 export interface SimulatePrefundAccount {
   address: string
+  /** Wei as decimal string. Omit for default 1 ETH; use "0" for unfunded. */
   balance?: string
+  /** Account nonce as decimal string. Default 0. */
+  nonce?: string
   code?: string
   /** Optional slots to seed (existing-slot SSTORE / SLOAD). */
   storage?: SimulatePrefundStorageSlot[]

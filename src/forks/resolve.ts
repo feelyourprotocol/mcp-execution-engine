@@ -115,6 +115,25 @@ export function parseWeiValue(value?: string): bigint {
   return parsed
 }
 
+export function parseAccountNonce(value?: string): bigint {
+  if (value === undefined || value.trim() === '') {
+    return 0n
+  }
+
+  let parsed: bigint
+  try {
+    parsed = BigInt(value.trim())
+  } catch {
+    throw new EngineError('nonce must be an integer string', 'invalid_nonce')
+  }
+
+  if (parsed < 0n) {
+    throw new EngineError('nonce must not be negative', 'invalid_nonce')
+  }
+
+  return parsed
+}
+
 export function parseOptionalHexData(data?: string): Uint8Array {
   if (data === undefined || data.trim() === '') {
     return new Uint8Array()

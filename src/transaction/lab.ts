@@ -10,6 +10,7 @@ import { type Address, bytesToHex, createAccount } from '@ethereumjs/util'
 import { createVM, type RunTxResult } from '@ethereumjs/vm'
 
 import {
+  parseAccountNonce,
   parseAddress,
   parseBytecodeHex,
   parseBytes32,
@@ -108,8 +109,12 @@ export async function applyPrefundAccounts(
 
   for (const entry of accounts) {
     const address = parseAddress(entry.address)
-    const balance = parseWeiValue(entry.balance ?? '1000000000000000000')
-    await vm.stateManager.putAccount(address, createAccount({ nonce: 0n, balance }))
+    const balance =
+      entry.balance !== undefined
+        ? parseWeiValue(entry.balance)
+        : parseWeiValue('1000000000000000000')
+    const nonce = parseAccountNonce(entry.nonce)
+    await vm.stateManager.putAccount(address, createAccount({ nonce, balance }))
     if (entry.code !== undefined && entry.code.trim() !== '') {
       await vm.stateManager.putCode(address, parseBytecodeHex(entry.code))
     }
