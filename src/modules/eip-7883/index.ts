@@ -13,7 +13,7 @@ export const EIP_7883_MODULE: EipCapability = {
   eip: 7883,
   name: 'ModExp gas cost increase',
   summary:
-    'Fusaka EVM runs ModExp (0x05) with Fusaka gas formula and EIP-7823 bounds. Supply CALL bytecode; compare with predecessor fork (Pectra) via eipIntroductions.',
+    'Fusaka EVM runs ModExp (0x05) with Fusaka gas formula and EIP-7823 bounds. Supply CALL bytecode; read call-frame gasUsed on the result.',
   changeNature: 'repricing',
   runnable: true,
   shapes: ['simulate'],

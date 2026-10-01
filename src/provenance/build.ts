@@ -116,8 +116,7 @@ function buildCaveat(
     activationNote =
       ' Fork rules may change before mainnet activation — verify against latest spec.'
   } else {
-    activationNote =
-      ' Historical fork rules — compare with predecessorForkId or eipIntroductions for before/after pairs.'
+    activationNote = ' Historical fork rules as implemented in this engine build.'
   }
   return (
     `Result from mcp-execution-engine v${engineVersion} simulating ${forkDisplayName(config)}${eipList}.` +

@@ -34,5 +34,5 @@ export const EIP_7951_MODULE: EipCapability = {
   status: 'Final',
   specUrl: 'https://eips.ethereum.org/EIPS/eip-7951',
   notes:
-    'Live on Fusaka (mainnet). Focus on valid vs invalid return data — not a Pectra gas compare. Invoke via CALL to 0x100; no dedicated precompile input tool.',
+    'Live on Fusaka (mainnet). Focus on valid vs invalid return data from secp256r1 precompile 0x100. Invoke via CALL bytecode; no dedicated precompile input tool.',
 }
