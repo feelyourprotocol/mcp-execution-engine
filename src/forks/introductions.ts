@@ -331,8 +331,9 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     name: 'Block gas accounting without refunds',
     summary:
       'Storage refunds still reduce what the sender pays. They do not reduce gas counted toward the block limit.',
-    keywords: ['7778', 'gas refund', 'block gas'],
+    keywords: ['7778', 'gas refund', 'block gas', 'storage clear', 'SSTORE refund'],
     introducedAt: 'glamsterdam',
+    observableShapes: ['transaction', 'block'],
   },
   {
     eip: 7928,

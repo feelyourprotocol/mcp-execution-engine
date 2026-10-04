@@ -17,7 +17,7 @@ describe('provenance', () => {
     expect(provenance.forkConfig.eips).toEqual([])
     expect(provenance.stabilityRollup).toBe('stabilizing')
     expect(provenance.perEip?.map((entry) => entry.eip)).toEqual([
-      2780, 7708, 7843, 7928, 7954, 7976, 8024, 8037, 8038,
+      2780, 7708, 7778, 7843, 7928, 7954, 7976, 8024, 8037, 8038,
     ])
     expect(provenance.perEip?.[0]?.specUrl).toMatch(
       /^https:\/\/github\.com\/ethereum\/EIPs\/blob\/[0-9a-f]{40}\/EIPS\/eip-2780\.md$/,
@@ -26,7 +26,7 @@ describe('provenance', () => {
     expect(provenance.perEip?.[0]?.testReleaseUrl).toContain('tests-glamsterdam-devnet@v8.1.0')
     expect(provenance.perEip?.[0]?.testReleaseName).toBe('tests-glamsterdam-devnet@v8.1.0')
     expect(provenance.caveat).toMatch(
-      /advertised modules: 2780, 7708, 7843, 7928, 7954, 7976, 8024, 8037, 8038/,
+      /advertised modules: 2780, 7708, 7778, 7843, 7928, 7954, 7976, 8024, 8037, 8038/,
     )
     expect(provenance.caveat).not.toMatch(/Spec:/)
     expect(provenance.caveat).toMatch(/mcp-execution-engine/)
