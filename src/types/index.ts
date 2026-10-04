@@ -62,4 +62,8 @@ export {
   queryShapeDescriptors,
 } from './queryShapes.js'
 export type { SimulateBytecodeInput, SimulateBytecodeResult } from './simulate.js'
-export type { RunTransactionInput, RunTransactionResult } from './transaction.js'
+export type {
+  RunTransactionAccessListItem,
+  RunTransactionInput,
+  RunTransactionResult,
+} from './transaction.js'

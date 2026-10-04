@@ -4,8 +4,8 @@
  * canonicalSource: website/src/explorations/eip-7976/canonical.ts
  *
  * Callers supply calldata. Catalog describes the floor; it does not ship demo transactions.
- * EIP-7981 (access-list bytes at the same rate) is coverage `supported` — this verb
- * does not take an access list.
+ * EIP-7981 (access-list bytes at the same rate) is coverage `supported` — pass
+ * `accessList` on this verb; leave 7981 out of `eips`.
  */
 import type { EipCapability } from '../../types/index.js'
 import {
@@ -30,5 +30,5 @@ export const EIP_7976_MODULE: EipCapability = {
   testReleaseUrl: GLAMSTERDAM_DEVNET_TEST_RELEASE_URL,
   testReleaseName: GLAMSTERDAM_DEVNET_TEST_RELEASE_NAME,
   notes:
-    'gasUsed is the observation. The floor binds when the call does little besides carrying data. EIP-7981 prices access-list bytes at the same 64 gas rate and is already active on Glamsterdam; leave 7981 out of eips. This verb does not accept an access list.',
+    'gasUsed is the observation. The floor binds when the call does little besides carrying data. EIP-7981 prices access-list bytes at the same 64 gas rate on Glamsterdam — use accessList on run_transaction; leave 7981 out of eips.',
 }

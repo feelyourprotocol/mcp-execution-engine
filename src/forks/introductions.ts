@@ -365,10 +365,11 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     eip: 7981,
     name: 'Increase access list cost',
     summary:
-      'Active on Glamsterdam. Access-list bytes pay 64 gas each so they cannot dodge the calldata floor. Run a transaction on that fork. Leave eips empty.',
+      'Active on Glamsterdam. Access-list bytes pay 64 gas each so they cannot dodge the calldata floor. Pass accessList on run_transaction. Leave eips empty.',
     keywords: ['7981', 'access list', 'calldata floor'],
     introducedAt: 'glamsterdam',
     coverage: 'supported',
+    observableShapes: ['transaction'],
   },
   {
     eip: 7997,

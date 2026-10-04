@@ -228,6 +228,9 @@ describe('fork registry & resolve', () => {
       'Increase access list cost',
     )
     expect(caps.eipIntroductions.find((e) => e.eip === 7981)?.coverage).toBe('supported')
+    expect(caps.eipIntroductions.find((e) => e.eip === 7981)?.observableTools).toEqual([
+      'run_transaction',
+    ])
     expect(caps.eipIntroductions.find((e) => e.eip === 7997)?.name).toBe(
       'Deterministic factory contract',
     )
@@ -283,8 +286,9 @@ describe('fork registry & resolve', () => {
     expect(twinRows.every((row) => row.coverage === 'twin')).toBe(true)
     const supported = EIP_INTRODUCTIONS.filter((row) => row.coverage === 'supported')
     expect(supported.map((row) => row.eip)).toEqual([7981, 8246])
+    expect(supported.find((row) => row.eip === 7981)?.observableShapes).toEqual(['transaction'])
+    expect(supported.find((row) => row.eip === 8246)?.observableShapes).toBeUndefined()
     for (const row of supported) {
-      expect(row.observableShapes).toBeUndefined()
       expect(EIP_MODULES.some((module) => module.eip === row.eip)).toBe(false)
       expect(caps.eips.some((entry) => entry.eip === row.eip)).toBe(false)
     }

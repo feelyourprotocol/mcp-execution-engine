@@ -8,6 +8,13 @@ import type {
 } from './lab.js'
 import type { ForkConfig } from './protocol.js'
 
+/** One EIP-2930 access-list row (EIP-7981 floor applies to these bytes on Glamsterdam). */
+export interface RunTransactionAccessListItem {
+  address: string
+  /** Storage key hex strings (≤32 bytes each). Default empty. */
+  storageKeys?: string[]
+}
+
 export interface RunTransactionInput {
   /** Hex sender address (impersonated — no private key required). */
   from: string
@@ -26,6 +33,8 @@ export interface RunTransactionInput {
   gasLimit?: string
   /** Signed EIP-7702 authorization JSON items — builds a type-4 tx on Pectra+. */
   authorizationList?: EOACode7702AuthorizationListItem[]
+  /** EIP-2930 access list — type-2 tx. On Glamsterdam, list bytes pay the calldata floor (EIP-7981). */
+  accessList?: RunTransactionAccessListItem[]
 }
 
 export interface RunTransactionResult {
