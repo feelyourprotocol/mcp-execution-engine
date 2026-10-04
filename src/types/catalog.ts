@@ -47,13 +47,14 @@ export interface NamedFork {
 
 /**
  * How an introduction appears on the probe.
- * `twin` is derived from `EIP_MODULES`. `supported`, `consensus`, `networking`,
- * and `informational` are hand-set. Everything else is `listed`.
+ * `twin` is derived from `EIP_MODULES`. `supported`, `unshown`, `consensus`,
+ * `networking`, and `informational` are hand-set. Everything else is `listed`.
  */
 export type EipLabCoverage =
   | 'twin'
   | 'supported'
   | 'listed'
+  | 'unshown'
   | 'consensus'
   | 'networking'
   | 'informational'
@@ -67,13 +68,14 @@ export interface EipIntroduction {
   introducedAt: string
   /**
    * `supported`: the execution hardfork already applies it. No module and no exploration.
+   * `unshown`: execution-layer, in the bundle, and this lab does not demonstrate it.
    * `consensus`: consensus-layer only. This lab does not execute it.
    * `networking`: wire protocol. This lab does not speak it.
    * `informational`: analysis or a schedule. This lab does not execute it.
    * Omit for the default `listed`. The probe sets `twin` when the number is a module.
    */
-  coverage?: 'supported' | 'consensus' | 'networking' | 'informational'
-  /** Query shapes where a shipped verb can honestly show the effect. Omit on `supported`, `consensus`, `networking`, and `informational` rows. */
+  coverage?: 'supported' | 'unshown' | 'consensus' | 'networking' | 'informational'
+  /** Query shapes where a shipped verb can honestly show the effect. Omit on `supported`, `unshown`, `consensus`, `networking`, and `informational` rows. */
   observableShapes?: QueryShape[]
 }
 

@@ -331,8 +331,9 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
     name: 'Block gas accounting without refunds',
     summary:
       'Storage refunds still reduce what the sender pays. They do not reduce gas counted toward the block limit.',
-    keywords: ['7778', 'gas refund', 'block gas'],
+    keywords: ['7778', 'gas refund', 'block gas', 'storage clear', 'SSTORE refund'],
     introducedAt: 'glamsterdam',
+    observableShapes: ['transaction', 'block'],
   },
   {
     eip: 7928,
@@ -376,6 +377,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
       'Well-known CREATE2 factory at a fixed address. Clients do not inject it at the fork boundary.',
     keywords: ['7997', 'create2', 'factory'],
     introducedAt: 'glamsterdam',
+    coverage: 'unshown',
   },
   {
     eip: 8024,
@@ -412,9 +414,11 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   {
     eip: 8282,
     name: 'Builder execution requests',
-    summary: 'Builder deposit and exit request contracts on the execution-request bus.',
+    summary:
+      'Builder deposit and exit contracts on the request bus. This lab does not return those requests. Builder acceptance is consensus-layer.',
     keywords: ['8282', 'builder', 'execution requests'],
     introducedAt: 'glamsterdam',
+    coverage: 'unshown',
   },
   {
     eip: 7688,

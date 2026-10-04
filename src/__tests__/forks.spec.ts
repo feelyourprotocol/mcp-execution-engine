@@ -105,6 +105,15 @@ describe('fork registry & resolve', () => {
     )
   })
 
+  it('rejects unshown eips instead of treating a fork run as the effect', () => {
+    expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [7997] })).toThrow(
+      /unshown. This lab does not demonstrate it/,
+    )
+    expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [8282] })).toThrow(
+      /unshown. This lab does not demonstrate it/,
+    )
+  })
+
   it('accepts registered eip 7883 in fork config', () => {
     expect(() => buildCommon({ baseHardfork: 'fusaka', eips: [7883] })).not.toThrow()
   })
@@ -170,7 +179,9 @@ describe('fork registry & resolve', () => {
     expect(fusaka?.aliases).toContain('osaka')
     expect(fusaka?.relatedEips).toEqual([7883, 7951])
     expect(glamsterdam?.role).toBe('preview')
-    expect(glamsterdam?.relatedEips).toEqual([2780, 7708, 7843, 7928, 7954, 7976, 8024, 8037, 8038])
+    expect(glamsterdam?.relatedEips).toEqual([
+      2780, 7708, 7778, 7843, 7928, 7954, 7976, 8024, 8037, 8038,
+    ])
     expect(glamsterdam?.plannedEips).toBeUndefined()
     expect(glamsterdam?.aliases).toContain('amsterdam')
     expect(glamsterdam?.tools).toEqual(['run_bytecode', 'run_transaction', 'run_block'])
@@ -191,7 +202,7 @@ describe('fork registry & resolve', () => {
     expect(
       caps.eipIntroductions.some((row) => row.eip === 3855 && row.introducedAt === 'shapella'),
     ).toBe(true)
-    expect(caps.eips).toHaveLength(11)
+    expect(caps.eips).toHaveLength(12)
     expect(caps.eips.some((e) => e.eip === 7702)).toBe(false)
     expect(caps.eips.some((e) => e.eip === 7928 && e.tools.includes('generate_artifact'))).toBe(
       true,
@@ -206,6 +217,8 @@ describe('fork registry & resolve', () => {
     expect(caps.eipIntroductions.find((e) => e.eip === 7778)?.name).toBe(
       'Block gas accounting without refunds',
     )
+    expect(caps.eipIntroductions.find((e) => e.eip === 7778)?.coverage).toBe('twin')
+    expect(caps.eips.find((e) => e.eip === 7778)?.tools).toEqual(['run_block', 'run_transaction'])
     expect(caps.eipIntroductions.find((e) => e.eip === 7976)?.name).toBe(
       'Increase calldata floor cost',
     )
@@ -218,9 +231,13 @@ describe('fork registry & resolve', () => {
     expect(caps.eipIntroductions.find((e) => e.eip === 7997)?.name).toBe(
       'Deterministic factory contract',
     )
+    expect(caps.eipIntroductions.find((e) => e.eip === 7997)?.coverage).toBe('unshown')
+    expect(caps.eipIntroductions.find((e) => e.eip === 7997)?.observableTools).toBeUndefined()
     expect(caps.eipIntroductions.find((e) => e.eip === 8282)?.name).toBe(
       'Builder execution requests',
     )
+    expect(caps.eipIntroductions.find((e) => e.eip === 8282)?.coverage).toBe('unshown')
+    expect(caps.eipIntroductions.find((e) => e.eip === 8282)?.observableTools).toBeUndefined()
     expect(caps.eips.some((e) => e.eip === 8246)).toBe(false)
     const e8024 = caps.eips.find((e) => e.eip === 8024)
     expect(e8024?.comparison?.baselineForkId).toBe('fusaka')
@@ -246,7 +263,7 @@ describe('fork registry & resolve', () => {
       getNamedFork('fusaka')?.relatedEips,
     )
     expect(advertisedEipsForForkConfig({ baseHardfork: 'glamsterdam', eips: [] })).toEqual([
-      2780, 7708, 7843, 7928, 7954, 7976, 8024, 8037, 8038,
+      2780, 7708, 7778, 7843, 7928, 7954, 7976, 8024, 8037, 8038,
     ])
     expect(advertisedEipsForForkConfig({ baseHardfork: 'glamsterdam', eips: [8024] })).toEqual([
       8024,
@@ -296,7 +313,11 @@ describe('fork registry & resolve', () => {
       (row) => row.eip,
     )
     expect(informational).toEqual([7904, 8261])
-    for (const eip of [...networking, ...informational]) {
+    const unshown = EIP_INTRODUCTIONS.filter((row) => row.coverage === 'unshown').map(
+      (row) => row.eip,
+    )
+    expect(unshown).toEqual([7997, 8282])
+    for (const eip of [...networking, ...informational, ...unshown]) {
       const row = EIP_INTRODUCTIONS.find((entry) => entry.eip === eip)
       expect(row?.observableShapes).toBeUndefined()
       expect(EIP_MODULES.some((module) => module.eip === eip)).toBe(false)
@@ -309,7 +330,10 @@ describe('fork registry & resolve', () => {
     expect(caps.eipIntroductions.find((entry) => entry.eip === 7904)?.coverage).toBe(
       'informational',
     )
+    expect(caps.eipIntroductions.find((entry) => entry.eip === 7997)?.coverage).toBe('unshown')
+    expect(caps.eipIntroductions.find((entry) => entry.eip === 8282)?.coverage).toBe('unshown')
     const glamsterdam = FORK_LINEAGE.find((fork) => fork.id === 'glamsterdam')
+    expect(glamsterdam?.activatedEips).toEqual(expect.arrayContaining([7997, 8282]))
     expect(glamsterdam?.activatedEips).not.toEqual(
       expect.arrayContaining([7688, 7732, 8045, 8061, 7975, 8070, 8136, 8159, 8189, 7904, 8261]),
     )

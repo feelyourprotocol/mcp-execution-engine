@@ -1,6 +1,7 @@
 import type { EipCapability } from '../types/index.js'
 import { EIP_2780_MODULE } from './eip-2780/index.js'
 import { EIP_7708_MODULE } from './eip-7708/index.js'
+import { EIP_7778_MODULE } from './eip-7778/index.js'
 import { EIP_7843_MODULE } from './eip-7843/index.js'
 import { EIP_7883_MODULE } from './eip-7883/index.js'
 import { EIP_7928_MODULE } from './eip-7928/index.js'
@@ -18,6 +19,7 @@ export const EIP_MODULES: EipCapability[] = [
   EIP_7843_MODULE,
   EIP_7928_MODULE,
   EIP_7708_MODULE,
+  EIP_7778_MODULE,
   EIP_7883_MODULE,
   EIP_7951_MODULE,
   EIP_7954_MODULE,

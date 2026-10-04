@@ -171,7 +171,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     summary:
       'Run under Glamsterdam (EL alias amsterdam) — default preview fork. Upcoming EL bundle with runnable twins (8024, 7708, 8037, and others). You do not need to name an EIP.',
     notes:
-      'Runnable twins are relatedEips. Other execution EIPs are eipIntroductions (supported or listed). Consensus, networking, and informational EIPs use those coverages and are not executed in this lab.',
+      'Runnable twins are relatedEips. Other execution EIPs are eipIntroductions (supported, listed, or unshown). Consensus, networking, and informational EIPs use those coverages and are not executed in this lab.',
   },
 ]
 
