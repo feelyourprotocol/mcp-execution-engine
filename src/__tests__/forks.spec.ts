@@ -105,8 +105,11 @@ describe('fork registry & resolve', () => {
     )
   })
 
-  it('rejects unshown eip 7997 instead of treating a fork run as the factory', () => {
+  it('rejects unshown eips instead of treating a fork run as the effect', () => {
     expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [7997] })).toThrow(
+      /unshown. This lab does not demonstrate it/,
+    )
+    expect(() => buildCommon({ baseHardfork: 'glamsterdam', eips: [8282] })).toThrow(
       /unshown. This lab does not demonstrate it/,
     )
   })
@@ -229,6 +232,8 @@ describe('fork registry & resolve', () => {
     expect(caps.eipIntroductions.find((e) => e.eip === 8282)?.name).toBe(
       'Builder execution requests',
     )
+    expect(caps.eipIntroductions.find((e) => e.eip === 8282)?.coverage).toBe('unshown')
+    expect(caps.eipIntroductions.find((e) => e.eip === 8282)?.observableTools).toBeUndefined()
     expect(caps.eips.some((e) => e.eip === 8246)).toBe(false)
     const e8024 = caps.eips.find((e) => e.eip === 8024)
     expect(e8024?.comparison?.baselineForkId).toBe('fusaka')
@@ -307,7 +312,7 @@ describe('fork registry & resolve', () => {
     const unshown = EIP_INTRODUCTIONS.filter((row) => row.coverage === 'unshown').map(
       (row) => row.eip,
     )
-    expect(unshown).toEqual([7997])
+    expect(unshown).toEqual([7997, 8282])
     for (const eip of [...networking, ...informational, ...unshown]) {
       const row = EIP_INTRODUCTIONS.find((entry) => entry.eip === eip)
       expect(row?.observableShapes).toBeUndefined()
@@ -322,8 +327,9 @@ describe('fork registry & resolve', () => {
       'informational',
     )
     expect(caps.eipIntroductions.find((entry) => entry.eip === 7997)?.coverage).toBe('unshown')
+    expect(caps.eipIntroductions.find((entry) => entry.eip === 8282)?.coverage).toBe('unshown')
     const glamsterdam = FORK_LINEAGE.find((fork) => fork.id === 'glamsterdam')
-    expect(glamsterdam?.activatedEips).toEqual(expect.arrayContaining([7997]))
+    expect(glamsterdam?.activatedEips).toEqual(expect.arrayContaining([7997, 8282]))
     expect(glamsterdam?.activatedEips).not.toEqual(
       expect.arrayContaining([7688, 7732, 8045, 8061, 7975, 8070, 8136, 8159, 8189, 7904, 8261]),
     )

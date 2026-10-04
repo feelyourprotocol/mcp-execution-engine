@@ -413,9 +413,11 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
   {
     eip: 8282,
     name: 'Builder execution requests',
-    summary: 'Builder deposit and exit request contracts on the execution-request bus.',
+    summary:
+      'Builder deposit and exit contracts on the request bus. This lab does not return those requests. Builder acceptance is consensus-layer.',
     keywords: ['8282', 'builder', 'execution requests'],
     introducedAt: 'glamsterdam',
+    coverage: 'unshown',
   },
   {
     eip: 7688,
