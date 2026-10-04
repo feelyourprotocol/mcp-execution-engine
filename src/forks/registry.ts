@@ -242,6 +242,12 @@ export function assertForkAllowed(config: ForkConfig): void {
         'unknown_eip',
       )
     }
+    if (intro?.coverage === 'unshown') {
+      throw new EngineError(
+        `EIP ${eip} is unshown. This lab does not demonstrate it.`,
+        'unknown_eip',
+      )
+    }
     throw new EngineError(`EIP ${eip} is not registered in the capability registry`, 'unknown_eip')
   }
 }

@@ -16,6 +16,7 @@ Engine-only:
 - Demo bytecode belongs in `src/__tests__/fixtures/`, not module descriptors
 - Live catalog is `describeCapabilities()` — unimplemented EIPs stay off `EIP_MODULES`
 - `coverage: 'supported'` on `eipIntroductions` is a hardfork fact (generic tools already apply it), not a module
+- `coverage: 'unshown'` is an execution-layer EIP in the bundle whose effect this lab does not demonstrate. No module. Naming it in `eips` errors. A generic fork run is not a substitute.
 - `coverage: 'consensus'` is a consensus-layer fact. This lab does not execute it. No module.
 - `coverage: 'networking'` is a wire-protocol fact. This lab does not speak it. No module.
 - `coverage: 'informational'` is an analysis or a schedule. This lab does not execute it. No module.

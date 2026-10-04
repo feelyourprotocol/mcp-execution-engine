@@ -376,6 +376,7 @@ export const EIP_INTRODUCTIONS: EipIntroduction[] = [
       'Well-known CREATE2 factory at a fixed address. Clients do not inject it at the fork boundary.',
     keywords: ['7997', 'create2', 'factory'],
     introducedAt: 'glamsterdam',
+    coverage: 'unshown',
   },
   {
     eip: 8024,
