@@ -17,6 +17,7 @@ import { EngineError } from '../types/index.js'
 import {
   applyPrefundAccounts,
   applyPrefundStorage,
+  createImpersonated2930Tx,
   createImpersonated7702Tx,
   createImpersonatedTx,
   emptyTransactionResult,
@@ -27,6 +28,7 @@ import {
   senderUpfrontCost,
   transactionResultFromRunTx,
 } from './lab.js'
+import { accessListJsonToBytes } from './parseAccessList.js'
 
 export async function runTransaction(input: RunTransactionInput): Promise<RunTransactionResult> {
   if (input.from === undefined || input.from.trim() === '') {
@@ -43,6 +45,12 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
   const { config, common, absorbedEips } = resolveFork(input.fork)
   const provenance = buildProvenance(ENGINE_VERSION, config, absorbedEips)
 
+  if (input.authorizationList !== undefined && input.accessList !== undefined) {
+    throw new EngineError(
+      'authorizationList and accessList are mutually exclusive',
+      'invalid_input',
+    )
+  }
   if (input.authorizationList !== undefined && input.to === undefined) {
     throw new EngineError('authorizationList requires to', 'invalid_input')
   }
@@ -78,6 +86,8 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
     input.authorizationList !== undefined
       ? authorizationListJsonToBytes(input.authorizationList)
       : undefined
+  const accessListBytes =
+    input.accessList !== undefined ? accessListJsonToBytes(input.accessList) : undefined
 
   if (authBytes !== undefined && to === undefined) {
     throw new EngineError('authorizationList requires to', 'invalid_input')
@@ -94,7 +104,17 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
             gasLimit,
             authorizationList: authBytes,
           })
-        : createImpersonatedTx({ common, from, to, value, data, gasLimit })
+        : accessListBytes !== undefined
+          ? createImpersonated2930Tx({
+              common,
+              from,
+              to,
+              value,
+              data,
+              gasLimit,
+              accessList: accessListBytes,
+            })
+          : createImpersonatedTx({ common, from, to, value, data, gasLimit })
     const block = createBlock(
       {
         header: {

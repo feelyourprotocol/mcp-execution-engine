@@ -1,4 +1,7 @@
 import {
+  type AccessList2930Tx,
+  type AccessList2930TxData,
+  createAccessList2930Tx,
   createEOACode7702Tx,
   createLegacyTx,
   type EOACode7702Tx,
@@ -38,7 +41,10 @@ export const LAB_DEFAULT_TIMESTAMP = 1n
  * receive the impersonated sender). Recompute the EIP-2780 extras with `from`
  * so a self-send is 12,000 and a zero-value call is 15,000.
  */
-function bindIntrinsicGasToSender(tx: LegacyTx | EOACode7702Tx, from: Address): void {
+function bindIntrinsicGasToSender(
+  tx: LegacyTx | EOACode7702Tx | AccessList2930Tx,
+  from: Address,
+): void {
   const intrinsic = tx.getIntrinsicGas.bind(tx)
   tx.getIntrinsicGas = () => {
     const base = intrinsic()
@@ -65,6 +71,34 @@ export function createImpersonatedTx(opts: {
       to: opts.to,
       value: opts.value,
       data: opts.data,
+    },
+    { common: opts.common, freeze: false },
+  )
+  tx.getSenderAddress = () => opts.from
+  bindIntrinsicGasToSender(tx, opts.from)
+  return tx
+}
+
+export function createImpersonated2930Tx(opts: {
+  common: ReturnType<typeof resolveFork>['common']
+  from: Address
+  to?: Address
+  value: bigint
+  data: Uint8Array
+  gasLimit: bigint
+  accessList: AccessList2930TxData['accessList']
+  nonce?: bigint
+}): AccessList2930Tx {
+  const tx = createAccessList2930Tx(
+    {
+      chainId: opts.common.chainId(),
+      nonce: opts.nonce ?? 0n,
+      gasLimit: opts.gasLimit,
+      gasPrice: LAB_GAS_PRICE,
+      to: opts.to,
+      value: opts.value,
+      data: opts.data,
+      accessList: opts.accessList,
     },
     { common: opts.common, freeze: false },
   )
