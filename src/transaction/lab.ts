@@ -22,10 +22,18 @@ import {
 } from '../forks/resolve.js'
 import { mapExecLogs } from '../simulate/logs.js'
 import type {
+  RecipientPrestate,
   RunBlockTxResult,
   RunTransactionResult,
   SimulatePrefundAccount,
 } from '../types/index.js'
+import { computeRegularGasBreakdown, type ImpersonatedTx } from './regularGas.js'
+
+export interface TxResultContext {
+  tx: ImpersonatedTx
+  from: Address
+  recipientPrestate?: RecipientPrestate
+}
 
 export { LAB_BYTECODE_ADDRESS, LAB_BYTECODE_CALLER, LAB_COINBASE } from './addresses.js'
 
@@ -41,7 +49,7 @@ export const LAB_DEFAULT_TIMESTAMP = 1n
  * receive the impersonated sender). Recompute the EIP-2780 extras with `from`
  * so a self-send is 12,000 and a zero-value call is 15,000.
  */
-function bindIntrinsicGasToSender(
+export function bindIntrinsicGasToSender(
   tx: LegacyTx | EOACode7702Tx | AccessList2930Tx,
   from: Address,
 ): void {
@@ -180,7 +188,7 @@ async function applyAccountStorageSlots(
   }
 }
 
-export function txFieldsFromRunTx(result: RunTxResult): RunBlockTxResult {
+export function txFieldsFromRunTx(result: RunTxResult, ctx?: TxResultContext): RunBlockTxResult {
   const receiptLogs = 'logs' in result.receipt ? result.receipt.logs : result.execResult.logs
   const { logs, decodedLogs } = mapExecLogs(receiptLogs)
   const execError = result.execResult.exceptionError
@@ -198,6 +206,15 @@ export function txFieldsFromRunTx(result: RunTxResult): RunBlockTxResult {
   if (result.txStateGas !== undefined) {
     response.txStateGas = result.txStateGas.toString()
   }
+  if (ctx !== undefined) {
+    const regularGas = computeRegularGasBreakdown(ctx.tx, ctx.from, result)
+    if (regularGas !== undefined) {
+      response.regularGas = regularGas
+    }
+    if (ctx.recipientPrestate !== undefined) {
+      response.recipientPrestate = ctx.recipientPrestate
+    }
+  }
   if (logs.length > 0) {
     response.logs = logs
     response.decodedLogs = decodedLogs
@@ -210,8 +227,9 @@ export function transactionResultFromRunTx(
   result: RunTxResult,
   provenance: RunTransactionResult['provenance'],
   deployedCodeSize?: number,
+  ctx?: TxResultContext,
 ): RunTransactionResult {
-  const response: RunTransactionResult = { ...txFieldsFromRunTx(result), provenance }
+  const response: RunTransactionResult = { ...txFieldsFromRunTx(result, ctx), provenance }
   if (result.execResult.exceptionError === undefined && result.createdAddress !== undefined) {
     response.createdAddress = result.createdAddress.toString()
     response.deployedCodeSize = deployedCodeSize ?? result.execResult.returnValue.length
