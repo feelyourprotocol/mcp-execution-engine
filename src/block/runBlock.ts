@@ -2,6 +2,7 @@ import { ENGINE_VERSION } from '../forks/registry.js'
 import { resolveFork } from '../forks/resolve.js'
 import { buildProvenance } from '../provenance/build.js'
 import { txFieldsFromRunTx } from '../transaction/lab.js'
+import { computeRegularGasDelta } from '../transaction/regularGas.js'
 import type { RunBlockInput, RunBlockResult, RunBlockTxResult } from '../types/index.js'
 import { EngineError } from '../types/index.js'
 import { executeLabBlock } from './executeLabBlock.js'
@@ -27,13 +28,19 @@ export async function runBlock(input: RunBlockInput): Promise<RunBlockResult> {
   const provenance = buildProvenance(ENGINE_VERSION, config, absorbedEips)
 
   try {
-    const { provenance: runProvenance, headerSnapshotBase, vmResult } = await executeLabBlock(input)
+    const {
+      provenance: runProvenance,
+      headerSnapshotBase,
+      vmResult,
+      txContexts,
+    } = await executeLabBlock(input)
 
-    const txResults: RunBlockTxResult[] = vmResult.results.map((txResult) =>
-      txFieldsFromRunTx(txResult),
+    const txResults: RunBlockTxResult[] = vmResult.results.map((txResult, index) =>
+      txFieldsFromRunTx(txResult, txContexts[index]),
     )
     const allOk = txResults.every((tx) => tx.success)
     const firstError = txResults.find((tx) => tx.error !== null)?.error ?? null
+    const regularGasDelta = computeRegularGasDelta(txResults)
 
     return {
       success: allOk,
@@ -44,6 +51,7 @@ export async function runBlock(input: RunBlockInput): Promise<RunBlockResult> {
         gasUsed: vmResult.gasUsed.toString(),
       },
       transactions: txResults,
+      ...(regularGasDelta !== undefined ? { regularGasDelta } : {}),
       error: firstError,
       provenance: runProvenance,
     }

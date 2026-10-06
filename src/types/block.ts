@@ -5,6 +5,7 @@ import type {
   SimulateRawLog,
 } from './lab.js'
 import type { ForkConfig } from './protocol.js'
+import type { RecipientPrestate, RegularGasBreakdown, RegularGasPartDelta } from './regularGas.js'
 
 /** One impersonated transaction inside a lab `runBlock` request. */
 export interface RunBlockTransactionInput {
@@ -51,6 +52,8 @@ export interface RunBlockTxResult {
   error: string | null
   logs?: SimulateRawLog[]
   decodedLogs?: SimulateDecodedLog[]
+  regularGas?: RegularGasBreakdown
+  recipientPrestate?: RecipientPrestate
 }
 
 export interface RunBlockHeaderSnapshot {
@@ -68,6 +71,8 @@ export interface RunBlockResult {
   gasUsedScope: 'block'
   header: RunBlockHeaderSnapshot
   transactions: RunBlockTxResult[]
+  /** Parts whose values differ across txs when regular totals differ. */
+  regularGasDelta?: RegularGasPartDelta[]
   error: string | null
   provenance: Provenance
 }

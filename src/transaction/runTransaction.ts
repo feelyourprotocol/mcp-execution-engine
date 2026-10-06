@@ -29,6 +29,7 @@ import {
   transactionResultFromRunTx,
 } from './lab.js'
 import { accessListJsonToBytes } from './parseAccessList.js'
+import { classifyRecipientPrestate } from './regularGas.js'
 
 export async function runTransaction(input: RunTransactionInput): Promise<RunTransactionResult> {
   if (input.from === undefined || input.from.trim() === '') {
@@ -93,6 +94,12 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
     throw new EngineError('authorizationList requires to', 'invalid_input')
   }
   try {
+    const recipientPrestate = await classifyRecipientPrestate(
+      (address) => vm.stateManager.getAccount(address),
+      (address) => vm.stateManager.getCode(address),
+      from,
+      to,
+    )
     const tx =
       authBytes !== undefined && to !== undefined
         ? createImpersonated7702Tx({
@@ -132,7 +139,11 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
       result.execResult.exceptionError === undefined && result.createdAddress !== undefined
         ? (await vm.stateManager.getCode(result.createdAddress)).length
         : undefined
-    return transactionResultFromRunTx(result, provenance, deployedCodeSize)
+    return transactionResultFromRunTx(result, provenance, deployedCodeSize, {
+      tx,
+      from,
+      recipientPrestate,
+    })
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
     return emptyTransactionResult(message, provenance)

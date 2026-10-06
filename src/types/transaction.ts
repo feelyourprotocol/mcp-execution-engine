@@ -7,6 +7,7 @@ import type {
   SimulateRawLog,
 } from './lab.js'
 import type { ForkConfig } from './protocol.js'
+import type { RecipientPrestate, RegularGasBreakdown } from './regularGas.js'
 
 /** One EIP-2930 access-list row (EIP-7981 floor applies to these bytes on Glamsterdam). */
 export interface RunTransactionAccessListItem {
@@ -54,5 +55,9 @@ export interface RunTransactionResult {
   deployedCodeSize?: number
   logs?: SimulateRawLog[]
   decodedLogs?: SimulateDecodedLog[]
+  /** Sender-aware regular-gas parts (sum to txRegularGas or gasUsed). */
+  regularGas?: RegularGasBreakdown
+  /** Recipient before execution — explains txStateGas, not part of regularGas. */
+  recipientPrestate?: RecipientPrestate
   provenance: Provenance
 }

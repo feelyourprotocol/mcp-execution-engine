@@ -61,6 +61,12 @@ export {
   QUERY_SHAPE_CATALOG,
   queryShapeDescriptors,
 } from './queryShapes.js'
+export type {
+  RecipientPrestate,
+  RegularGasBreakdown,
+  RegularGasPartDelta,
+  RegularGasPartName,
+} from './regularGas.js'
 export type { SimulateBytecodeInput, SimulateBytecodeResult } from './simulate.js'
 export type {
   RunTransactionAccessListItem,

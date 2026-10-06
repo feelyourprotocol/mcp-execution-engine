@@ -20,6 +20,7 @@ import { buildProvenance } from '../provenance/build.js'
 import {
   applyPrefundAccounts,
   applyPrefundStorage,
+  bindIntrinsicGasToSender,
   createImpersonatedTx,
   installCodeAt,
   LAB_BASE_FEE,
@@ -29,7 +30,9 @@ import {
   LAB_DEFAULT_TIMESTAMP,
   LAB_GAS_PRICE,
   putFundedAccount,
+  type TxResultContext,
 } from '../transaction/lab.js'
+import { classifyRecipientPrestate, type ImpersonatedTx } from '../transaction/regularGas.js'
 import type { Provenance, RunBlockHeaderSnapshot, RunBlockInput } from '../types/index.js'
 import { EngineError } from '../types/index.js'
 
@@ -38,6 +41,7 @@ export interface LabBlockExecution {
   common: Common
   headerSnapshotBase: Omit<RunBlockHeaderSnapshot, 'gasUsed'>
   vmResult: VmRunBlockResult
+  txContexts: TxResultContext[]
 }
 
 function validateRunBlockInput(input: RunBlockInput): void {
@@ -123,6 +127,17 @@ export async function executeLabBlock(input: RunBlockInput): Promise<LabBlockExe
     await putFundedAccount(vm, funded.address, funded.wei + BigInt(1e18))
   }
 
+  const recipientPrestates = await Promise.all(
+    parsedTxs.map((tx) =>
+      classifyRecipientPrestate(
+        (address) => vm.stateManager.getAccount(address),
+        (address) => vm.stateManager.getCode(address),
+        tx.from,
+        tx.to,
+      ),
+    ),
+  )
+
   const nonceBySender = new Map<string, bigint>()
   const txs = parsedTxs.map((tx) => {
     const key = tx.from.toString()
@@ -130,6 +145,11 @@ export async function executeLabBlock(input: RunBlockInput): Promise<LabBlockExe
     nonceBySender.set(key, nonce + 1n)
     return createImpersonatedTx({ ...tx, common, nonce })
   })
+  const txContexts: TxResultContext[] = txs.map((tx, index) => ({
+    tx,
+    from: parsedTxs[index]!.from,
+    recipientPrestate: recipientPrestates[index],
+  }))
 
   const header: {
     number: bigint
@@ -157,6 +177,7 @@ export async function executeLabBlock(input: RunBlockInput): Promise<LabBlockExe
   for (const [index, tx] of block.transactions.entries()) {
     const from = parsedTxs[index]!.from
     tx.getSenderAddress = () => from
+    bindIntrinsicGasToSender(tx as ImpersonatedTx, from)
   }
 
   const vmResult = await executeVmBlock(vm, {
@@ -167,5 +188,5 @@ export async function executeLabBlock(input: RunBlockInput): Promise<LabBlockExe
     skipHardForkValidation: true,
   })
 
-  return { provenance, common, headerSnapshotBase, vmResult }
+  return { provenance, common, headerSnapshotBase, vmResult, txContexts }
 }
