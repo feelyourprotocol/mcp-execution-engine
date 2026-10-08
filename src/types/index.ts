@@ -27,7 +27,8 @@ export type {
   NamedFork,
   NamedForkProbe,
 } from './catalog.js'
-export { EngineError } from './errors.js'
+export type { EngineErrorFacts } from './errorFacts.js'
+export { EngineError, type EngineErrorOptions } from './errors.js'
 export type {
   Provenance,
   SimulateDecodedLog,

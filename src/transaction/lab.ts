@@ -240,6 +240,7 @@ export function transactionResultFromRunTx(
 export function emptyTransactionResult(
   error: string,
   provenance: RunTransactionResult['provenance'],
+  errorCode?: 'unexpected',
 ): RunTransactionResult {
   return {
     success: false,
@@ -247,6 +248,7 @@ export function emptyTransactionResult(
     gasUsedScope: 'transaction',
     returnValue: '0x',
     error,
+    ...(errorCode !== undefined ? { errorCode } : {}),
     provenance,
   }
 }
@@ -268,8 +270,9 @@ export async function installCodeAt(
   vm: Awaited<ReturnType<typeof createVM>>,
   to: Address,
   codeHex: string,
+  codeField = 'code',
 ): Promise<void> {
-  const code = parseBytecodeHex(codeHex)
+  const code = parseBytecodeHex(codeHex, codeField)
   const existing = await vm.stateManager.getAccount(to)
   const balance = existing?.balance ?? BigInt(1e18)
   const nonce = existing?.nonce ?? 0n

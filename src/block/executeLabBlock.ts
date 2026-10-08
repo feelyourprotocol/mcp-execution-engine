@@ -46,12 +46,21 @@ export interface LabBlockExecution {
 
 function validateRunBlockInput(input: RunBlockInput): void {
   if (!Array.isArray(input.transactions) || input.transactions.length === 0) {
-    throw new EngineError('Provide at least one transaction', 'invalid_input')
+    throw new EngineError('Provide at least one transaction', 'invalid_input', {
+      field: 'transactions',
+    })
   }
   if (input.transactions.length > ENGINE_CEILINGS.maxTxsPerBlock) {
     throw new EngineError(
       `Too many transactions (max ${ENGINE_CEILINGS.maxTxsPerBlock})`,
       'too_many_transactions',
+      {
+        field: 'transactions',
+        facts: {
+          txCount: input.transactions.length,
+          maxTxsPerBlock: ENGINE_CEILINGS.maxTxsPerBlock,
+        },
+      },
     )
   }
 }
@@ -70,6 +79,7 @@ export async function executeLabBlock(input: RunBlockInput): Promise<LabBlockExe
     throw new EngineError(
       'slotNumber requires a fork that activates EIP-7843 (Glamsterdam)',
       'slot_not_available',
+      { field: 'header.slotNumber', facts: { eip: 7843 } },
     )
   }
 
@@ -92,22 +102,30 @@ export async function executeLabBlock(input: RunBlockInput): Promise<LabBlockExe
 
   for (const [index, raw] of input.transactions.entries()) {
     if (raw.from === undefined || raw.from.trim() === '') {
-      throw new EngineError(`transactions[${index}]: Provide from`, 'invalid_input')
+      throw new EngineError(`transactions[${index}]: Provide from`, 'invalid_input', {
+        field: `transactions[${index}].from`,
+      })
     }
     if (raw.to === undefined || raw.to.trim() === '') {
-      throw new EngineError(`transactions[${index}]: Provide to`, 'invalid_input')
+      throw new EngineError(`transactions[${index}]: Provide to`, 'invalid_input', {
+        field: `transactions[${index}].to`,
+      })
     }
-    const from = parseAddress(raw.from)
-    const to = parseAddress(raw.to)
+    const from = parseAddress(raw.from, `transactions[${index}].from`)
+    const to = parseAddress(raw.to, `transactions[${index}].to`)
     if (raw.code !== undefined && raw.code.trim() !== '') {
-      await installCodeAt(vm, to, raw.code)
+      await installCodeAt(vm, to, raw.code, `transactions[${index}].code`)
     }
     parsedTxs.push({
       from,
       to,
-      value: parseWeiValue(raw.value),
-      data: parseOptionalHexData(raw.data),
-      gasLimit: parseGasLimit(raw.gasLimit),
+      value: parseWeiValue(raw.value, `transactions[${index}].value`),
+      data: parseOptionalHexData(raw.data, `transactions[${index}].data`),
+      gasLimit: parseGasLimit(
+        raw.gasLimit,
+        ENGINE_CEILINGS.maxTransactionGasLimit,
+        `transactions[${index}].gasLimit`,
+      ),
     })
   }
   await applyPrefundStorage(vm, input.accounts)

@@ -20,7 +20,10 @@ import { stepToTrace } from './trace.js'
 
 function validateInput(input: SimulateBytecodeInput): void {
   if (input.bytecode === undefined || input.bytecode.trim() === '') {
-    throw new EngineError('Provide bytecode', 'invalid_input')
+    throw new EngineError('Provide bytecode', 'invalid_input', {
+      field: 'bytecode',
+      facts: { 'bytecode.shape': 'empty', 'bytecode.chars': 0 },
+    })
   }
 }
 
@@ -88,7 +91,7 @@ export async function simulateBytecode(
 
   if (input.trace) {
     if (evmEvents === undefined) {
-      throw new EngineError('EVM events unavailable for trace', 'internal')
+      throw new EngineError('EVM events unavailable for trace', 'internal', { field: 'trace' })
     }
     evmEvents.on('step', (step: InterpreterStep, resolve?: () => void) => {
       if (steps.length >= ENGINE_CEILINGS.maxTraceSteps) {
@@ -115,6 +118,10 @@ export async function simulateBytecode(
     throw new EngineError(
       `Trace exceeded max steps (${ENGINE_CEILINGS.maxTraceSteps})`,
       'trace_too_long',
+      {
+        field: 'trace',
+        facts: { maxTraceSteps: ENGINE_CEILINGS.maxTraceSteps },
+      },
     )
   }
 

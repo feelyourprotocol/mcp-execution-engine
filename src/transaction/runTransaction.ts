@@ -33,16 +33,17 @@ import { classifyRecipientPrestate } from './regularGas.js'
 
 export async function runTransaction(input: RunTransactionInput): Promise<RunTransactionResult> {
   if (input.from === undefined || input.from.trim() === '') {
-    throw new EngineError('Provide from', 'invalid_input')
+    throw new EngineError('Provide from', 'invalid_input', { field: 'from' })
   }
   if (input.to !== undefined && input.to.trim() === '') {
     throw new EngineError(
       'to must be a recipient address or omitted for contract creation',
       'invalid_input',
+      { field: 'to' },
     )
   }
 
-  const gasLimit = parseGasLimit(input.gasLimit, ENGINE_CEILINGS.maxTransactionGasLimit)
+  const gasLimit = parseGasLimit(input.gasLimit, ENGINE_CEILINGS.maxTransactionGasLimit, 'gasLimit')
   const { config, common, absorbedEips } = resolveFork(input.fork)
   const provenance = buildProvenance(ENGINE_VERSION, config, absorbedEips)
 
@@ -50,22 +51,26 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
     throw new EngineError(
       'authorizationList and accessList are mutually exclusive',
       'invalid_input',
+      { field: 'authorizationList' },
     )
   }
   if (input.authorizationList !== undefined && input.to === undefined) {
-    throw new EngineError('authorizationList requires to', 'invalid_input')
+    throw new EngineError('authorizationList requires to', 'invalid_input', {
+      field: 'authorizationList',
+    })
   }
   if (input.authorizationList !== undefined && !common.isActivatedEIP(7702)) {
     throw new EngineError(
       'authorizationList requires a fork with EIP-7702 active (e.g. prague)',
       'unsupported_eip',
+      { field: 'authorizationList', facts: { eip: 7702 } },
     )
   }
 
-  const from = parseAddress(input.from)
-  const to = input.to === undefined ? undefined : parseAddress(input.to)
-  const value = parseWeiValue(input.value)
-  const data = parseOptionalHexData(input.data)
+  const from = parseAddress(input.from, 'from')
+  const to = input.to === undefined ? undefined : parseAddress(input.to, 'to')
+  const value = parseWeiValue(input.value, 'value')
+  const data = parseOptionalHexData(input.data, 'data')
 
   const vm = await createVM({ common })
   await applyPrefundAccounts(vm, input.accounts)
@@ -74,10 +79,11 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
     throw new EngineError(
       'code requires to; contract creation executes data as initcode',
       'invalid_input',
+      { field: 'code' },
     )
   }
   if (input.code !== undefined && input.code.trim() !== '' && to !== undefined) {
-    await installCodeAt(vm, to, input.code)
+    await installCodeAt(vm, to, input.code, 'code')
   }
   await applyPrefundStorage(vm, input.accounts)
 
@@ -91,7 +97,9 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
     input.accessList !== undefined ? accessListJsonToBytes(input.accessList) : undefined
 
   if (authBytes !== undefined && to === undefined) {
-    throw new EngineError('authorizationList requires to', 'invalid_input')
+    throw new EngineError('authorizationList requires to', 'invalid_input', {
+      field: 'authorizationList',
+    })
   }
   try {
     const recipientPrestate = await classifyRecipientPrestate(
@@ -145,7 +153,10 @@ export async function runTransaction(input: RunTransactionInput): Promise<RunTra
       recipientPrestate,
     })
   } catch (error) {
+    if (error instanceof EngineError) {
+      throw error
+    }
     const message = error instanceof Error ? error.message : String(error)
-    return emptyTransactionResult(message, provenance)
+    return emptyTransactionResult(message, provenance, 'unexpected')
   }
 }
