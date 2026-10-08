@@ -10,6 +10,7 @@
  * | `ChangeNature` | `ChangeNature` |
  * | `QueryShape` | `McpQueryShape` |
  * | `ForkRole` | `TIMELINE` role |
+ * | `FORK_MASCOT_EMOJI` / `mascotEmoji` | `FORK_MASCOT_EMOJI` in `forkCatalog.ts` |
  * | `ForkConfig.baseHardfork` | `taxonomy.timeline` (catalog fork id) |
  * | `EipComparison` | `mcp.comparison` |
  * | `EipProvenance` | `ProtocolChangeIdentity` (`status`, `specUrl`, `specDate`, `testReleaseUrl`, `testReleaseName`) |

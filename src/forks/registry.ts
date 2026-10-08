@@ -25,6 +25,7 @@ import {
   defaultForkShapes,
   eipActiveOnLineageFork,
   FORK_LINEAGE,
+  getLineageDefinition,
   lineageElId,
   lineageForkIds,
   predecessorFork,
@@ -63,6 +64,7 @@ function buildNamedForks(): NamedFork[] {
   return FORK_LINEAGE.map((def) => ({
     id: def.id,
     label: def.label,
+    mascotEmoji: def.mascotEmoji,
     config: { baseHardfork: def.id, eips: [] },
     stabilityRollup: def.stabilityRollup,
     role: def.role,
@@ -307,10 +309,16 @@ function coverageForIntroduction(row: EipIntroduction): EipLabCoverage {
 function toEipIntroductionProbe(row: EipIntroduction): EipIntroductionProbe {
   const { observableShapes, ...rest } = row
   const coverage = coverageForIntroduction(row)
-  if (observableShapes === undefined) {
-    return { ...rest, coverage }
+  const introducedAtMascotEmoji = getLineageDefinition(row.introducedAt)?.mascotEmoji
+  const base = {
+    ...rest,
+    coverage,
+    ...(introducedAtMascotEmoji ? { introducedAtMascotEmoji } : {}),
   }
-  return { ...rest, coverage, observableTools: mcpToolsForShapes(observableShapes) }
+  if (observableShapes === undefined) {
+    return base
+  }
+  return { ...base, observableTools: mcpToolsForShapes(observableShapes) }
 }
 
 export function describeCapabilities(): CapabilityDescription {
