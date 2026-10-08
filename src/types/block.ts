@@ -74,5 +74,7 @@ export interface RunBlockResult {
   /** Parts whose values differ across txs when regular totals differ. */
   regularGasDelta?: RegularGasPartDelta[]
   error: string | null
+  /** Set when a non-EngineError exception was caught (operator metrics). */
+  errorCode?: 'unexpected'
   provenance: Provenance
 }

@@ -101,6 +101,7 @@ export type {
 } from './types/index.js'
 export {
   EngineError,
+  type EngineErrorFacts,
   mcpToolForShape,
   mcpToolsForShapes,
   QUERY_SHAPE_CATALOG,

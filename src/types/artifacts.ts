@@ -32,6 +32,8 @@ export interface GenerateResult {
   gasUsed: string
   header: RunBlockHeaderSnapshot
   error: string | null
+  /** Set when a non-EngineError exception was caught (operator metrics). */
+  errorCode?: 'unexpected'
   provenance: Provenance
 }
 

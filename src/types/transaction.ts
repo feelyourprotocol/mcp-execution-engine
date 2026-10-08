@@ -49,6 +49,8 @@ export interface RunTransactionResult {
   txStateGas?: string
   returnValue: string
   error: string | null
+  /** Set when a non-EngineError exception was caught (operator metrics). */
+  errorCode?: 'unexpected'
   /** Address created by a successful contract-creation transaction. */
   createdAddress?: string
   /** Runtime code bytes stored by a successful contract-creation transaction. */

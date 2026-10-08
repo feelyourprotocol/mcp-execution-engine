@@ -3,6 +3,10 @@ import type { EipProvenance, ForkConfig, StabilityRollup } from './protocol.js'
 export interface Provenance {
   engineVersion: string
   forkConfig: ForkConfig
+  /** Human fork label with mascot when assigned (e.g. "🦓 Fusaka"). */
+  forkLabel?: string
+  /** Mascot emoji for `forkConfig.baseHardfork` when assigned. */
+  forkMascotEmoji?: string
   /** Lineage predecessor for generic historical runs (compare pair hint). */
   predecessorForkId?: string
   perEip?: EipProvenance[]

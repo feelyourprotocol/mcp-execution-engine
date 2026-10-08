@@ -26,7 +26,7 @@ export async function generateArtifact(input: GenerateInput): Promise<GenerateRe
       throw error
     }
     const message = error instanceof Error ? error.message : String(error)
-    throw new EngineError(message, 'execution_failed')
+    throw new EngineError(message, 'execution_failed', { field: 'transactions' })
   }
 
   const { provenance, common, headerSnapshotBase, vmResult } = execution

@@ -82,6 +82,9 @@ describe('hardfork lineage', () => {
     expect(provenance.predecessorForkId).toBe('london')
     expect(provenance.caveat).toMatch(/Merge/i)
     expect(provenance.caveat).toMatch(/Historical fork rules/)
+    expect(provenance.caveat).toMatch(/🐼/)
+    expect(provenance.forkLabel).toMatch(/^🐼 Paris/)
+    expect(provenance.forkMascotEmoji).toBe('🐼')
     expect(provenance.perEip).toBeUndefined()
   })
 

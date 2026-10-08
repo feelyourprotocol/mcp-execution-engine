@@ -1,5 +1,6 @@
 import type { ForkRole, QueryShape, StabilityRollup } from '../types/index.js'
 import { EngineError } from '../types/index.js'
+import { FORK_MASCOT_EMOJI } from './mascots.js'
 
 /**
  * Catalog ids for named forks (Berlin→Glamsterdam).
@@ -49,6 +50,8 @@ export interface LineageForkDefinition {
   elId: string
   order: number
   label: string
+  /** Upgrade mascot emoji when assigned (EIP-8066 tradition). */
+  mascotEmoji?: string
   aliases: string[]
   role: ForkRole
   stabilityRollup: StabilityRollup
@@ -92,6 +95,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     elId: 'paris',
     order: 2,
     label: 'Paris (The Merge)',
+    mascotEmoji: FORK_MASCOT_EMOJI.paris,
     aliases: ['merge', 'the-merge'],
     role: 'historical',
     stabilityRollup: 'firm',
@@ -107,6 +111,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     elId: 'shanghai',
     order: 3,
     label: 'Shapella',
+    mascotEmoji: FORK_MASCOT_EMOJI.shapella,
     aliases: ['shanghai'],
     role: 'historical',
     stabilityRollup: 'firm',
@@ -122,6 +127,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     elId: 'cancun',
     order: 4,
     label: 'Dencun',
+    mascotEmoji: FORK_MASCOT_EMOJI.dencun,
     aliases: ['cancun'],
     role: 'historical',
     stabilityRollup: 'firm',
@@ -135,6 +141,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     elId: 'prague',
     order: 5,
     label: 'Pectra',
+    mascotEmoji: FORK_MASCOT_EMOJI.pectra,
     aliases: ['prague'],
     role: 'historical',
     stabilityRollup: 'firm',
@@ -148,6 +155,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     elId: 'osaka',
     order: 6,
     label: 'Fusaka',
+    mascotEmoji: FORK_MASCOT_EMOJI.fusaka,
     aliases: ['osaka', 'mainnet-el'],
     role: 'current',
     stabilityRollup: 'firm',
@@ -161,6 +169,7 @@ export const FORK_LINEAGE: LineageForkDefinition[] = [
     elId: 'amsterdam',
     order: 7,
     label: 'Glamsterdam',
+    mascotEmoji: FORK_MASCOT_EMOJI.glamsterdam,
     aliases: ['amsterdam'],
     role: 'preview',
     stabilityRollup: 'stabilizing',

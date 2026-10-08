@@ -25,6 +25,7 @@ import {
   defaultForkShapes,
   eipActiveOnLineageFork,
   FORK_LINEAGE,
+  getLineageDefinition,
   lineageElId,
   lineageForkIds,
   predecessorFork,
@@ -63,6 +64,7 @@ function buildNamedForks(): NamedFork[] {
   return FORK_LINEAGE.map((def) => ({
     id: def.id,
     label: def.label,
+    mascotEmoji: def.mascotEmoji,
     config: { baseHardfork: def.id, eips: [] },
     stabilityRollup: def.stabilityRollup,
     role: def.role,
@@ -145,7 +147,10 @@ export function getNamedFork(id: string): NamedFork | undefined {
 export function resolveNamedFork(id: string): ForkConfig {
   const named = getNamedFork(id)
   if (!named) {
-    throw new EngineError(`Unknown named fork: ${id}`, 'unknown_named_fork')
+    throw new EngineError(`Unknown named fork: ${id}`, 'unknown_named_fork', {
+      field: 'fork.baseHardfork',
+      facts: { forkId: id },
+    })
   }
   return normalizeForkConfig(named.config)
 }
@@ -170,7 +175,10 @@ export function hardforkToEnum(baseHardfork: string): Hardfork {
     case 'amsterdam':
       return Hardfork.Amsterdam
     default:
-      throw new EngineError(`Unsupported base hardfork: ${baseHardfork}`, 'unsupported_hardfork')
+      throw new EngineError(`Unsupported base hardfork: ${baseHardfork}`, 'unsupported_hardfork', {
+        field: 'fork.baseHardfork',
+        facts: { baseHardfork },
+      })
   }
 }
 
@@ -221,6 +229,10 @@ export function assertForkAllowed(config: ForkConfig): void {
     throw new EngineError(
       `Base hardfork not allowed: ${fork.baseHardfork}. Allowed: ${ALLOWED_BASE_HARDFORKS.join(', ')}`,
       'unsupported_hardfork',
+      {
+        field: 'fork.baseHardfork',
+        facts: { baseHardfork: fork.baseHardfork },
+      },
     )
   }
 
@@ -234,21 +246,31 @@ export function assertForkAllowed(config: ForkConfig): void {
       throw new EngineError(
         `EIP ${eip} is ${outOfLab}. This lab does not execute it.`,
         'unknown_eip',
+        { field: 'fork.eips', facts: { eip, coverage: outOfLab } },
       )
     }
     if (intro?.coverage === 'supported') {
       throw new EngineError(
         `EIP ${eip} is bundled in ${intro.introducedAt}. Omit it from eips and run on that fork.`,
         'unknown_eip',
+        { field: 'fork.eips', facts: { eip, introducedAt: intro.introducedAt } },
       )
     }
     if (intro?.coverage === 'unshown') {
       throw new EngineError(
         `EIP ${eip} is unshown. This lab does not demonstrate it.`,
         'unknown_eip',
+        { field: 'fork.eips', facts: { eip } },
       )
     }
-    throw new EngineError(`EIP ${eip} is not registered in the capability registry`, 'unknown_eip')
+    throw new EngineError(
+      `EIP ${eip} is not registered in the capability registry`,
+      'unknown_eip',
+      {
+        field: 'fork.eips',
+        facts: { eip },
+      },
+    )
   }
 }
 
@@ -287,10 +309,16 @@ function coverageForIntroduction(row: EipIntroduction): EipLabCoverage {
 function toEipIntroductionProbe(row: EipIntroduction): EipIntroductionProbe {
   const { observableShapes, ...rest } = row
   const coverage = coverageForIntroduction(row)
-  if (observableShapes === undefined) {
-    return { ...rest, coverage }
+  const introducedAtMascotEmoji = getLineageDefinition(row.introducedAt)?.mascotEmoji
+  const base = {
+    ...rest,
+    coverage,
+    ...(introducedAtMascotEmoji ? { introducedAtMascotEmoji } : {}),
   }
-  return { ...rest, coverage, observableTools: mcpToolsForShapes(observableShapes) }
+  if (observableShapes === undefined) {
+    return base
+  }
+  return { ...base, observableTools: mcpToolsForShapes(observableShapes) }
 }
 
 export function describeCapabilities(): CapabilityDescription {

@@ -11,6 +11,7 @@ function emptyBlockResult(
   error: string,
   provenance: RunBlockResult['provenance'],
   header: RunBlockResult['header'],
+  errorCode?: 'unexpected',
 ): RunBlockResult {
   return {
     success: false,
@@ -19,6 +20,7 @@ function emptyBlockResult(
     header: { ...header, gasUsed: '0' },
     transactions: [],
     error,
+    ...(errorCode !== undefined ? { errorCode } : {}),
     provenance,
   }
 }
@@ -60,10 +62,15 @@ export async function runBlock(input: RunBlockInput): Promise<RunBlockResult> {
       throw error
     }
     const message = error instanceof Error ? error.message : String(error)
-    return emptyBlockResult(message, provenance, {
-      number: '1',
-      timestamp: '1',
-      gasUsed: '0',
-    })
+    return emptyBlockResult(
+      message,
+      provenance,
+      {
+        number: '1',
+        timestamp: '1',
+        gasUsed: '0',
+      },
+      'unexpected',
+    )
   }
 }
