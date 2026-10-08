@@ -18,6 +18,7 @@ import type { McpToolName, QueryShapeDescriptor } from './queryShapes.js'
  */
 export interface NamedFork {
   id: string
+  /** Display name for agents (mascot prefix when assigned; `id` stays the catalog key). */
   label: string
   /** Upgrade mascot emoji when assigned (EIP-8066 tradition). */
   mascotEmoji?: string
@@ -130,6 +131,8 @@ export type EipCapabilityProbe = Omit<EipCapability, 'shapes'> & { tools: McpToo
 /** Live probe row — MCP tool names, not internal `observableShapes`. `coverage` is always set. */
 export type EipIntroductionProbe = Omit<EipIntroduction, 'observableShapes' | 'coverage'> & {
   coverage: EipLabCoverage
+  /** Human fork name for `introducedAt` (mascot baked into label when assigned). */
+  introducedAtLabel?: string
   /** Mascot emoji for `introducedAt` when the fork has one. */
   introducedAtMascotEmoji?: string
   observableTools?: McpToolName[]
