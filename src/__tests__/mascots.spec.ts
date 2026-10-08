@@ -9,12 +9,20 @@ describe('fork mascots', () => {
     for (const [id, emoji] of Object.entries(FORK_MASCOT_EMOJI)) {
       const row = probe.namedForks.find((fork) => fork.id === id)
       expect(row?.mascotEmoji).toBe(emoji)
+      expect(row?.label.startsWith(emoji)).toBe(true)
     }
+  })
+
+  it('keeps berlin and london labels plain', () => {
+    const probe = describeCapabilities()
+    expect(probe.namedForks.find((fork) => fork.id === 'berlin')?.label).toBe('Berlin')
+    expect(probe.namedForks.find((fork) => fork.id === 'london')?.label).toBe('London')
   })
 
   it('adds introducedAtMascotEmoji on eipIntroductions when known', () => {
     const push0 = describeCapabilities().eipIntroductions.find((row) => row.eip === 3855)
     expect(push0?.introducedAt).toBe('shapella')
     expect(push0?.introducedAtMascotEmoji).toBe('🦉')
+    expect(push0?.introducedAtLabel).toBe('🦉 Shapella')
   })
 })

@@ -32,6 +32,7 @@ import {
   resolveForkAlias,
   successorFork,
 } from './lineage.js'
+import { forkLabelWithMascot } from './mascots.js'
 
 export { BASELINE_FORK_ID, DEFAULT_PREVIEW_FORK_ID }
 
@@ -63,7 +64,7 @@ export function advertisedEipsForFork(id: string, aliases: string[] = []): numbe
 function buildNamedForks(): NamedFork[] {
   return FORK_LINEAGE.map((def) => ({
     id: def.id,
-    label: def.label,
+    label: forkLabelWithMascot(def.label, def.id),
     mascotEmoji: def.mascotEmoji,
     config: { baseHardfork: def.id, eips: [] },
     stabilityRollup: def.stabilityRollup,
@@ -309,10 +310,15 @@ function coverageForIntroduction(row: EipIntroduction): EipLabCoverage {
 function toEipIntroductionProbe(row: EipIntroduction): EipIntroductionProbe {
   const { observableShapes, ...rest } = row
   const coverage = coverageForIntroduction(row)
-  const introducedAtMascotEmoji = getLineageDefinition(row.introducedAt)?.mascotEmoji
+  const introFork = getLineageDefinition(row.introducedAt)
+  const introducedAtMascotEmoji = introFork?.mascotEmoji
+  const introducedAtLabel = introFork
+    ? forkLabelWithMascot(introFork.label, introFork.id)
+    : undefined
   const base = {
     ...rest,
     coverage,
+    ...(introducedAtLabel ? { introducedAtLabel } : {}),
     ...(introducedAtMascotEmoji ? { introducedAtMascotEmoji } : {}),
   }
   if (observableShapes === undefined) {

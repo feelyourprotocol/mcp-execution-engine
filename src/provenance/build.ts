@@ -1,5 +1,4 @@
 import { getLineageDefinition, predecessorFork } from '../forks/lineage.js'
-import { forkLabelWithMascot } from '../forks/mascots.js'
 import {
   advertisedEipsForForkConfig,
   getEipCapability,
@@ -56,9 +55,7 @@ function buildPerEipProvenance(config: ForkConfig): EipProvenance[] | undefined 
 
 function forkDisplayName(config: ForkConfig): string {
   const named = getNamedFork(config.baseHardfork)
-  const label =
-    config.baseHardfork === 'paris' ? 'Paris (The Merge)' : (named?.label ?? config.baseHardfork)
-  return forkLabelWithMascot(label, config.baseHardfork)
+  return named?.label ?? config.baseHardfork
 }
 
 /** Compact human note for named `eips[]` only — not generic advertised-module runs. */
